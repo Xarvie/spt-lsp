@@ -1,0 +1,74 @@
+{
+  "name": "sptscript-lsp-client",
+  "description": "VS Code client for the sptScript Language Server",
+  "version": "0.0.1",
+  "publisher": "yourPublisherName",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/sptscript-lsp.git"
+  },
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "activationEvents": [
+    "onLanguage:sptscript"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "languages": [
+      {
+        "id": "sptscript",
+        "aliases": [
+          "sptScript",
+          "sptscript"
+        ],
+        "extensions": [
+          ".flx"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "configuration": {
+      "title": "sptScript LSP",
+      "properties": {
+        "sptscript.lsp.serverPath": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null,
+          "description": "指定 sptScript LSP 服务器可执行文件的绝对路径。如果留空，插件将尝试在默认位置查找。",
+          "scope": "resource"
+        }
+      }
+    },
+    "snippets": [
+      {
+        "language": "sptscript",
+        "path": "./snippets/sptscript.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "sptscript",
+        "scopeName": "source.sptscript",
+        "path": "./syntaxes/sptscript.tmLanguage.json"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "@types/node": "^18.19.130",
+    "@types/vscode": "^1.107.0",
+    "typescript": "^5.x.x",
+    "vscode": "^1.1.37"
+  },
+  "dependencies": {
+    "vscode-languageclient": "^9.0.1"
+  }
+}

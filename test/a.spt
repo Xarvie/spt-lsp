@@ -1,0 +1,11 @@
+//a.spt
+import { Rectangle } from "b.spt";
+
+int main(){
+    if (true == true) {
+        Rectangle b = new Rectangle();
+        b.height = 10;
+        b.add();
+        print("abc");
+    }
+}

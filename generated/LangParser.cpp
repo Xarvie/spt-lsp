@@ -1,0 +1,6923 @@
+
+// Generated from LangParser.g4 by ANTLR 4.13.1
+
+
+#include "LangParserVisitor.h"
+
+#include "LangParser.h"
+
+
+using namespace antlrcpp;
+
+using namespace antlr4;
+
+namespace {
+
+struct LangParserStaticData final {
+  LangParserStaticData(std::vector<std::string> ruleNames,
+                        std::vector<std::string> literalNames,
+                        std::vector<std::string> symbolicNames)
+      : ruleNames(std::move(ruleNames)), literalNames(std::move(literalNames)),
+        symbolicNames(std::move(symbolicNames)),
+        vocabulary(this->literalNames, this->symbolicNames) {}
+
+  LangParserStaticData(const LangParserStaticData&) = delete;
+  LangParserStaticData(LangParserStaticData&&) = delete;
+  LangParserStaticData& operator=(const LangParserStaticData&) = delete;
+  LangParserStaticData& operator=(LangParserStaticData&&) = delete;
+
+  std::vector<antlr4::dfa::DFA> decisionToDFA;
+  antlr4::atn::PredictionContextCache sharedContextCache;
+  const std::vector<std::string> ruleNames;
+  const std::vector<std::string> literalNames;
+  const std::vector<std::string> symbolicNames;
+  const antlr4::dfa::Vocabulary vocabulary;
+  antlr4::atn::SerializedATNView serializedATN;
+  std::unique_ptr<antlr4::atn::ATN> atn;
+};
+
+::antlr4::internal::OnceFlag langparserParserOnceFlag;
+#if ANTLR4_USE_THREAD_LOCAL_CACHE
+static thread_local
+#endif
+LangParserStaticData *langparserParserStaticData = nullptr;
+
+void langparserParserInitialize() {
+#if ANTLR4_USE_THREAD_LOCAL_CACHE
+  if (langparserParserStaticData != nullptr) {
+    return;
+  }
+#else
+  assert(langparserParserStaticData == nullptr);
+#endif
+  auto staticData = std::make_unique<LangParserStaticData>(
+    std::vector<std::string>{
+      "compilationUnit", "blockStatement", "statement", "importStatement", 
+      "importSpecifier", "deferStatement", "updateStatement", "assignStatement", 
+      "lvalue", "lvalueSuffix", "declaration", "variableDeclaration", "declaration_item", 
+      "functionDeclaration", "classDeclaration", "classMember", "type", 
+      "qualifiedIdentifier", "primitiveType", "listType", "mapType", "expression", 
+      "expressionList", "logicalOrExp", "logicalAndExp", "bitwiseOrExp", 
+      "bitwiseXorExp", "bitwiseAndExp", "equalityExp", "equalityExpOp", 
+      "comparisonExp", "comparisonExpOp", "shiftExp", "shiftExpOp", "concatExp", 
+      "addSubExp", "addSubExpOp", "mulDivModExp", "mulDivModExpOp", "unaryExp", 
+      "postfixExp", "postfixSuffix", "primaryExp", "atomexp", "lambdaExpression", 
+      "listExpression", "mapExpression", "mapEntryList", "mapEntry", "newExp", 
+      "ifStatement", "whileStatement", "forStatement", "forControl", "forUpdate", 
+      "forUpdateSingle", "forInitStatement", "multiDeclaration", "parameterList", 
+      "parameter", "arguments"
+    },
+    std::vector<std::string>{
+      "", "'int'", "'float'", "'number'", "'string'", "'bool'", "'any'", 
+      "'void'", "'null'", "'list'", "'map'", "'function'", "'coro'", "'mutivar'", 
+      "'if'", "'else'", "'while'", "'for'", "'break'", "'continue'", "'return'", 
+      "'defer'", "'true'", "'false'", "'const'", "'auto'", "'global'", "'static'", 
+      "'import'", "'as'", "'type'", "'from'", "'private'", "'export'", "'class'", 
+      "'new'", "'+'", "'-'", "'*'", "'/'", "'%'", "'='", "'+='", "'-='", 
+      "'*='", "'/='", "'%='", "'..='", "'=='", "'!='", "'<'", "'>'", "'<='", 
+      "'>='", "'&&'", "'||'", "'!'", "'..'", "'#'", "'&'", "'|'", "'^'", 
+      "'~'", "'<<'", "'->'", "'('", "')'", "'['", "']'", "'{'", "'}'", "','", 
+      "'.'", "':'", "';'", "'...'"
+    },
+    std::vector<std::string>{
+      "", "INT", "FLOAT", "NUMBER", "STRING", "BOOL", "ANY", "VOID", "NULL_", 
+      "LIST", "MAP", "FUNCTION", "COROUTINE", "MUTIVAR", "IF", "ELSE", "WHILE", 
+      "FOR", "BREAK", "CONTINUE", "RETURN", "DEFER", "TRUE", "FALSE", "CONST", 
+      "AUTO", "GLOBAL", "STATIC", "IMPORT", "AS", "TYPE", "FROM", "PRIVATE", 
+      "EXPORT", "CLASS", "NEW", "ADD", "SUB", "MUL", "DIV", "MOD", "ASSIGN", 
+      "ADD_ASSIGN", "SUB_ASSIGN", "MUL_ASSIGN", "DIV_ASSIGN", "MOD_ASSIGN", 
+      "CONCAT_ASSIGN", "EQ", "NEQ", "LT", "GT", "LTE", "GTE", "AND", "OR", 
+      "NOT", "CONCAT", "LEN", "BIT_AND", "BIT_OR", "BIT_XOR", "BIT_NOT", 
+      "LSHIFT", "ARROW", "OP", "CP", "OSB", "CSB", "OCB", "CCB", "COMMA", 
+      "DOT", "COL", "SEMICOLON", "DDD", "INTEGER", "FLOAT_LITERAL", "STRING_LITERAL", 
+      "IDENTIFIER", "WS", "LINE_COMMENT", "BLOCK_COMMENT"
+    }
+  );
+  static const int32_t serializedATNSegment[] = {
+  	4,1,82,726,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,
+  	7,7,7,2,8,7,8,2,9,7,9,2,10,7,10,2,11,7,11,2,12,7,12,2,13,7,13,2,14,7,
+  	14,2,15,7,15,2,16,7,16,2,17,7,17,2,18,7,18,2,19,7,19,2,20,7,20,2,21,7,
+  	21,2,22,7,22,2,23,7,23,2,24,7,24,2,25,7,25,2,26,7,26,2,27,7,27,2,28,7,
+  	28,2,29,7,29,2,30,7,30,2,31,7,31,2,32,7,32,2,33,7,33,2,34,7,34,2,35,7,
+  	35,2,36,7,36,2,37,7,37,2,38,7,38,2,39,7,39,2,40,7,40,2,41,7,41,2,42,7,
+  	42,2,43,7,43,2,44,7,44,2,45,7,45,2,46,7,46,2,47,7,47,2,48,7,48,2,49,7,
+  	49,2,50,7,50,2,51,7,51,2,52,7,52,2,53,7,53,2,54,7,54,2,55,7,55,2,56,7,
+  	56,2,57,7,57,2,58,7,58,2,59,7,59,2,60,7,60,1,0,5,0,124,8,0,10,0,12,0,
+  	127,9,0,1,0,1,0,1,1,1,1,5,1,133,8,1,10,1,12,1,136,9,1,1,1,1,1,1,2,1,2,
+  	1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,
+  	2,3,2,160,8,2,1,2,1,2,1,2,1,2,1,2,1,2,3,2,168,8,2,1,3,1,3,1,3,1,3,1,3,
+  	1,3,1,3,1,3,1,3,1,3,1,3,5,3,181,8,3,10,3,12,3,184,9,3,1,3,1,3,1,3,1,3,
+  	3,3,190,8,3,1,4,3,4,193,8,4,1,4,1,4,1,4,3,4,198,8,4,1,5,1,5,1,5,1,6,1,
+  	6,1,6,1,6,1,7,1,7,1,7,5,7,210,8,7,10,7,12,7,213,9,7,1,7,1,7,1,7,1,7,5,
+  	7,219,8,7,10,7,12,7,222,9,7,1,8,1,8,5,8,226,8,8,10,8,12,8,229,9,8,1,9,
+  	1,9,1,9,1,9,1,9,1,9,3,9,237,8,9,1,10,3,10,240,8,10,1,10,1,10,1,10,1,10,
+  	1,10,3,10,247,8,10,1,11,3,11,250,8,11,1,11,3,11,253,8,11,1,11,1,11,1,
+  	11,3,11,258,8,11,1,11,1,11,3,11,262,8,11,1,11,3,11,265,8,11,1,11,1,11,
+  	1,11,3,11,270,8,11,1,11,3,11,273,8,11,1,11,5,11,276,8,11,10,11,12,11,
+  	279,9,11,1,11,1,11,3,11,283,8,11,3,11,285,8,11,1,12,1,12,3,12,289,8,12,
+  	1,12,1,12,1,13,3,13,294,8,13,1,13,1,13,1,13,1,13,3,13,300,8,13,1,13,1,
+  	13,1,13,1,13,3,13,306,8,13,1,13,1,13,1,13,1,13,3,13,312,8,13,1,13,1,13,
+  	1,13,3,13,317,8,13,1,14,1,14,1,14,1,14,5,14,323,8,14,10,14,12,14,326,
+  	9,14,1,14,1,14,1,15,3,15,331,8,15,1,15,3,15,334,8,15,1,15,1,15,1,15,3,
+  	15,339,8,15,1,15,3,15,342,8,15,1,15,1,15,1,15,1,15,3,15,348,8,15,1,15,
+  	1,15,1,15,1,15,3,15,354,8,15,1,15,1,15,1,15,1,15,3,15,360,8,15,1,15,1,
+  	15,1,15,3,15,365,8,15,1,16,1,16,1,16,1,16,1,16,3,16,372,8,16,1,17,1,17,
+  	1,17,5,17,377,8,17,10,17,12,17,380,9,17,1,18,1,18,1,19,1,19,1,19,1,19,
+  	1,19,3,19,389,8,19,1,20,1,20,1,20,1,20,1,20,1,20,1,20,3,20,398,8,20,1,
+  	21,1,21,1,22,1,22,1,22,5,22,405,8,22,10,22,12,22,408,9,22,1,23,1,23,1,
+  	23,5,23,413,8,23,10,23,12,23,416,9,23,1,24,1,24,1,24,5,24,421,8,24,10,
+  	24,12,24,424,9,24,1,25,1,25,1,25,5,25,429,8,25,10,25,12,25,432,9,25,1,
+  	26,1,26,1,26,5,26,437,8,26,10,26,12,26,440,9,26,1,27,1,27,1,27,5,27,445,
+  	8,27,10,27,12,27,448,9,27,1,28,1,28,1,28,1,28,5,28,454,8,28,10,28,12,
+  	28,457,9,28,1,29,1,29,1,30,1,30,1,30,1,30,5,30,465,8,30,10,30,12,30,468,
+  	9,30,1,31,1,31,1,32,1,32,1,32,1,32,5,32,476,8,32,10,32,12,32,479,9,32,
+  	1,33,1,33,1,33,3,33,484,8,33,1,34,1,34,1,34,5,34,489,8,34,10,34,12,34,
+  	492,9,34,1,35,1,35,1,35,1,35,5,35,498,8,35,10,35,12,35,501,9,35,1,36,
+  	1,36,1,37,1,37,1,37,1,37,5,37,509,8,37,10,37,12,37,512,9,37,1,38,1,38,
+  	1,39,1,39,1,39,3,39,519,8,39,1,40,1,40,5,40,523,8,40,10,40,12,40,526,
+  	9,40,1,41,1,41,1,41,1,41,1,41,1,41,1,41,1,41,1,41,1,41,3,41,538,8,41,
+  	1,41,3,41,541,8,41,1,42,1,42,1,42,1,42,1,42,1,42,1,42,1,42,1,42,1,42,
+  	1,42,3,42,554,8,42,1,43,1,43,1,44,1,44,1,44,3,44,561,8,44,1,44,1,44,1,
+  	44,1,44,3,44,567,8,44,1,44,1,44,1,45,1,45,3,45,573,8,45,1,45,1,45,1,46,
+  	1,46,3,46,579,8,46,1,46,1,46,1,47,1,47,1,47,5,47,586,8,47,10,47,12,47,
+  	589,9,47,1,48,1,48,1,48,1,48,1,48,1,48,1,48,1,48,1,48,1,48,1,48,1,48,
+  	3,48,603,8,48,1,49,1,49,1,49,1,49,3,49,609,8,49,1,49,1,49,1,50,1,50,1,
+  	50,1,50,1,50,1,50,1,50,1,50,1,50,1,50,1,50,1,50,5,50,625,8,50,10,50,12,
+  	50,628,9,50,1,50,1,50,3,50,632,8,50,1,51,1,51,1,51,1,51,1,51,1,51,1,52,
+  	1,52,1,52,1,52,1,52,1,52,1,53,1,53,1,53,3,53,649,8,53,1,53,1,53,3,53,
+  	653,8,53,1,53,1,53,1,53,5,53,658,8,53,10,53,12,53,661,9,53,1,53,1,53,
+  	1,53,3,53,666,8,53,1,54,1,54,1,54,5,54,671,8,54,10,54,12,54,674,9,54,
+  	1,55,1,55,1,55,3,55,679,8,55,1,56,1,56,1,56,3,56,684,8,56,1,56,3,56,687,
+  	8,56,1,57,1,57,1,57,3,57,692,8,57,1,57,1,57,1,57,1,57,3,57,698,8,57,5,
+  	57,700,8,57,10,57,12,57,703,9,57,1,58,1,58,1,58,5,58,708,8,58,10,58,12,
+  	58,711,9,58,1,58,1,58,3,58,715,8,58,1,58,3,58,718,8,58,1,59,1,59,1,59,
+  	1,60,3,60,724,8,60,1,60,0,0,61,0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,
+  	30,32,34,36,38,40,42,44,46,48,50,52,54,56,58,60,62,64,66,68,70,72,74,
+  	76,78,80,82,84,86,88,90,92,94,96,98,100,102,104,106,108,110,112,114,116,
+  	118,120,0,8,1,0,42,47,3,0,1,5,7,8,11,12,1,0,48,49,1,0,50,53,1,0,36,37,
+  	1,0,38,40,4,0,37,37,56,56,58,58,62,62,3,0,8,8,22,23,76,78,779,0,125,1,
+  	0,0,0,2,130,1,0,0,0,4,167,1,0,0,0,6,189,1,0,0,0,8,192,1,0,0,0,10,199,
+  	1,0,0,0,12,202,1,0,0,0,14,206,1,0,0,0,16,223,1,0,0,0,18,236,1,0,0,0,20,
+  	239,1,0,0,0,22,284,1,0,0,0,24,288,1,0,0,0,26,316,1,0,0,0,28,318,1,0,0,
+  	0,30,364,1,0,0,0,32,371,1,0,0,0,34,373,1,0,0,0,36,381,1,0,0,0,38,383,
+  	1,0,0,0,40,390,1,0,0,0,42,399,1,0,0,0,44,401,1,0,0,0,46,409,1,0,0,0,48,
+  	417,1,0,0,0,50,425,1,0,0,0,52,433,1,0,0,0,54,441,1,0,0,0,56,449,1,0,0,
+  	0,58,458,1,0,0,0,60,460,1,0,0,0,62,469,1,0,0,0,64,471,1,0,0,0,66,483,
+  	1,0,0,0,68,485,1,0,0,0,70,493,1,0,0,0,72,502,1,0,0,0,74,504,1,0,0,0,76,
+  	513,1,0,0,0,78,518,1,0,0,0,80,520,1,0,0,0,82,540,1,0,0,0,84,553,1,0,0,
+  	0,86,555,1,0,0,0,88,557,1,0,0,0,90,570,1,0,0,0,92,576,1,0,0,0,94,582,
+  	1,0,0,0,96,602,1,0,0,0,98,604,1,0,0,0,100,612,1,0,0,0,102,633,1,0,0,0,
+  	104,639,1,0,0,0,106,665,1,0,0,0,108,667,1,0,0,0,110,678,1,0,0,0,112,686,
+  	1,0,0,0,114,688,1,0,0,0,116,717,1,0,0,0,118,719,1,0,0,0,120,723,1,0,0,
+  	0,122,124,3,4,2,0,123,122,1,0,0,0,124,127,1,0,0,0,125,123,1,0,0,0,125,
+  	126,1,0,0,0,126,128,1,0,0,0,127,125,1,0,0,0,128,129,5,0,0,1,129,1,1,0,
+  	0,0,130,134,5,69,0,0,131,133,3,4,2,0,132,131,1,0,0,0,133,136,1,0,0,0,
+  	134,132,1,0,0,0,134,135,1,0,0,0,135,137,1,0,0,0,136,134,1,0,0,0,137,138,
+  	5,70,0,0,138,3,1,0,0,0,139,168,5,74,0,0,140,141,3,14,7,0,141,142,5,74,
+  	0,0,142,168,1,0,0,0,143,144,3,12,6,0,144,145,5,74,0,0,145,168,1,0,0,0,
+  	146,147,3,42,21,0,147,148,5,74,0,0,148,168,1,0,0,0,149,168,3,20,10,0,
+  	150,168,3,100,50,0,151,168,3,102,51,0,152,168,3,104,52,0,153,154,5,18,
+  	0,0,154,168,5,74,0,0,155,156,5,19,0,0,156,168,5,74,0,0,157,159,5,20,0,
+  	0,158,160,3,44,22,0,159,158,1,0,0,0,159,160,1,0,0,0,160,161,1,0,0,0,161,
+  	168,5,74,0,0,162,168,3,2,1,0,163,164,3,6,3,0,164,165,5,74,0,0,165,168,
+  	1,0,0,0,166,168,3,10,5,0,167,139,1,0,0,0,167,140,1,0,0,0,167,143,1,0,
+  	0,0,167,146,1,0,0,0,167,149,1,0,0,0,167,150,1,0,0,0,167,151,1,0,0,0,167,
+  	152,1,0,0,0,167,153,1,0,0,0,167,155,1,0,0,0,167,157,1,0,0,0,167,162,1,
+  	0,0,0,167,163,1,0,0,0,167,166,1,0,0,0,168,5,1,0,0,0,169,170,5,28,0,0,
+  	170,171,5,38,0,0,171,172,5,29,0,0,172,173,5,79,0,0,173,174,5,31,0,0,174,
+  	190,5,78,0,0,175,176,5,28,0,0,176,177,5,69,0,0,177,182,3,8,4,0,178,179,
+  	5,71,0,0,179,181,3,8,4,0,180,178,1,0,0,0,181,184,1,0,0,0,182,180,1,0,
+  	0,0,182,183,1,0,0,0,183,185,1,0,0,0,184,182,1,0,0,0,185,186,5,70,0,0,
+  	186,187,5,31,0,0,187,188,5,78,0,0,188,190,1,0,0,0,189,169,1,0,0,0,189,
+  	175,1,0,0,0,190,7,1,0,0,0,191,193,5,30,0,0,192,191,1,0,0,0,192,193,1,
+  	0,0,0,193,194,1,0,0,0,194,197,5,79,0,0,195,196,5,29,0,0,196,198,5,79,
+  	0,0,197,195,1,0,0,0,197,198,1,0,0,0,198,9,1,0,0,0,199,200,5,21,0,0,200,
+  	201,3,2,1,0,201,11,1,0,0,0,202,203,3,16,8,0,203,204,7,0,0,0,204,205,3,
+  	42,21,0,205,13,1,0,0,0,206,211,3,16,8,0,207,208,5,71,0,0,208,210,3,16,
+  	8,0,209,207,1,0,0,0,210,213,1,0,0,0,211,209,1,0,0,0,211,212,1,0,0,0,212,
+  	214,1,0,0,0,213,211,1,0,0,0,214,215,5,41,0,0,215,220,3,42,21,0,216,217,
+  	5,71,0,0,217,219,3,42,21,0,218,216,1,0,0,0,219,222,1,0,0,0,220,218,1,
+  	0,0,0,220,221,1,0,0,0,221,15,1,0,0,0,222,220,1,0,0,0,223,227,5,79,0,0,
+  	224,226,3,18,9,0,225,224,1,0,0,0,226,229,1,0,0,0,227,225,1,0,0,0,227,
+  	228,1,0,0,0,228,17,1,0,0,0,229,227,1,0,0,0,230,231,5,67,0,0,231,232,3,
+  	42,21,0,232,233,5,68,0,0,233,237,1,0,0,0,234,235,5,72,0,0,235,237,5,79,
+  	0,0,236,230,1,0,0,0,236,234,1,0,0,0,237,19,1,0,0,0,238,240,5,33,0,0,239,
+  	238,1,0,0,0,239,240,1,0,0,0,240,246,1,0,0,0,241,242,3,22,11,0,242,243,
+  	5,74,0,0,243,247,1,0,0,0,244,247,3,26,13,0,245,247,3,28,14,0,246,241,
+  	1,0,0,0,246,244,1,0,0,0,246,245,1,0,0,0,247,21,1,0,0,0,248,250,5,26,0,
+  	0,249,248,1,0,0,0,249,250,1,0,0,0,250,252,1,0,0,0,251,253,5,24,0,0,252,
+  	251,1,0,0,0,252,253,1,0,0,0,253,254,1,0,0,0,254,257,3,24,12,0,255,256,
+  	5,41,0,0,256,258,3,42,21,0,257,255,1,0,0,0,257,258,1,0,0,0,258,285,1,
+  	0,0,0,259,261,5,13,0,0,260,262,5,26,0,0,261,260,1,0,0,0,261,262,1,0,0,
+  	0,262,264,1,0,0,0,263,265,5,24,0,0,264,263,1,0,0,0,264,265,1,0,0,0,265,
+  	266,1,0,0,0,266,277,5,79,0,0,267,269,5,71,0,0,268,270,5,26,0,0,269,268,
+  	1,0,0,0,269,270,1,0,0,0,270,272,1,0,0,0,271,273,5,24,0,0,272,271,1,0,
+  	0,0,272,273,1,0,0,0,273,274,1,0,0,0,274,276,5,79,0,0,275,267,1,0,0,0,
+  	276,279,1,0,0,0,277,275,1,0,0,0,277,278,1,0,0,0,278,282,1,0,0,0,279,277,
+  	1,0,0,0,280,281,5,41,0,0,281,283,3,42,21,0,282,280,1,0,0,0,282,283,1,
+  	0,0,0,283,285,1,0,0,0,284,249,1,0,0,0,284,259,1,0,0,0,285,23,1,0,0,0,
+  	286,289,3,32,16,0,287,289,5,25,0,0,288,286,1,0,0,0,288,287,1,0,0,0,289,
+  	290,1,0,0,0,290,291,5,79,0,0,291,25,1,0,0,0,292,294,5,26,0,0,293,292,
+  	1,0,0,0,293,294,1,0,0,0,294,295,1,0,0,0,295,296,3,32,16,0,296,297,3,34,
+  	17,0,297,299,5,65,0,0,298,300,3,116,58,0,299,298,1,0,0,0,299,300,1,0,
+  	0,0,300,301,1,0,0,0,301,302,5,66,0,0,302,303,3,2,1,0,303,317,1,0,0,0,
+  	304,306,5,26,0,0,305,304,1,0,0,0,305,306,1,0,0,0,306,307,1,0,0,0,307,
+  	308,5,13,0,0,308,309,3,34,17,0,309,311,5,65,0,0,310,312,3,116,58,0,311,
+  	310,1,0,0,0,311,312,1,0,0,0,312,313,1,0,0,0,313,314,5,66,0,0,314,315,
+  	3,2,1,0,315,317,1,0,0,0,316,293,1,0,0,0,316,305,1,0,0,0,317,27,1,0,0,
+  	0,318,319,5,34,0,0,319,320,5,79,0,0,320,324,5,69,0,0,321,323,3,30,15,
+  	0,322,321,1,0,0,0,323,326,1,0,0,0,324,322,1,0,0,0,324,325,1,0,0,0,325,
+  	327,1,0,0,0,326,324,1,0,0,0,327,328,5,70,0,0,328,29,1,0,0,0,329,331,5,
+  	27,0,0,330,329,1,0,0,0,330,331,1,0,0,0,331,333,1,0,0,0,332,334,5,24,0,
+  	0,333,332,1,0,0,0,333,334,1,0,0,0,334,335,1,0,0,0,335,338,3,24,12,0,336,
+  	337,5,41,0,0,337,339,3,42,21,0,338,336,1,0,0,0,338,339,1,0,0,0,339,365,
+  	1,0,0,0,340,342,5,27,0,0,341,340,1,0,0,0,341,342,1,0,0,0,342,343,1,0,
+  	0,0,343,344,3,32,16,0,344,345,5,79,0,0,345,347,5,65,0,0,346,348,3,116,
+  	58,0,347,346,1,0,0,0,347,348,1,0,0,0,348,349,1,0,0,0,349,350,5,66,0,0,
+  	350,351,3,2,1,0,351,365,1,0,0,0,352,354,5,27,0,0,353,352,1,0,0,0,353,
+  	354,1,0,0,0,354,355,1,0,0,0,355,356,5,13,0,0,356,357,5,79,0,0,357,359,
+  	5,65,0,0,358,360,3,116,58,0,359,358,1,0,0,0,359,360,1,0,0,0,360,361,1,
+  	0,0,0,361,362,5,66,0,0,362,365,3,2,1,0,363,365,5,74,0,0,364,330,1,0,0,
+  	0,364,341,1,0,0,0,364,353,1,0,0,0,364,363,1,0,0,0,365,31,1,0,0,0,366,
+  	372,3,36,18,0,367,372,3,38,19,0,368,372,3,40,20,0,369,372,5,6,0,0,370,
+  	372,3,34,17,0,371,366,1,0,0,0,371,367,1,0,0,0,371,368,1,0,0,0,371,369,
+  	1,0,0,0,371,370,1,0,0,0,372,33,1,0,0,0,373,378,5,79,0,0,374,375,5,72,
+  	0,0,375,377,5,79,0,0,376,374,1,0,0,0,377,380,1,0,0,0,378,376,1,0,0,0,
+  	378,379,1,0,0,0,379,35,1,0,0,0,380,378,1,0,0,0,381,382,7,1,0,0,382,37,
+  	1,0,0,0,383,388,5,9,0,0,384,385,5,50,0,0,385,386,3,32,16,0,386,387,5,
+  	51,0,0,387,389,1,0,0,0,388,384,1,0,0,0,388,389,1,0,0,0,389,39,1,0,0,0,
+  	390,397,5,10,0,0,391,392,5,50,0,0,392,393,3,32,16,0,393,394,5,71,0,0,
+  	394,395,3,32,16,0,395,396,5,51,0,0,396,398,1,0,0,0,397,391,1,0,0,0,397,
+  	398,1,0,0,0,398,41,1,0,0,0,399,400,3,46,23,0,400,43,1,0,0,0,401,406,3,
+  	42,21,0,402,403,5,71,0,0,403,405,3,42,21,0,404,402,1,0,0,0,405,408,1,
+  	0,0,0,406,404,1,0,0,0,406,407,1,0,0,0,407,45,1,0,0,0,408,406,1,0,0,0,
+  	409,414,3,48,24,0,410,411,5,55,0,0,411,413,3,48,24,0,412,410,1,0,0,0,
+  	413,416,1,0,0,0,414,412,1,0,0,0,414,415,1,0,0,0,415,47,1,0,0,0,416,414,
+  	1,0,0,0,417,422,3,50,25,0,418,419,5,54,0,0,419,421,3,50,25,0,420,418,
+  	1,0,0,0,421,424,1,0,0,0,422,420,1,0,0,0,422,423,1,0,0,0,423,49,1,0,0,
+  	0,424,422,1,0,0,0,425,430,3,52,26,0,426,427,5,60,0,0,427,429,3,52,26,
+  	0,428,426,1,0,0,0,429,432,1,0,0,0,430,428,1,0,0,0,430,431,1,0,0,0,431,
+  	51,1,0,0,0,432,430,1,0,0,0,433,438,3,54,27,0,434,435,5,61,0,0,435,437,
+  	3,54,27,0,436,434,1,0,0,0,437,440,1,0,0,0,438,436,1,0,0,0,438,439,1,0,
+  	0,0,439,53,1,0,0,0,440,438,1,0,0,0,441,446,3,56,28,0,442,443,5,59,0,0,
+  	443,445,3,56,28,0,444,442,1,0,0,0,445,448,1,0,0,0,446,444,1,0,0,0,446,
+  	447,1,0,0,0,447,55,1,0,0,0,448,446,1,0,0,0,449,455,3,60,30,0,450,451,
+  	3,58,29,0,451,452,3,60,30,0,452,454,1,0,0,0,453,450,1,0,0,0,454,457,1,
+  	0,0,0,455,453,1,0,0,0,455,456,1,0,0,0,456,57,1,0,0,0,457,455,1,0,0,0,
+  	458,459,7,2,0,0,459,59,1,0,0,0,460,466,3,64,32,0,461,462,3,62,31,0,462,
+  	463,3,64,32,0,463,465,1,0,0,0,464,461,1,0,0,0,465,468,1,0,0,0,466,464,
+  	1,0,0,0,466,467,1,0,0,0,467,61,1,0,0,0,468,466,1,0,0,0,469,470,7,3,0,
+  	0,470,63,1,0,0,0,471,477,3,68,34,0,472,473,3,66,33,0,473,474,3,68,34,
+  	0,474,476,1,0,0,0,475,472,1,0,0,0,476,479,1,0,0,0,477,475,1,0,0,0,477,
+  	478,1,0,0,0,478,65,1,0,0,0,479,477,1,0,0,0,480,484,5,63,0,0,481,482,5,
+  	51,0,0,482,484,5,51,0,0,483,480,1,0,0,0,483,481,1,0,0,0,484,67,1,0,0,
+  	0,485,490,3,70,35,0,486,487,5,57,0,0,487,489,3,70,35,0,488,486,1,0,0,
+  	0,489,492,1,0,0,0,490,488,1,0,0,0,490,491,1,0,0,0,491,69,1,0,0,0,492,
+  	490,1,0,0,0,493,499,3,74,37,0,494,495,3,72,36,0,495,496,3,74,37,0,496,
+  	498,1,0,0,0,497,494,1,0,0,0,498,501,1,0,0,0,499,497,1,0,0,0,499,500,1,
+  	0,0,0,500,71,1,0,0,0,501,499,1,0,0,0,502,503,7,4,0,0,503,73,1,0,0,0,504,
+  	510,3,78,39,0,505,506,3,76,38,0,506,507,3,78,39,0,507,509,1,0,0,0,508,
+  	505,1,0,0,0,509,512,1,0,0,0,510,508,1,0,0,0,510,511,1,0,0,0,511,75,1,
+  	0,0,0,512,510,1,0,0,0,513,514,7,5,0,0,514,77,1,0,0,0,515,516,7,6,0,0,
+  	516,519,3,78,39,0,517,519,3,80,40,0,518,515,1,0,0,0,518,517,1,0,0,0,519,
+  	79,1,0,0,0,520,524,3,84,42,0,521,523,3,82,41,0,522,521,1,0,0,0,523,526,
+  	1,0,0,0,524,522,1,0,0,0,524,525,1,0,0,0,525,81,1,0,0,0,526,524,1,0,0,
+  	0,527,528,5,67,0,0,528,529,3,42,21,0,529,530,5,68,0,0,530,541,1,0,0,0,
+  	531,532,5,72,0,0,532,541,5,79,0,0,533,534,5,73,0,0,534,541,5,79,0,0,535,
+  	537,5,65,0,0,536,538,3,120,60,0,537,536,1,0,0,0,537,538,1,0,0,0,538,539,
+  	1,0,0,0,539,541,5,66,0,0,540,527,1,0,0,0,540,531,1,0,0,0,540,533,1,0,
+  	0,0,540,535,1,0,0,0,541,83,1,0,0,0,542,554,3,86,43,0,543,554,3,90,45,
+  	0,544,554,3,92,46,0,545,554,5,79,0,0,546,554,5,75,0,0,547,548,5,65,0,
+  	0,548,549,3,42,21,0,549,550,5,66,0,0,550,554,1,0,0,0,551,554,3,98,49,
+  	0,552,554,3,88,44,0,553,542,1,0,0,0,553,543,1,0,0,0,553,544,1,0,0,0,553,
+  	545,1,0,0,0,553,546,1,0,0,0,553,547,1,0,0,0,553,551,1,0,0,0,553,552,1,
+  	0,0,0,554,85,1,0,0,0,555,556,7,7,0,0,556,87,1,0,0,0,557,558,5,11,0,0,
+  	558,560,5,65,0,0,559,561,3,116,58,0,560,559,1,0,0,0,560,561,1,0,0,0,561,
+  	562,1,0,0,0,562,563,5,66,0,0,563,566,5,64,0,0,564,567,3,32,16,0,565,567,
+  	5,13,0,0,566,564,1,0,0,0,566,565,1,0,0,0,567,568,1,0,0,0,568,569,3,2,
+  	1,0,569,89,1,0,0,0,570,572,5,67,0,0,571,573,3,44,22,0,572,571,1,0,0,0,
+  	572,573,1,0,0,0,573,574,1,0,0,0,574,575,5,68,0,0,575,91,1,0,0,0,576,578,
+  	5,69,0,0,577,579,3,94,47,0,578,577,1,0,0,0,578,579,1,0,0,0,579,580,1,
+  	0,0,0,580,581,5,70,0,0,581,93,1,0,0,0,582,587,3,96,48,0,583,584,5,71,
+  	0,0,584,586,3,96,48,0,585,583,1,0,0,0,586,589,1,0,0,0,587,585,1,0,0,0,
+  	587,588,1,0,0,0,588,95,1,0,0,0,589,587,1,0,0,0,590,591,5,79,0,0,591,592,
+  	5,73,0,0,592,603,3,42,21,0,593,594,5,67,0,0,594,595,3,42,21,0,595,596,
+  	5,68,0,0,596,597,5,73,0,0,597,598,3,42,21,0,598,603,1,0,0,0,599,600,5,
+  	78,0,0,600,601,5,73,0,0,601,603,3,42,21,0,602,590,1,0,0,0,602,593,1,0,
+  	0,0,602,599,1,0,0,0,603,97,1,0,0,0,604,605,5,35,0,0,605,606,3,34,17,0,
+  	606,608,5,65,0,0,607,609,3,120,60,0,608,607,1,0,0,0,608,609,1,0,0,0,609,
+  	610,1,0,0,0,610,611,5,66,0,0,611,99,1,0,0,0,612,613,5,14,0,0,613,614,
+  	5,65,0,0,614,615,3,42,21,0,615,616,5,66,0,0,616,626,3,2,1,0,617,618,5,
+  	15,0,0,618,619,5,14,0,0,619,620,5,65,0,0,620,621,3,42,21,0,621,622,5,
+  	66,0,0,622,623,3,2,1,0,623,625,1,0,0,0,624,617,1,0,0,0,625,628,1,0,0,
+  	0,626,624,1,0,0,0,626,627,1,0,0,0,627,631,1,0,0,0,628,626,1,0,0,0,629,
+  	630,5,15,0,0,630,632,3,2,1,0,631,629,1,0,0,0,631,632,1,0,0,0,632,101,
+  	1,0,0,0,633,634,5,16,0,0,634,635,5,65,0,0,635,636,3,42,21,0,636,637,5,
+  	66,0,0,637,638,3,2,1,0,638,103,1,0,0,0,639,640,5,17,0,0,640,641,5,65,
+  	0,0,641,642,3,106,53,0,642,643,5,66,0,0,643,644,3,2,1,0,644,105,1,0,0,
+  	0,645,646,3,112,56,0,646,648,5,74,0,0,647,649,3,42,21,0,648,647,1,0,0,
+  	0,648,649,1,0,0,0,649,650,1,0,0,0,650,652,5,74,0,0,651,653,3,108,54,0,
+  	652,651,1,0,0,0,652,653,1,0,0,0,653,666,1,0,0,0,654,659,3,24,12,0,655,
+  	656,5,71,0,0,656,658,3,24,12,0,657,655,1,0,0,0,658,661,1,0,0,0,659,657,
+  	1,0,0,0,659,660,1,0,0,0,660,662,1,0,0,0,661,659,1,0,0,0,662,663,5,73,
+  	0,0,663,664,3,42,21,0,664,666,1,0,0,0,665,645,1,0,0,0,665,654,1,0,0,0,
+  	666,107,1,0,0,0,667,672,3,110,55,0,668,669,5,71,0,0,669,671,3,110,55,
+  	0,670,668,1,0,0,0,671,674,1,0,0,0,672,670,1,0,0,0,672,673,1,0,0,0,673,
+  	109,1,0,0,0,674,672,1,0,0,0,675,679,3,42,21,0,676,679,3,12,6,0,677,679,
+  	3,14,7,0,678,675,1,0,0,0,678,676,1,0,0,0,678,677,1,0,0,0,679,111,1,0,
+  	0,0,680,687,3,114,57,0,681,687,3,14,7,0,682,684,3,44,22,0,683,682,1,0,
+  	0,0,683,684,1,0,0,0,684,687,1,0,0,0,685,687,1,0,0,0,686,680,1,0,0,0,686,
+  	681,1,0,0,0,686,683,1,0,0,0,686,685,1,0,0,0,687,113,1,0,0,0,688,691,3,
+  	24,12,0,689,690,5,41,0,0,690,692,3,42,21,0,691,689,1,0,0,0,691,692,1,
+  	0,0,0,692,701,1,0,0,0,693,694,5,71,0,0,694,697,3,24,12,0,695,696,5,41,
+  	0,0,696,698,3,42,21,0,697,695,1,0,0,0,697,698,1,0,0,0,698,700,1,0,0,0,
+  	699,693,1,0,0,0,700,703,1,0,0,0,701,699,1,0,0,0,701,702,1,0,0,0,702,115,
+  	1,0,0,0,703,701,1,0,0,0,704,709,3,118,59,0,705,706,5,71,0,0,706,708,3,
+  	118,59,0,707,705,1,0,0,0,708,711,1,0,0,0,709,707,1,0,0,0,709,710,1,0,
+  	0,0,710,714,1,0,0,0,711,709,1,0,0,0,712,713,5,71,0,0,713,715,5,75,0,0,
+  	714,712,1,0,0,0,714,715,1,0,0,0,715,718,1,0,0,0,716,718,5,75,0,0,717,
+  	704,1,0,0,0,717,716,1,0,0,0,718,117,1,0,0,0,719,720,3,32,16,0,720,721,
+  	5,79,0,0,721,119,1,0,0,0,722,724,3,44,22,0,723,722,1,0,0,0,723,724,1,
+  	0,0,0,724,121,1,0,0,0,85,125,134,159,167,182,189,192,197,211,220,227,
+  	236,239,246,249,252,257,261,264,269,272,277,282,284,288,293,299,305,311,
+  	316,324,330,333,338,341,347,353,359,364,371,378,388,397,406,414,422,430,
+  	438,446,455,466,477,483,490,499,510,518,524,537,540,553,560,566,572,578,
+  	587,602,608,626,631,648,652,659,665,672,678,683,686,691,697,701,709,714,
+  	717,723
+  };
+  staticData->serializedATN = antlr4::atn::SerializedATNView(serializedATNSegment, sizeof(serializedATNSegment) / sizeof(serializedATNSegment[0]));
+
+  antlr4::atn::ATNDeserializer deserializer;
+  staticData->atn = deserializer.deserialize(staticData->serializedATN);
+
+  const size_t count = staticData->atn->getNumberOfDecisions();
+  staticData->decisionToDFA.reserve(count);
+  for (size_t i = 0; i < count; i++) { 
+    staticData->decisionToDFA.emplace_back(staticData->atn->getDecisionState(i), i);
+  }
+  langparserParserStaticData = staticData.release();
+}
+
+}
+
+LangParser::LangParser(TokenStream *input) : LangParser(input, antlr4::atn::ParserATNSimulatorOptions()) {}
+
+LangParser::LangParser(TokenStream *input, const antlr4::atn::ParserATNSimulatorOptions &options) : Parser(input) {
+  LangParser::initialize();
+  _interpreter = new atn::ParserATNSimulator(this, *langparserParserStaticData->atn, langparserParserStaticData->decisionToDFA, langparserParserStaticData->sharedContextCache, options);
+}
+
+LangParser::~LangParser() {
+  delete _interpreter;
+}
+
+const atn::ATN& LangParser::getATN() const {
+  return *langparserParserStaticData->atn;
+}
+
+std::string LangParser::getGrammarFileName() const {
+  return "LangParser.g4";
+}
+
+const std::vector<std::string>& LangParser::getRuleNames() const {
+  return langparserParserStaticData->ruleNames;
+}
+
+const dfa::Vocabulary& LangParser::getVocabulary() const {
+  return langparserParserStaticData->vocabulary;
+}
+
+antlr4::atn::SerializedATNView LangParser::getSerializedATN() const {
+  return langparserParserStaticData->serializedATN;
+}
+
+
+//----------------- CompilationUnitContext ------------------------------------------------------------------
+
+LangParser::CompilationUnitContext::CompilationUnitContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+tree::TerminalNode* LangParser::CompilationUnitContext::EOF() {
+  return getToken(LangParser::EOF, 0);
+}
+
+std::vector<LangParser::StatementContext *> LangParser::CompilationUnitContext::statement() {
+  return getRuleContexts<LangParser::StatementContext>();
+}
+
+LangParser::StatementContext* LangParser::CompilationUnitContext::statement(size_t i) {
+  return getRuleContext<LangParser::StatementContext>(i);
+}
+
+
+size_t LangParser::CompilationUnitContext::getRuleIndex() const {
+  return LangParser::RuleCompilationUnit;
+}
+
+
+std::any LangParser::CompilationUnitContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitCompilationUnit(this);
+  else
+    return visitor->visitChildren(this);
+}
+
+LangParser::CompilationUnitContext* LangParser::compilationUnit() {
+  CompilationUnitContext *_localctx = _tracker.createInstance<CompilationUnitContext>(_ctx, getState());
+  enterRule(_localctx, 0, LangParser::RuleCompilationUnit);
+  size_t _la = 0;
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    enterOuterAlt(_localctx, 1);
+    setState(125);
+    _errHandler->sync(this);
+    _la = _input->LA(1);
+    while ((((_la & ~ 0x3fULL) == 0) &&
+      ((1ULL << _la) & 4971974186588143614) != 0) || ((((_la - 65) & ~ 0x3fULL) == 0) &&
+      ((1ULL << (_la - 65)) & 32277) != 0)) {
+      setState(122);
+      statement();
+      setState(127);
+      _errHandler->sync(this);
+      _la = _input->LA(1);
+    }
+    setState(128);
+    match(LangParser::EOF);
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- BlockStatementContext ------------------------------------------------------------------
+
+LangParser::BlockStatementContext::BlockStatementContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+tree::TerminalNode* LangParser::BlockStatementContext::OCB() {
+  return getToken(LangParser::OCB, 0);
+}
+
+tree::TerminalNode* LangParser::BlockStatementContext::CCB() {
+  return getToken(LangParser::CCB, 0);
+}
+
+std::vector<LangParser::StatementContext *> LangParser::BlockStatementContext::statement() {
+  return getRuleContexts<LangParser::StatementContext>();
+}
+
+LangParser::StatementContext* LangParser::BlockStatementContext::statement(size_t i) {
+  return getRuleContext<LangParser::StatementContext>(i);
+}
+
+
+size_t LangParser::BlockStatementContext::getRuleIndex() const {
+  return LangParser::RuleBlockStatement;
+}
+
+
+std::any LangParser::BlockStatementContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitBlockStatement(this);
+  else
+    return visitor->visitChildren(this);
+}
+
+LangParser::BlockStatementContext* LangParser::blockStatement() {
+  BlockStatementContext *_localctx = _tracker.createInstance<BlockStatementContext>(_ctx, getState());
+  enterRule(_localctx, 2, LangParser::RuleBlockStatement);
+  size_t _la = 0;
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    enterOuterAlt(_localctx, 1);
+    setState(130);
+    match(LangParser::OCB);
+    setState(134);
+    _errHandler->sync(this);
+    _la = _input->LA(1);
+    while ((((_la & ~ 0x3fULL) == 0) &&
+      ((1ULL << _la) & 4971974186588143614) != 0) || ((((_la - 65) & ~ 0x3fULL) == 0) &&
+      ((1ULL << (_la - 65)) & 32277) != 0)) {
+      setState(131);
+      statement();
+      setState(136);
+      _errHandler->sync(this);
+      _la = _input->LA(1);
+    }
+    setState(137);
+    match(LangParser::CCB);
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- StatementContext ------------------------------------------------------------------
+
+LangParser::StatementContext::StatementContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+
+size_t LangParser::StatementContext::getRuleIndex() const {
+  return LangParser::RuleStatement;
+}
+
+void LangParser::StatementContext::copyFrom(StatementContext *ctx) {
+  ParserRuleContext::copyFrom(ctx);
+}
+
+//----------------- ImportStmtContext ------------------------------------------------------------------
+
+LangParser::ImportStatementContext* LangParser::ImportStmtContext::importStatement() {
+  return getRuleContext<LangParser::ImportStatementContext>(0);
+}
+
+tree::TerminalNode* LangParser::ImportStmtContext::SEMICOLON() {
+  return getToken(LangParser::SEMICOLON, 0);
+}
+
+LangParser::ImportStmtContext::ImportStmtContext(StatementContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::ImportStmtContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitImportStmt(this);
+  else
+    return visitor->visitChildren(this);
+}
+//----------------- ForStmtContext ------------------------------------------------------------------
+
+LangParser::ForStatementContext* LangParser::ForStmtContext::forStatement() {
+  return getRuleContext<LangParser::ForStatementContext>(0);
+}
+
+LangParser::ForStmtContext::ForStmtContext(StatementContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::ForStmtContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitForStmt(this);
+  else
+    return visitor->visitChildren(this);
+}
+//----------------- WhileStmtContext ------------------------------------------------------------------
+
+LangParser::WhileStatementContext* LangParser::WhileStmtContext::whileStatement() {
+  return getRuleContext<LangParser::WhileStatementContext>(0);
+}
+
+LangParser::WhileStmtContext::WhileStmtContext(StatementContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::WhileStmtContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitWhileStmt(this);
+  else
+    return visitor->visitChildren(this);
+}
+//----------------- AssignStmtContext ------------------------------------------------------------------
+
+LangParser::AssignStatementContext* LangParser::AssignStmtContext::assignStatement() {
+  return getRuleContext<LangParser::AssignStatementContext>(0);
+}
+
+tree::TerminalNode* LangParser::AssignStmtContext::SEMICOLON() {
+  return getToken(LangParser::SEMICOLON, 0);
+}
+
+LangParser::AssignStmtContext::AssignStmtContext(StatementContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::AssignStmtContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitAssignStmt(this);
+  else
+    return visitor->visitChildren(this);
+}
+//----------------- ExpressionStmtContext ------------------------------------------------------------------
+
+LangParser::ExpressionContext* LangParser::ExpressionStmtContext::expression() {
+  return getRuleContext<LangParser::ExpressionContext>(0);
+}
+
+tree::TerminalNode* LangParser::ExpressionStmtContext::SEMICOLON() {
+  return getToken(LangParser::SEMICOLON, 0);
+}
+
+LangParser::ExpressionStmtContext::ExpressionStmtContext(StatementContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::ExpressionStmtContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitExpressionStmt(this);
+  else
+    return visitor->visitChildren(this);
+}
+//----------------- ReturnStmtContext ------------------------------------------------------------------
+
+tree::TerminalNode* LangParser::ReturnStmtContext::RETURN() {
+  return getToken(LangParser::RETURN, 0);
+}
+
+tree::TerminalNode* LangParser::ReturnStmtContext::SEMICOLON() {
+  return getToken(LangParser::SEMICOLON, 0);
+}
+
+LangParser::ExpressionListContext* LangParser::ReturnStmtContext::expressionList() {
+  return getRuleContext<LangParser::ExpressionListContext>(0);
+}
+
+LangParser::ReturnStmtContext::ReturnStmtContext(StatementContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::ReturnStmtContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitReturnStmt(this);
+  else
+    return visitor->visitChildren(this);
+}
+//----------------- UpdateStmtContext ------------------------------------------------------------------
+
+LangParser::UpdateStatementContext* LangParser::UpdateStmtContext::updateStatement() {
+  return getRuleContext<LangParser::UpdateStatementContext>(0);
+}
+
+tree::TerminalNode* LangParser::UpdateStmtContext::SEMICOLON() {
+  return getToken(LangParser::SEMICOLON, 0);
+}
+
+LangParser::UpdateStmtContext::UpdateStmtContext(StatementContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::UpdateStmtContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitUpdateStmt(this);
+  else
+    return visitor->visitChildren(this);
+}
+//----------------- DeferStmtContext ------------------------------------------------------------------
+
+LangParser::DeferStatementContext* LangParser::DeferStmtContext::deferStatement() {
+  return getRuleContext<LangParser::DeferStatementContext>(0);
+}
+
+LangParser::DeferStmtContext::DeferStmtContext(StatementContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::DeferStmtContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitDeferStmt(this);
+  else
+    return visitor->visitChildren(this);
+}
+//----------------- DeclarationStmtContext ------------------------------------------------------------------
+
+LangParser::DeclarationContext* LangParser::DeclarationStmtContext::declaration() {
+  return getRuleContext<LangParser::DeclarationContext>(0);
+}
+
+LangParser::DeclarationStmtContext::DeclarationStmtContext(StatementContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::DeclarationStmtContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitDeclarationStmt(this);
+  else
+    return visitor->visitChildren(this);
+}
+//----------------- SemicolonStmtContext ------------------------------------------------------------------
+
+tree::TerminalNode* LangParser::SemicolonStmtContext::SEMICOLON() {
+  return getToken(LangParser::SEMICOLON, 0);
+}
+
+LangParser::SemicolonStmtContext::SemicolonStmtContext(StatementContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::SemicolonStmtContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitSemicolonStmt(this);
+  else
+    return visitor->visitChildren(this);
+}
+//----------------- IfStmtContext ------------------------------------------------------------------
+
+LangParser::IfStatementContext* LangParser::IfStmtContext::ifStatement() {
+  return getRuleContext<LangParser::IfStatementContext>(0);
+}
+
+LangParser::IfStmtContext::IfStmtContext(StatementContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::IfStmtContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitIfStmt(this);
+  else
+    return visitor->visitChildren(this);
+}
+//----------------- BlockStmtContext ------------------------------------------------------------------
+
+LangParser::BlockStatementContext* LangParser::BlockStmtContext::blockStatement() {
+  return getRuleContext<LangParser::BlockStatementContext>(0);
+}
+
+LangParser::BlockStmtContext::BlockStmtContext(StatementContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::BlockStmtContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitBlockStmt(this);
+  else
+    return visitor->visitChildren(this);
+}
+//----------------- BreakStmtContext ------------------------------------------------------------------
+
+tree::TerminalNode* LangParser::BreakStmtContext::BREAK() {
+  return getToken(LangParser::BREAK, 0);
+}
+
+tree::TerminalNode* LangParser::BreakStmtContext::SEMICOLON() {
+  return getToken(LangParser::SEMICOLON, 0);
+}
+
+LangParser::BreakStmtContext::BreakStmtContext(StatementContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::BreakStmtContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitBreakStmt(this);
+  else
+    return visitor->visitChildren(this);
+}
+//----------------- ContinueStmtContext ------------------------------------------------------------------
+
+tree::TerminalNode* LangParser::ContinueStmtContext::CONTINUE() {
+  return getToken(LangParser::CONTINUE, 0);
+}
+
+tree::TerminalNode* LangParser::ContinueStmtContext::SEMICOLON() {
+  return getToken(LangParser::SEMICOLON, 0);
+}
+
+LangParser::ContinueStmtContext::ContinueStmtContext(StatementContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::ContinueStmtContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitContinueStmt(this);
+  else
+    return visitor->visitChildren(this);
+}
+LangParser::StatementContext* LangParser::statement() {
+  StatementContext *_localctx = _tracker.createInstance<StatementContext>(_ctx, getState());
+  enterRule(_localctx, 4, LangParser::RuleStatement);
+  size_t _la = 0;
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    setState(167);
+    _errHandler->sync(this);
+    switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 3, _ctx)) {
+    case 1: {
+      _localctx = _tracker.createInstance<LangParser::SemicolonStmtContext>(_localctx);
+      enterOuterAlt(_localctx, 1);
+      setState(139);
+      match(LangParser::SEMICOLON);
+      break;
+    }
+
+    case 2: {
+      _localctx = _tracker.createInstance<LangParser::AssignStmtContext>(_localctx);
+      enterOuterAlt(_localctx, 2);
+      setState(140);
+      assignStatement();
+      setState(141);
+      match(LangParser::SEMICOLON);
+      break;
+    }
+
+    case 3: {
+      _localctx = _tracker.createInstance<LangParser::UpdateStmtContext>(_localctx);
+      enterOuterAlt(_localctx, 3);
+      setState(143);
+      updateStatement();
+      setState(144);
+      match(LangParser::SEMICOLON);
+      break;
+    }
+
+    case 4: {
+      _localctx = _tracker.createInstance<LangParser::ExpressionStmtContext>(_localctx);
+      enterOuterAlt(_localctx, 4);
+      setState(146);
+      expression();
+      setState(147);
+      match(LangParser::SEMICOLON);
+      break;
+    }
+
+    case 5: {
+      _localctx = _tracker.createInstance<LangParser::DeclarationStmtContext>(_localctx);
+      enterOuterAlt(_localctx, 5);
+      setState(149);
+      declaration();
+      break;
+    }
+
+    case 6: {
+      _localctx = _tracker.createInstance<LangParser::IfStmtContext>(_localctx);
+      enterOuterAlt(_localctx, 6);
+      setState(150);
+      ifStatement();
+      break;
+    }
+
+    case 7: {
+      _localctx = _tracker.createInstance<LangParser::WhileStmtContext>(_localctx);
+      enterOuterAlt(_localctx, 7);
+      setState(151);
+      whileStatement();
+      break;
+    }
+
+    case 8: {
+      _localctx = _tracker.createInstance<LangParser::ForStmtContext>(_localctx);
+      enterOuterAlt(_localctx, 8);
+      setState(152);
+      forStatement();
+      break;
+    }
+
+    case 9: {
+      _localctx = _tracker.createInstance<LangParser::BreakStmtContext>(_localctx);
+      enterOuterAlt(_localctx, 9);
+      setState(153);
+      match(LangParser::BREAK);
+      setState(154);
+      match(LangParser::SEMICOLON);
+      break;
+    }
+
+    case 10: {
+      _localctx = _tracker.createInstance<LangParser::ContinueStmtContext>(_localctx);
+      enterOuterAlt(_localctx, 10);
+      setState(155);
+      match(LangParser::CONTINUE);
+      setState(156);
+      match(LangParser::SEMICOLON);
+      break;
+    }
+
+    case 11: {
+      _localctx = _tracker.createInstance<LangParser::ReturnStmtContext>(_localctx);
+      enterOuterAlt(_localctx, 11);
+      setState(157);
+      match(LangParser::RETURN);
+      setState(159);
+      _errHandler->sync(this);
+
+      _la = _input->LA(1);
+      if ((((_la & ~ 0x3fULL) == 0) &&
+        ((1ULL << _la) & 4971974160428304640) != 0) || ((((_la - 65) & ~ 0x3fULL) == 0) &&
+        ((1ULL << (_la - 65)) & 31765) != 0)) {
+        setState(158);
+        expressionList();
+      }
+      setState(161);
+      match(LangParser::SEMICOLON);
+      break;
+    }
+
+    case 12: {
+      _localctx = _tracker.createInstance<LangParser::BlockStmtContext>(_localctx);
+      enterOuterAlt(_localctx, 12);
+      setState(162);
+      blockStatement();
+      break;
+    }
+
+    case 13: {
+      _localctx = _tracker.createInstance<LangParser::ImportStmtContext>(_localctx);
+      enterOuterAlt(_localctx, 13);
+      setState(163);
+      importStatement();
+      setState(164);
+      match(LangParser::SEMICOLON);
+      break;
+    }
+
+    case 14: {
+      _localctx = _tracker.createInstance<LangParser::DeferStmtContext>(_localctx);
+      enterOuterAlt(_localctx, 14);
+      setState(166);
+      deferStatement();
+      break;
+    }
+
+    default:
+      break;
+    }
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- ImportStatementContext ------------------------------------------------------------------
+
+LangParser::ImportStatementContext::ImportStatementContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+
+size_t LangParser::ImportStatementContext::getRuleIndex() const {
+  return LangParser::RuleImportStatement;
+}
+
+void LangParser::ImportStatementContext::copyFrom(ImportStatementContext *ctx) {
+  ParserRuleContext::copyFrom(ctx);
+}
+
+//----------------- ImportNamespaceStmtContext ------------------------------------------------------------------
+
+tree::TerminalNode* LangParser::ImportNamespaceStmtContext::IMPORT() {
+  return getToken(LangParser::IMPORT, 0);
+}
+
+tree::TerminalNode* LangParser::ImportNamespaceStmtContext::MUL() {
+  return getToken(LangParser::MUL, 0);
+}
+
+tree::TerminalNode* LangParser::ImportNamespaceStmtContext::AS() {
+  return getToken(LangParser::AS, 0);
+}
+
+tree::TerminalNode* LangParser::ImportNamespaceStmtContext::IDENTIFIER() {
+  return getToken(LangParser::IDENTIFIER, 0);
+}
+
+tree::TerminalNode* LangParser::ImportNamespaceStmtContext::FROM() {
+  return getToken(LangParser::FROM, 0);
+}
+
+tree::TerminalNode* LangParser::ImportNamespaceStmtContext::STRING_LITERAL() {
+  return getToken(LangParser::STRING_LITERAL, 0);
+}
+
+LangParser::ImportNamespaceStmtContext::ImportNamespaceStmtContext(ImportStatementContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::ImportNamespaceStmtContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitImportNamespaceStmt(this);
+  else
+    return visitor->visitChildren(this);
+}
+//----------------- ImportNamedStmtContext ------------------------------------------------------------------
+
+tree::TerminalNode* LangParser::ImportNamedStmtContext::IMPORT() {
+  return getToken(LangParser::IMPORT, 0);
+}
+
+tree::TerminalNode* LangParser::ImportNamedStmtContext::OCB() {
+  return getToken(LangParser::OCB, 0);
+}
+
+std::vector<LangParser::ImportSpecifierContext *> LangParser::ImportNamedStmtContext::importSpecifier() {
+  return getRuleContexts<LangParser::ImportSpecifierContext>();
+}
+
+LangParser::ImportSpecifierContext* LangParser::ImportNamedStmtContext::importSpecifier(size_t i) {
+  return getRuleContext<LangParser::ImportSpecifierContext>(i);
+}
+
+tree::TerminalNode* LangParser::ImportNamedStmtContext::CCB() {
+  return getToken(LangParser::CCB, 0);
+}
+
+tree::TerminalNode* LangParser::ImportNamedStmtContext::FROM() {
+  return getToken(LangParser::FROM, 0);
+}
+
+tree::TerminalNode* LangParser::ImportNamedStmtContext::STRING_LITERAL() {
+  return getToken(LangParser::STRING_LITERAL, 0);
+}
+
+std::vector<tree::TerminalNode *> LangParser::ImportNamedStmtContext::COMMA() {
+  return getTokens(LangParser::COMMA);
+}
+
+tree::TerminalNode* LangParser::ImportNamedStmtContext::COMMA(size_t i) {
+  return getToken(LangParser::COMMA, i);
+}
+
+LangParser::ImportNamedStmtContext::ImportNamedStmtContext(ImportStatementContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::ImportNamedStmtContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitImportNamedStmt(this);
+  else
+    return visitor->visitChildren(this);
+}
+LangParser::ImportStatementContext* LangParser::importStatement() {
+  ImportStatementContext *_localctx = _tracker.createInstance<ImportStatementContext>(_ctx, getState());
+  enterRule(_localctx, 6, LangParser::RuleImportStatement);
+  size_t _la = 0;
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    setState(189);
+    _errHandler->sync(this);
+    switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 5, _ctx)) {
+    case 1: {
+      _localctx = _tracker.createInstance<LangParser::ImportNamespaceStmtContext>(_localctx);
+      enterOuterAlt(_localctx, 1);
+      setState(169);
+      match(LangParser::IMPORT);
+      setState(170);
+      match(LangParser::MUL);
+      setState(171);
+      match(LangParser::AS);
+      setState(172);
+      match(LangParser::IDENTIFIER);
+      setState(173);
+      match(LangParser::FROM);
+      setState(174);
+      match(LangParser::STRING_LITERAL);
+      break;
+    }
+
+    case 2: {
+      _localctx = _tracker.createInstance<LangParser::ImportNamedStmtContext>(_localctx);
+      enterOuterAlt(_localctx, 2);
+      setState(175);
+      match(LangParser::IMPORT);
+      setState(176);
+      match(LangParser::OCB);
+      setState(177);
+      importSpecifier();
+      setState(182);
+      _errHandler->sync(this);
+      _la = _input->LA(1);
+      while (_la == LangParser::COMMA) {
+        setState(178);
+        match(LangParser::COMMA);
+        setState(179);
+        importSpecifier();
+        setState(184);
+        _errHandler->sync(this);
+        _la = _input->LA(1);
+      }
+      setState(185);
+      match(LangParser::CCB);
+      setState(186);
+      match(LangParser::FROM);
+      setState(187);
+      match(LangParser::STRING_LITERAL);
+      break;
+    }
+
+    default:
+      break;
+    }
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- ImportSpecifierContext ------------------------------------------------------------------
+
+LangParser::ImportSpecifierContext::ImportSpecifierContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+std::vector<tree::TerminalNode *> LangParser::ImportSpecifierContext::IDENTIFIER() {
+  return getTokens(LangParser::IDENTIFIER);
+}
+
+tree::TerminalNode* LangParser::ImportSpecifierContext::IDENTIFIER(size_t i) {
+  return getToken(LangParser::IDENTIFIER, i);
+}
+
+tree::TerminalNode* LangParser::ImportSpecifierContext::TYPE() {
+  return getToken(LangParser::TYPE, 0);
+}
+
+tree::TerminalNode* LangParser::ImportSpecifierContext::AS() {
+  return getToken(LangParser::AS, 0);
+}
+
+
+size_t LangParser::ImportSpecifierContext::getRuleIndex() const {
+  return LangParser::RuleImportSpecifier;
+}
+
+
+std::any LangParser::ImportSpecifierContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitImportSpecifier(this);
+  else
+    return visitor->visitChildren(this);
+}
+
+LangParser::ImportSpecifierContext* LangParser::importSpecifier() {
+  ImportSpecifierContext *_localctx = _tracker.createInstance<ImportSpecifierContext>(_ctx, getState());
+  enterRule(_localctx, 8, LangParser::RuleImportSpecifier);
+  size_t _la = 0;
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    enterOuterAlt(_localctx, 1);
+    setState(192);
+    _errHandler->sync(this);
+
+    _la = _input->LA(1);
+    if (_la == LangParser::TYPE) {
+      setState(191);
+      match(LangParser::TYPE);
+    }
+    setState(194);
+    match(LangParser::IDENTIFIER);
+    setState(197);
+    _errHandler->sync(this);
+
+    _la = _input->LA(1);
+    if (_la == LangParser::AS) {
+      setState(195);
+      match(LangParser::AS);
+      setState(196);
+      match(LangParser::IDENTIFIER);
+    }
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- DeferStatementContext ------------------------------------------------------------------
+
+LangParser::DeferStatementContext::DeferStatementContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+
+size_t LangParser::DeferStatementContext::getRuleIndex() const {
+  return LangParser::RuleDeferStatement;
+}
+
+void LangParser::DeferStatementContext::copyFrom(DeferStatementContext *ctx) {
+  ParserRuleContext::copyFrom(ctx);
+}
+
+//----------------- DeferBlockStmtContext ------------------------------------------------------------------
+
+tree::TerminalNode* LangParser::DeferBlockStmtContext::DEFER() {
+  return getToken(LangParser::DEFER, 0);
+}
+
+LangParser::BlockStatementContext* LangParser::DeferBlockStmtContext::blockStatement() {
+  return getRuleContext<LangParser::BlockStatementContext>(0);
+}
+
+LangParser::DeferBlockStmtContext::DeferBlockStmtContext(DeferStatementContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::DeferBlockStmtContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitDeferBlockStmt(this);
+  else
+    return visitor->visitChildren(this);
+}
+LangParser::DeferStatementContext* LangParser::deferStatement() {
+  DeferStatementContext *_localctx = _tracker.createInstance<DeferStatementContext>(_ctx, getState());
+  enterRule(_localctx, 10, LangParser::RuleDeferStatement);
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    _localctx = _tracker.createInstance<LangParser::DeferBlockStmtContext>(_localctx);
+    enterOuterAlt(_localctx, 1);
+    setState(199);
+    match(LangParser::DEFER);
+    setState(200);
+    blockStatement();
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- UpdateStatementContext ------------------------------------------------------------------
+
+LangParser::UpdateStatementContext::UpdateStatementContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+
+size_t LangParser::UpdateStatementContext::getRuleIndex() const {
+  return LangParser::RuleUpdateStatement;
+}
+
+void LangParser::UpdateStatementContext::copyFrom(UpdateStatementContext *ctx) {
+  ParserRuleContext::copyFrom(ctx);
+}
+
+//----------------- UpdateAssignStmtContext ------------------------------------------------------------------
+
+LangParser::LvalueContext* LangParser::UpdateAssignStmtContext::lvalue() {
+  return getRuleContext<LangParser::LvalueContext>(0);
+}
+
+LangParser::ExpressionContext* LangParser::UpdateAssignStmtContext::expression() {
+  return getRuleContext<LangParser::ExpressionContext>(0);
+}
+
+tree::TerminalNode* LangParser::UpdateAssignStmtContext::ADD_ASSIGN() {
+  return getToken(LangParser::ADD_ASSIGN, 0);
+}
+
+tree::TerminalNode* LangParser::UpdateAssignStmtContext::SUB_ASSIGN() {
+  return getToken(LangParser::SUB_ASSIGN, 0);
+}
+
+tree::TerminalNode* LangParser::UpdateAssignStmtContext::MUL_ASSIGN() {
+  return getToken(LangParser::MUL_ASSIGN, 0);
+}
+
+tree::TerminalNode* LangParser::UpdateAssignStmtContext::DIV_ASSIGN() {
+  return getToken(LangParser::DIV_ASSIGN, 0);
+}
+
+tree::TerminalNode* LangParser::UpdateAssignStmtContext::MOD_ASSIGN() {
+  return getToken(LangParser::MOD_ASSIGN, 0);
+}
+
+tree::TerminalNode* LangParser::UpdateAssignStmtContext::CONCAT_ASSIGN() {
+  return getToken(LangParser::CONCAT_ASSIGN, 0);
+}
+
+LangParser::UpdateAssignStmtContext::UpdateAssignStmtContext(UpdateStatementContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::UpdateAssignStmtContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitUpdateAssignStmt(this);
+  else
+    return visitor->visitChildren(this);
+}
+LangParser::UpdateStatementContext* LangParser::updateStatement() {
+  UpdateStatementContext *_localctx = _tracker.createInstance<UpdateStatementContext>(_ctx, getState());
+  enterRule(_localctx, 12, LangParser::RuleUpdateStatement);
+  size_t _la = 0;
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    _localctx = _tracker.createInstance<LangParser::UpdateAssignStmtContext>(_localctx);
+    enterOuterAlt(_localctx, 1);
+    setState(202);
+    lvalue();
+    setState(203);
+    antlrcpp::downCast<UpdateAssignStmtContext *>(_localctx)->op = _input->LT(1);
+    _la = _input->LA(1);
+    if (!((((_la & ~ 0x3fULL) == 0) &&
+      ((1ULL << _la) & 277076930199552) != 0))) {
+      antlrcpp::downCast<UpdateAssignStmtContext *>(_localctx)->op = _errHandler->recoverInline(this);
+    }
+    else {
+      _errHandler->reportMatch(this);
+      consume();
+    }
+    setState(204);
+    expression();
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- AssignStatementContext ------------------------------------------------------------------
+
+LangParser::AssignStatementContext::AssignStatementContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+
+size_t LangParser::AssignStatementContext::getRuleIndex() const {
+  return LangParser::RuleAssignStatement;
+}
+
+void LangParser::AssignStatementContext::copyFrom(AssignStatementContext *ctx) {
+  ParserRuleContext::copyFrom(ctx);
+}
+
+//----------------- NormalAssignStmtContext ------------------------------------------------------------------
+
+std::vector<LangParser::LvalueContext *> LangParser::NormalAssignStmtContext::lvalue() {
+  return getRuleContexts<LangParser::LvalueContext>();
+}
+
+LangParser::LvalueContext* LangParser::NormalAssignStmtContext::lvalue(size_t i) {
+  return getRuleContext<LangParser::LvalueContext>(i);
+}
+
+tree::TerminalNode* LangParser::NormalAssignStmtContext::ASSIGN() {
+  return getToken(LangParser::ASSIGN, 0);
+}
+
+std::vector<LangParser::ExpressionContext *> LangParser::NormalAssignStmtContext::expression() {
+  return getRuleContexts<LangParser::ExpressionContext>();
+}
+
+LangParser::ExpressionContext* LangParser::NormalAssignStmtContext::expression(size_t i) {
+  return getRuleContext<LangParser::ExpressionContext>(i);
+}
+
+std::vector<tree::TerminalNode *> LangParser::NormalAssignStmtContext::COMMA() {
+  return getTokens(LangParser::COMMA);
+}
+
+tree::TerminalNode* LangParser::NormalAssignStmtContext::COMMA(size_t i) {
+  return getToken(LangParser::COMMA, i);
+}
+
+LangParser::NormalAssignStmtContext::NormalAssignStmtContext(AssignStatementContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::NormalAssignStmtContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitNormalAssignStmt(this);
+  else
+    return visitor->visitChildren(this);
+}
+LangParser::AssignStatementContext* LangParser::assignStatement() {
+  AssignStatementContext *_localctx = _tracker.createInstance<AssignStatementContext>(_ctx, getState());
+  enterRule(_localctx, 14, LangParser::RuleAssignStatement);
+  size_t _la = 0;
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    size_t alt;
+    _localctx = _tracker.createInstance<LangParser::NormalAssignStmtContext>(_localctx);
+    enterOuterAlt(_localctx, 1);
+    setState(206);
+    lvalue();
+    setState(211);
+    _errHandler->sync(this);
+    _la = _input->LA(1);
+    while (_la == LangParser::COMMA) {
+      setState(207);
+      match(LangParser::COMMA);
+      setState(208);
+      lvalue();
+      setState(213);
+      _errHandler->sync(this);
+      _la = _input->LA(1);
+    }
+    setState(214);
+    match(LangParser::ASSIGN);
+    setState(215);
+    expression();
+    setState(220);
+    _errHandler->sync(this);
+    alt = getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 9, _ctx);
+    while (alt != 2 && alt != atn::ATN::INVALID_ALT_NUMBER) {
+      if (alt == 1) {
+        setState(216);
+        match(LangParser::COMMA);
+        setState(217);
+        expression(); 
+      }
+      setState(222);
+      _errHandler->sync(this);
+      alt = getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 9, _ctx);
+    }
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- LvalueContext ------------------------------------------------------------------
+
+LangParser::LvalueContext::LvalueContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+
+size_t LangParser::LvalueContext::getRuleIndex() const {
+  return LangParser::RuleLvalue;
+}
+
+void LangParser::LvalueContext::copyFrom(LvalueContext *ctx) {
+  ParserRuleContext::copyFrom(ctx);
+}
+
+//----------------- LvalueBaseContext ------------------------------------------------------------------
+
+tree::TerminalNode* LangParser::LvalueBaseContext::IDENTIFIER() {
+  return getToken(LangParser::IDENTIFIER, 0);
+}
+
+std::vector<LangParser::LvalueSuffixContext *> LangParser::LvalueBaseContext::lvalueSuffix() {
+  return getRuleContexts<LangParser::LvalueSuffixContext>();
+}
+
+LangParser::LvalueSuffixContext* LangParser::LvalueBaseContext::lvalueSuffix(size_t i) {
+  return getRuleContext<LangParser::LvalueSuffixContext>(i);
+}
+
+LangParser::LvalueBaseContext::LvalueBaseContext(LvalueContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::LvalueBaseContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitLvalueBase(this);
+  else
+    return visitor->visitChildren(this);
+}
+LangParser::LvalueContext* LangParser::lvalue() {
+  LvalueContext *_localctx = _tracker.createInstance<LvalueContext>(_ctx, getState());
+  enterRule(_localctx, 16, LangParser::RuleLvalue);
+  size_t _la = 0;
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    _localctx = _tracker.createInstance<LangParser::LvalueBaseContext>(_localctx);
+    enterOuterAlt(_localctx, 1);
+    setState(223);
+    match(LangParser::IDENTIFIER);
+    setState(227);
+    _errHandler->sync(this);
+    _la = _input->LA(1);
+    while (_la == LangParser::OSB
+
+    || _la == LangParser::DOT) {
+      setState(224);
+      lvalueSuffix();
+      setState(229);
+      _errHandler->sync(this);
+      _la = _input->LA(1);
+    }
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- LvalueSuffixContext ------------------------------------------------------------------
+
+LangParser::LvalueSuffixContext::LvalueSuffixContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+
+size_t LangParser::LvalueSuffixContext::getRuleIndex() const {
+  return LangParser::RuleLvalueSuffix;
+}
+
+void LangParser::LvalueSuffixContext::copyFrom(LvalueSuffixContext *ctx) {
+  ParserRuleContext::copyFrom(ctx);
+}
+
+//----------------- LvalueIndexContext ------------------------------------------------------------------
+
+tree::TerminalNode* LangParser::LvalueIndexContext::OSB() {
+  return getToken(LangParser::OSB, 0);
+}
+
+LangParser::ExpressionContext* LangParser::LvalueIndexContext::expression() {
+  return getRuleContext<LangParser::ExpressionContext>(0);
+}
+
+tree::TerminalNode* LangParser::LvalueIndexContext::CSB() {
+  return getToken(LangParser::CSB, 0);
+}
+
+LangParser::LvalueIndexContext::LvalueIndexContext(LvalueSuffixContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::LvalueIndexContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitLvalueIndex(this);
+  else
+    return visitor->visitChildren(this);
+}
+//----------------- LvalueMemberContext ------------------------------------------------------------------
+
+tree::TerminalNode* LangParser::LvalueMemberContext::DOT() {
+  return getToken(LangParser::DOT, 0);
+}
+
+tree::TerminalNode* LangParser::LvalueMemberContext::IDENTIFIER() {
+  return getToken(LangParser::IDENTIFIER, 0);
+}
+
+LangParser::LvalueMemberContext::LvalueMemberContext(LvalueSuffixContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::LvalueMemberContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitLvalueMember(this);
+  else
+    return visitor->visitChildren(this);
+}
+LangParser::LvalueSuffixContext* LangParser::lvalueSuffix() {
+  LvalueSuffixContext *_localctx = _tracker.createInstance<LvalueSuffixContext>(_ctx, getState());
+  enterRule(_localctx, 18, LangParser::RuleLvalueSuffix);
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    setState(236);
+    _errHandler->sync(this);
+    switch (_input->LA(1)) {
+      case LangParser::OSB: {
+        _localctx = _tracker.createInstance<LangParser::LvalueIndexContext>(_localctx);
+        enterOuterAlt(_localctx, 1);
+        setState(230);
+        match(LangParser::OSB);
+        setState(231);
+        expression();
+        setState(232);
+        match(LangParser::CSB);
+        break;
+      }
+
+      case LangParser::DOT: {
+        _localctx = _tracker.createInstance<LangParser::LvalueMemberContext>(_localctx);
+        enterOuterAlt(_localctx, 2);
+        setState(234);
+        match(LangParser::DOT);
+        setState(235);
+        match(LangParser::IDENTIFIER);
+        break;
+      }
+
+    default:
+      throw NoViableAltException(this);
+    }
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- DeclarationContext ------------------------------------------------------------------
+
+LangParser::DeclarationContext::DeclarationContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+LangParser::VariableDeclarationContext* LangParser::DeclarationContext::variableDeclaration() {
+  return getRuleContext<LangParser::VariableDeclarationContext>(0);
+}
+
+tree::TerminalNode* LangParser::DeclarationContext::SEMICOLON() {
+  return getToken(LangParser::SEMICOLON, 0);
+}
+
+LangParser::FunctionDeclarationContext* LangParser::DeclarationContext::functionDeclaration() {
+  return getRuleContext<LangParser::FunctionDeclarationContext>(0);
+}
+
+LangParser::ClassDeclarationContext* LangParser::DeclarationContext::classDeclaration() {
+  return getRuleContext<LangParser::ClassDeclarationContext>(0);
+}
+
+tree::TerminalNode* LangParser::DeclarationContext::EXPORT() {
+  return getToken(LangParser::EXPORT, 0);
+}
+
+
+size_t LangParser::DeclarationContext::getRuleIndex() const {
+  return LangParser::RuleDeclaration;
+}
+
+
+std::any LangParser::DeclarationContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitDeclaration(this);
+  else
+    return visitor->visitChildren(this);
+}
+
+LangParser::DeclarationContext* LangParser::declaration() {
+  DeclarationContext *_localctx = _tracker.createInstance<DeclarationContext>(_ctx, getState());
+  enterRule(_localctx, 20, LangParser::RuleDeclaration);
+  size_t _la = 0;
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    enterOuterAlt(_localctx, 1);
+    setState(239);
+    _errHandler->sync(this);
+
+    _la = _input->LA(1);
+    if (_la == LangParser::EXPORT) {
+      setState(238);
+      match(LangParser::EXPORT);
+    }
+    setState(246);
+    _errHandler->sync(this);
+    switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 13, _ctx)) {
+    case 1: {
+      setState(241);
+      variableDeclaration();
+      setState(242);
+      match(LangParser::SEMICOLON);
+      break;
+    }
+
+    case 2: {
+      setState(244);
+      functionDeclaration();
+      break;
+    }
+
+    case 3: {
+      setState(245);
+      classDeclaration();
+      break;
+    }
+
+    default:
+      break;
+    }
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- VariableDeclarationContext ------------------------------------------------------------------
+
+LangParser::VariableDeclarationContext::VariableDeclarationContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+
+size_t LangParser::VariableDeclarationContext::getRuleIndex() const {
+  return LangParser::RuleVariableDeclaration;
+}
+
+void LangParser::VariableDeclarationContext::copyFrom(VariableDeclarationContext *ctx) {
+  ParserRuleContext::copyFrom(ctx);
+}
+
+//----------------- MutiVariableDeclarationDefContext ------------------------------------------------------------------
+
+tree::TerminalNode* LangParser::MutiVariableDeclarationDefContext::MUTIVAR() {
+  return getToken(LangParser::MUTIVAR, 0);
+}
+
+std::vector<tree::TerminalNode *> LangParser::MutiVariableDeclarationDefContext::IDENTIFIER() {
+  return getTokens(LangParser::IDENTIFIER);
+}
+
+tree::TerminalNode* LangParser::MutiVariableDeclarationDefContext::IDENTIFIER(size_t i) {
+  return getToken(LangParser::IDENTIFIER, i);
+}
+
+std::vector<tree::TerminalNode *> LangParser::MutiVariableDeclarationDefContext::GLOBAL() {
+  return getTokens(LangParser::GLOBAL);
+}
+
+tree::TerminalNode* LangParser::MutiVariableDeclarationDefContext::GLOBAL(size_t i) {
+  return getToken(LangParser::GLOBAL, i);
+}
+
+std::vector<tree::TerminalNode *> LangParser::MutiVariableDeclarationDefContext::CONST() {
+  return getTokens(LangParser::CONST);
+}
+
+tree::TerminalNode* LangParser::MutiVariableDeclarationDefContext::CONST(size_t i) {
+  return getToken(LangParser::CONST, i);
+}
+
+std::vector<tree::TerminalNode *> LangParser::MutiVariableDeclarationDefContext::COMMA() {
+  return getTokens(LangParser::COMMA);
+}
+
+tree::TerminalNode* LangParser::MutiVariableDeclarationDefContext::COMMA(size_t i) {
+  return getToken(LangParser::COMMA, i);
+}
+
+tree::TerminalNode* LangParser::MutiVariableDeclarationDefContext::ASSIGN() {
+  return getToken(LangParser::ASSIGN, 0);
+}
+
+LangParser::ExpressionContext* LangParser::MutiVariableDeclarationDefContext::expression() {
+  return getRuleContext<LangParser::ExpressionContext>(0);
+}
+
+LangParser::MutiVariableDeclarationDefContext::MutiVariableDeclarationDefContext(VariableDeclarationContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::MutiVariableDeclarationDefContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitMutiVariableDeclarationDef(this);
+  else
+    return visitor->visitChildren(this);
+}
+//----------------- VariableDeclarationDefContext ------------------------------------------------------------------
+
+LangParser::Declaration_itemContext* LangParser::VariableDeclarationDefContext::declaration_item() {
+  return getRuleContext<LangParser::Declaration_itemContext>(0);
+}
+
+tree::TerminalNode* LangParser::VariableDeclarationDefContext::GLOBAL() {
+  return getToken(LangParser::GLOBAL, 0);
+}
+
+tree::TerminalNode* LangParser::VariableDeclarationDefContext::CONST() {
+  return getToken(LangParser::CONST, 0);
+}
+
+tree::TerminalNode* LangParser::VariableDeclarationDefContext::ASSIGN() {
+  return getToken(LangParser::ASSIGN, 0);
+}
+
+LangParser::ExpressionContext* LangParser::VariableDeclarationDefContext::expression() {
+  return getRuleContext<LangParser::ExpressionContext>(0);
+}
+
+LangParser::VariableDeclarationDefContext::VariableDeclarationDefContext(VariableDeclarationContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::VariableDeclarationDefContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitVariableDeclarationDef(this);
+  else
+    return visitor->visitChildren(this);
+}
+LangParser::VariableDeclarationContext* LangParser::variableDeclaration() {
+  VariableDeclarationContext *_localctx = _tracker.createInstance<VariableDeclarationContext>(_ctx, getState());
+  enterRule(_localctx, 22, LangParser::RuleVariableDeclaration);
+  size_t _la = 0;
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    setState(284);
+    _errHandler->sync(this);
+    switch (_input->LA(1)) {
+      case LangParser::INT:
+      case LangParser::FLOAT:
+      case LangParser::NUMBER:
+      case LangParser::STRING:
+      case LangParser::BOOL:
+      case LangParser::ANY:
+      case LangParser::VOID:
+      case LangParser::NULL_:
+      case LangParser::LIST:
+      case LangParser::MAP:
+      case LangParser::FUNCTION:
+      case LangParser::COROUTINE:
+      case LangParser::CONST:
+      case LangParser::AUTO:
+      case LangParser::GLOBAL:
+      case LangParser::IDENTIFIER: {
+        _localctx = _tracker.createInstance<LangParser::VariableDeclarationDefContext>(_localctx);
+        enterOuterAlt(_localctx, 1);
+        setState(249);
+        _errHandler->sync(this);
+
+        _la = _input->LA(1);
+        if (_la == LangParser::GLOBAL) {
+          setState(248);
+          match(LangParser::GLOBAL);
+        }
+        setState(252);
+        _errHandler->sync(this);
+
+        _la = _input->LA(1);
+        if (_la == LangParser::CONST) {
+          setState(251);
+          match(LangParser::CONST);
+        }
+        setState(254);
+        declaration_item();
+        setState(257);
+        _errHandler->sync(this);
+
+        _la = _input->LA(1);
+        if (_la == LangParser::ASSIGN) {
+          setState(255);
+          match(LangParser::ASSIGN);
+          setState(256);
+          expression();
+        }
+        break;
+      }
+
+      case LangParser::MUTIVAR: {
+        _localctx = _tracker.createInstance<LangParser::MutiVariableDeclarationDefContext>(_localctx);
+        enterOuterAlt(_localctx, 2);
+        setState(259);
+        match(LangParser::MUTIVAR);
+        setState(261);
+        _errHandler->sync(this);
+
+        _la = _input->LA(1);
+        if (_la == LangParser::GLOBAL) {
+          setState(260);
+          match(LangParser::GLOBAL);
+        }
+        setState(264);
+        _errHandler->sync(this);
+
+        _la = _input->LA(1);
+        if (_la == LangParser::CONST) {
+          setState(263);
+          match(LangParser::CONST);
+        }
+        setState(266);
+        match(LangParser::IDENTIFIER);
+        setState(277);
+        _errHandler->sync(this);
+        _la = _input->LA(1);
+        while (_la == LangParser::COMMA) {
+          setState(267);
+          match(LangParser::COMMA);
+          setState(269);
+          _errHandler->sync(this);
+
+          _la = _input->LA(1);
+          if (_la == LangParser::GLOBAL) {
+            setState(268);
+            match(LangParser::GLOBAL);
+          }
+          setState(272);
+          _errHandler->sync(this);
+
+          _la = _input->LA(1);
+          if (_la == LangParser::CONST) {
+            setState(271);
+            match(LangParser::CONST);
+          }
+          setState(274);
+          match(LangParser::IDENTIFIER);
+          setState(279);
+          _errHandler->sync(this);
+          _la = _input->LA(1);
+        }
+        setState(282);
+        _errHandler->sync(this);
+
+        _la = _input->LA(1);
+        if (_la == LangParser::ASSIGN) {
+          setState(280);
+          match(LangParser::ASSIGN);
+          setState(281);
+          expression();
+        }
+        break;
+      }
+
+    default:
+      throw NoViableAltException(this);
+    }
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- Declaration_itemContext ------------------------------------------------------------------
+
+LangParser::Declaration_itemContext::Declaration_itemContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+tree::TerminalNode* LangParser::Declaration_itemContext::IDENTIFIER() {
+  return getToken(LangParser::IDENTIFIER, 0);
+}
+
+LangParser::TypeContext* LangParser::Declaration_itemContext::type() {
+  return getRuleContext<LangParser::TypeContext>(0);
+}
+
+tree::TerminalNode* LangParser::Declaration_itemContext::AUTO() {
+  return getToken(LangParser::AUTO, 0);
+}
+
+
+size_t LangParser::Declaration_itemContext::getRuleIndex() const {
+  return LangParser::RuleDeclaration_item;
+}
+
+
+std::any LangParser::Declaration_itemContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitDeclaration_item(this);
+  else
+    return visitor->visitChildren(this);
+}
+
+LangParser::Declaration_itemContext* LangParser::declaration_item() {
+  Declaration_itemContext *_localctx = _tracker.createInstance<Declaration_itemContext>(_ctx, getState());
+  enterRule(_localctx, 24, LangParser::RuleDeclaration_item);
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    enterOuterAlt(_localctx, 1);
+    setState(288);
+    _errHandler->sync(this);
+    switch (_input->LA(1)) {
+      case LangParser::INT:
+      case LangParser::FLOAT:
+      case LangParser::NUMBER:
+      case LangParser::STRING:
+      case LangParser::BOOL:
+      case LangParser::ANY:
+      case LangParser::VOID:
+      case LangParser::NULL_:
+      case LangParser::LIST:
+      case LangParser::MAP:
+      case LangParser::FUNCTION:
+      case LangParser::COROUTINE:
+      case LangParser::IDENTIFIER: {
+        setState(286);
+        type();
+        break;
+      }
+
+      case LangParser::AUTO: {
+        setState(287);
+        match(LangParser::AUTO);
+        break;
+      }
+
+    default:
+      throw NoViableAltException(this);
+    }
+    setState(290);
+    match(LangParser::IDENTIFIER);
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- FunctionDeclarationContext ------------------------------------------------------------------
+
+LangParser::FunctionDeclarationContext::FunctionDeclarationContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+
+size_t LangParser::FunctionDeclarationContext::getRuleIndex() const {
+  return LangParser::RuleFunctionDeclaration;
+}
+
+void LangParser::FunctionDeclarationContext::copyFrom(FunctionDeclarationContext *ctx) {
+  ParserRuleContext::copyFrom(ctx);
+}
+
+//----------------- FunctionDeclarationDefContext ------------------------------------------------------------------
+
+LangParser::TypeContext* LangParser::FunctionDeclarationDefContext::type() {
+  return getRuleContext<LangParser::TypeContext>(0);
+}
+
+LangParser::QualifiedIdentifierContext* LangParser::FunctionDeclarationDefContext::qualifiedIdentifier() {
+  return getRuleContext<LangParser::QualifiedIdentifierContext>(0);
+}
+
+tree::TerminalNode* LangParser::FunctionDeclarationDefContext::OP() {
+  return getToken(LangParser::OP, 0);
+}
+
+tree::TerminalNode* LangParser::FunctionDeclarationDefContext::CP() {
+  return getToken(LangParser::CP, 0);
+}
+
+LangParser::BlockStatementContext* LangParser::FunctionDeclarationDefContext::blockStatement() {
+  return getRuleContext<LangParser::BlockStatementContext>(0);
+}
+
+tree::TerminalNode* LangParser::FunctionDeclarationDefContext::GLOBAL() {
+  return getToken(LangParser::GLOBAL, 0);
+}
+
+LangParser::ParameterListContext* LangParser::FunctionDeclarationDefContext::parameterList() {
+  return getRuleContext<LangParser::ParameterListContext>(0);
+}
+
+LangParser::FunctionDeclarationDefContext::FunctionDeclarationDefContext(FunctionDeclarationContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::FunctionDeclarationDefContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitFunctionDeclarationDef(this);
+  else
+    return visitor->visitChildren(this);
+}
+//----------------- MultiReturnFunctionDeclarationDefContext ------------------------------------------------------------------
+
+tree::TerminalNode* LangParser::MultiReturnFunctionDeclarationDefContext::MUTIVAR() {
+  return getToken(LangParser::MUTIVAR, 0);
+}
+
+LangParser::QualifiedIdentifierContext* LangParser::MultiReturnFunctionDeclarationDefContext::qualifiedIdentifier() {
+  return getRuleContext<LangParser::QualifiedIdentifierContext>(0);
+}
+
+tree::TerminalNode* LangParser::MultiReturnFunctionDeclarationDefContext::OP() {
+  return getToken(LangParser::OP, 0);
+}
+
+tree::TerminalNode* LangParser::MultiReturnFunctionDeclarationDefContext::CP() {
+  return getToken(LangParser::CP, 0);
+}
+
+LangParser::BlockStatementContext* LangParser::MultiReturnFunctionDeclarationDefContext::blockStatement() {
+  return getRuleContext<LangParser::BlockStatementContext>(0);
+}
+
+tree::TerminalNode* LangParser::MultiReturnFunctionDeclarationDefContext::GLOBAL() {
+  return getToken(LangParser::GLOBAL, 0);
+}
+
+LangParser::ParameterListContext* LangParser::MultiReturnFunctionDeclarationDefContext::parameterList() {
+  return getRuleContext<LangParser::ParameterListContext>(0);
+}
+
+LangParser::MultiReturnFunctionDeclarationDefContext::MultiReturnFunctionDeclarationDefContext(FunctionDeclarationContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::MultiReturnFunctionDeclarationDefContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitMultiReturnFunctionDeclarationDef(this);
+  else
+    return visitor->visitChildren(this);
+}
+LangParser::FunctionDeclarationContext* LangParser::functionDeclaration() {
+  FunctionDeclarationContext *_localctx = _tracker.createInstance<FunctionDeclarationContext>(_ctx, getState());
+  enterRule(_localctx, 26, LangParser::RuleFunctionDeclaration);
+  size_t _la = 0;
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    setState(316);
+    _errHandler->sync(this);
+    switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 29, _ctx)) {
+    case 1: {
+      _localctx = _tracker.createInstance<LangParser::FunctionDeclarationDefContext>(_localctx);
+      enterOuterAlt(_localctx, 1);
+      setState(293);
+      _errHandler->sync(this);
+
+      _la = _input->LA(1);
+      if (_la == LangParser::GLOBAL) {
+        setState(292);
+        match(LangParser::GLOBAL);
+      }
+      setState(295);
+      type();
+      setState(296);
+      qualifiedIdentifier();
+      setState(297);
+      match(LangParser::OP);
+      setState(299);
+      _errHandler->sync(this);
+
+      _la = _input->LA(1);
+      if ((((_la & ~ 0x3fULL) == 0) &&
+        ((1ULL << _la) & 8190) != 0) || _la == LangParser::DDD
+
+      || _la == LangParser::IDENTIFIER) {
+        setState(298);
+        parameterList();
+      }
+      setState(301);
+      match(LangParser::CP);
+      setState(302);
+      blockStatement();
+      break;
+    }
+
+    case 2: {
+      _localctx = _tracker.createInstance<LangParser::MultiReturnFunctionDeclarationDefContext>(_localctx);
+      enterOuterAlt(_localctx, 2);
+      setState(305);
+      _errHandler->sync(this);
+
+      _la = _input->LA(1);
+      if (_la == LangParser::GLOBAL) {
+        setState(304);
+        match(LangParser::GLOBAL);
+      }
+      setState(307);
+      match(LangParser::MUTIVAR);
+      setState(308);
+      qualifiedIdentifier();
+      setState(309);
+      match(LangParser::OP);
+      setState(311);
+      _errHandler->sync(this);
+
+      _la = _input->LA(1);
+      if ((((_la & ~ 0x3fULL) == 0) &&
+        ((1ULL << _la) & 8190) != 0) || _la == LangParser::DDD
+
+      || _la == LangParser::IDENTIFIER) {
+        setState(310);
+        parameterList();
+      }
+      setState(313);
+      match(LangParser::CP);
+      setState(314);
+      blockStatement();
+      break;
+    }
+
+    default:
+      break;
+    }
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- ClassDeclarationContext ------------------------------------------------------------------
+
+LangParser::ClassDeclarationContext::ClassDeclarationContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+
+size_t LangParser::ClassDeclarationContext::getRuleIndex() const {
+  return LangParser::RuleClassDeclaration;
+}
+
+void LangParser::ClassDeclarationContext::copyFrom(ClassDeclarationContext *ctx) {
+  ParserRuleContext::copyFrom(ctx);
+}
+
+//----------------- ClassDeclarationDefContext ------------------------------------------------------------------
+
+tree::TerminalNode* LangParser::ClassDeclarationDefContext::CLASS() {
+  return getToken(LangParser::CLASS, 0);
+}
+
+tree::TerminalNode* LangParser::ClassDeclarationDefContext::IDENTIFIER() {
+  return getToken(LangParser::IDENTIFIER, 0);
+}
+
+tree::TerminalNode* LangParser::ClassDeclarationDefContext::OCB() {
+  return getToken(LangParser::OCB, 0);
+}
+
+tree::TerminalNode* LangParser::ClassDeclarationDefContext::CCB() {
+  return getToken(LangParser::CCB, 0);
+}
+
+std::vector<LangParser::ClassMemberContext *> LangParser::ClassDeclarationDefContext::classMember() {
+  return getRuleContexts<LangParser::ClassMemberContext>();
+}
+
+LangParser::ClassMemberContext* LangParser::ClassDeclarationDefContext::classMember(size_t i) {
+  return getRuleContext<LangParser::ClassMemberContext>(i);
+}
+
+LangParser::ClassDeclarationDefContext::ClassDeclarationDefContext(ClassDeclarationContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::ClassDeclarationDefContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitClassDeclarationDef(this);
+  else
+    return visitor->visitChildren(this);
+}
+LangParser::ClassDeclarationContext* LangParser::classDeclaration() {
+  ClassDeclarationContext *_localctx = _tracker.createInstance<ClassDeclarationContext>(_ctx, getState());
+  enterRule(_localctx, 28, LangParser::RuleClassDeclaration);
+  size_t _la = 0;
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    _localctx = _tracker.createInstance<LangParser::ClassDeclarationDefContext>(_localctx);
+    enterOuterAlt(_localctx, 1);
+    setState(318);
+    match(LangParser::CLASS);
+    setState(319);
+    match(LangParser::IDENTIFIER);
+    setState(320);
+    match(LangParser::OCB);
+    setState(324);
+    _errHandler->sync(this);
+    _la = _input->LA(1);
+    while ((((_la & ~ 0x3fULL) == 0) &&
+      ((1ULL << _la) & 184565758) != 0) || _la == LangParser::SEMICOLON
+
+    || _la == LangParser::IDENTIFIER) {
+      setState(321);
+      classMember();
+      setState(326);
+      _errHandler->sync(this);
+      _la = _input->LA(1);
+    }
+    setState(327);
+    match(LangParser::CCB);
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- ClassMemberContext ------------------------------------------------------------------
+
+LangParser::ClassMemberContext::ClassMemberContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+
+size_t LangParser::ClassMemberContext::getRuleIndex() const {
+  return LangParser::RuleClassMember;
+}
+
+void LangParser::ClassMemberContext::copyFrom(ClassMemberContext *ctx) {
+  ParserRuleContext::copyFrom(ctx);
+}
+
+//----------------- ClassMethodMemberContext ------------------------------------------------------------------
+
+LangParser::TypeContext* LangParser::ClassMethodMemberContext::type() {
+  return getRuleContext<LangParser::TypeContext>(0);
+}
+
+tree::TerminalNode* LangParser::ClassMethodMemberContext::IDENTIFIER() {
+  return getToken(LangParser::IDENTIFIER, 0);
+}
+
+tree::TerminalNode* LangParser::ClassMethodMemberContext::OP() {
+  return getToken(LangParser::OP, 0);
+}
+
+tree::TerminalNode* LangParser::ClassMethodMemberContext::CP() {
+  return getToken(LangParser::CP, 0);
+}
+
+LangParser::BlockStatementContext* LangParser::ClassMethodMemberContext::blockStatement() {
+  return getRuleContext<LangParser::BlockStatementContext>(0);
+}
+
+tree::TerminalNode* LangParser::ClassMethodMemberContext::STATIC() {
+  return getToken(LangParser::STATIC, 0);
+}
+
+LangParser::ParameterListContext* LangParser::ClassMethodMemberContext::parameterList() {
+  return getRuleContext<LangParser::ParameterListContext>(0);
+}
+
+LangParser::ClassMethodMemberContext::ClassMethodMemberContext(ClassMemberContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::ClassMethodMemberContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitClassMethodMember(this);
+  else
+    return visitor->visitChildren(this);
+}
+//----------------- ClassFieldMemberContext ------------------------------------------------------------------
+
+LangParser::Declaration_itemContext* LangParser::ClassFieldMemberContext::declaration_item() {
+  return getRuleContext<LangParser::Declaration_itemContext>(0);
+}
+
+tree::TerminalNode* LangParser::ClassFieldMemberContext::STATIC() {
+  return getToken(LangParser::STATIC, 0);
+}
+
+tree::TerminalNode* LangParser::ClassFieldMemberContext::CONST() {
+  return getToken(LangParser::CONST, 0);
+}
+
+tree::TerminalNode* LangParser::ClassFieldMemberContext::ASSIGN() {
+  return getToken(LangParser::ASSIGN, 0);
+}
+
+LangParser::ExpressionContext* LangParser::ClassFieldMemberContext::expression() {
+  return getRuleContext<LangParser::ExpressionContext>(0);
+}
+
+LangParser::ClassFieldMemberContext::ClassFieldMemberContext(ClassMemberContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::ClassFieldMemberContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitClassFieldMember(this);
+  else
+    return visitor->visitChildren(this);
+}
+//----------------- ClassEmptyMemberContext ------------------------------------------------------------------
+
+tree::TerminalNode* LangParser::ClassEmptyMemberContext::SEMICOLON() {
+  return getToken(LangParser::SEMICOLON, 0);
+}
+
+LangParser::ClassEmptyMemberContext::ClassEmptyMemberContext(ClassMemberContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::ClassEmptyMemberContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitClassEmptyMember(this);
+  else
+    return visitor->visitChildren(this);
+}
+//----------------- MultiReturnClassMethodMemberContext ------------------------------------------------------------------
+
+tree::TerminalNode* LangParser::MultiReturnClassMethodMemberContext::MUTIVAR() {
+  return getToken(LangParser::MUTIVAR, 0);
+}
+
+tree::TerminalNode* LangParser::MultiReturnClassMethodMemberContext::IDENTIFIER() {
+  return getToken(LangParser::IDENTIFIER, 0);
+}
+
+tree::TerminalNode* LangParser::MultiReturnClassMethodMemberContext::OP() {
+  return getToken(LangParser::OP, 0);
+}
+
+tree::TerminalNode* LangParser::MultiReturnClassMethodMemberContext::CP() {
+  return getToken(LangParser::CP, 0);
+}
+
+LangParser::BlockStatementContext* LangParser::MultiReturnClassMethodMemberContext::blockStatement() {
+  return getRuleContext<LangParser::BlockStatementContext>(0);
+}
+
+tree::TerminalNode* LangParser::MultiReturnClassMethodMemberContext::STATIC() {
+  return getToken(LangParser::STATIC, 0);
+}
+
+LangParser::ParameterListContext* LangParser::MultiReturnClassMethodMemberContext::parameterList() {
+  return getRuleContext<LangParser::ParameterListContext>(0);
+}
+
+LangParser::MultiReturnClassMethodMemberContext::MultiReturnClassMethodMemberContext(ClassMemberContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::MultiReturnClassMethodMemberContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitMultiReturnClassMethodMember(this);
+  else
+    return visitor->visitChildren(this);
+}
+LangParser::ClassMemberContext* LangParser::classMember() {
+  ClassMemberContext *_localctx = _tracker.createInstance<ClassMemberContext>(_ctx, getState());
+  enterRule(_localctx, 30, LangParser::RuleClassMember);
+  size_t _la = 0;
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    setState(364);
+    _errHandler->sync(this);
+    switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 38, _ctx)) {
+    case 1: {
+      _localctx = _tracker.createInstance<LangParser::ClassFieldMemberContext>(_localctx);
+      enterOuterAlt(_localctx, 1);
+      setState(330);
+      _errHandler->sync(this);
+
+      _la = _input->LA(1);
+      if (_la == LangParser::STATIC) {
+        setState(329);
+        match(LangParser::STATIC);
+      }
+      setState(333);
+      _errHandler->sync(this);
+
+      _la = _input->LA(1);
+      if (_la == LangParser::CONST) {
+        setState(332);
+        match(LangParser::CONST);
+      }
+      setState(335);
+      declaration_item();
+      setState(338);
+      _errHandler->sync(this);
+
+      _la = _input->LA(1);
+      if (_la == LangParser::ASSIGN) {
+        setState(336);
+        match(LangParser::ASSIGN);
+        setState(337);
+        expression();
+      }
+      break;
+    }
+
+    case 2: {
+      _localctx = _tracker.createInstance<LangParser::ClassMethodMemberContext>(_localctx);
+      enterOuterAlt(_localctx, 2);
+      setState(341);
+      _errHandler->sync(this);
+
+      _la = _input->LA(1);
+      if (_la == LangParser::STATIC) {
+        setState(340);
+        match(LangParser::STATIC);
+      }
+      setState(343);
+      type();
+      setState(344);
+      match(LangParser::IDENTIFIER);
+      setState(345);
+      match(LangParser::OP);
+      setState(347);
+      _errHandler->sync(this);
+
+      _la = _input->LA(1);
+      if ((((_la & ~ 0x3fULL) == 0) &&
+        ((1ULL << _la) & 8190) != 0) || _la == LangParser::DDD
+
+      || _la == LangParser::IDENTIFIER) {
+        setState(346);
+        parameterList();
+      }
+      setState(349);
+      match(LangParser::CP);
+      setState(350);
+      blockStatement();
+      break;
+    }
+
+    case 3: {
+      _localctx = _tracker.createInstance<LangParser::MultiReturnClassMethodMemberContext>(_localctx);
+      enterOuterAlt(_localctx, 3);
+      setState(353);
+      _errHandler->sync(this);
+
+      _la = _input->LA(1);
+      if (_la == LangParser::STATIC) {
+        setState(352);
+        match(LangParser::STATIC);
+      }
+      setState(355);
+      match(LangParser::MUTIVAR);
+      setState(356);
+      match(LangParser::IDENTIFIER);
+      setState(357);
+      match(LangParser::OP);
+      setState(359);
+      _errHandler->sync(this);
+
+      _la = _input->LA(1);
+      if ((((_la & ~ 0x3fULL) == 0) &&
+        ((1ULL << _la) & 8190) != 0) || _la == LangParser::DDD
+
+      || _la == LangParser::IDENTIFIER) {
+        setState(358);
+        parameterList();
+      }
+      setState(361);
+      match(LangParser::CP);
+      setState(362);
+      blockStatement();
+      break;
+    }
+
+    case 4: {
+      _localctx = _tracker.createInstance<LangParser::ClassEmptyMemberContext>(_localctx);
+      enterOuterAlt(_localctx, 4);
+      setState(363);
+      match(LangParser::SEMICOLON);
+      break;
+    }
+
+    default:
+      break;
+    }
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- TypeContext ------------------------------------------------------------------
+
+LangParser::TypeContext::TypeContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+
+size_t LangParser::TypeContext::getRuleIndex() const {
+  return LangParser::RuleType;
+}
+
+void LangParser::TypeContext::copyFrom(TypeContext *ctx) {
+  ParserRuleContext::copyFrom(ctx);
+}
+
+//----------------- TypeMapContext ------------------------------------------------------------------
+
+LangParser::MapTypeContext* LangParser::TypeMapContext::mapType() {
+  return getRuleContext<LangParser::MapTypeContext>(0);
+}
+
+LangParser::TypeMapContext::TypeMapContext(TypeContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::TypeMapContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitTypeMap(this);
+  else
+    return visitor->visitChildren(this);
+}
+//----------------- TypeAnyContext ------------------------------------------------------------------
+
+tree::TerminalNode* LangParser::TypeAnyContext::ANY() {
+  return getToken(LangParser::ANY, 0);
+}
+
+LangParser::TypeAnyContext::TypeAnyContext(TypeContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::TypeAnyContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitTypeAny(this);
+  else
+    return visitor->visitChildren(this);
+}
+//----------------- TypeListTypeContext ------------------------------------------------------------------
+
+LangParser::ListTypeContext* LangParser::TypeListTypeContext::listType() {
+  return getRuleContext<LangParser::ListTypeContext>(0);
+}
+
+LangParser::TypeListTypeContext::TypeListTypeContext(TypeContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::TypeListTypeContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitTypeListType(this);
+  else
+    return visitor->visitChildren(this);
+}
+//----------------- TypeQualifiedIdentifierContext ------------------------------------------------------------------
+
+LangParser::QualifiedIdentifierContext* LangParser::TypeQualifiedIdentifierContext::qualifiedIdentifier() {
+  return getRuleContext<LangParser::QualifiedIdentifierContext>(0);
+}
+
+LangParser::TypeQualifiedIdentifierContext::TypeQualifiedIdentifierContext(TypeContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::TypeQualifiedIdentifierContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitTypeQualifiedIdentifier(this);
+  else
+    return visitor->visitChildren(this);
+}
+//----------------- TypePrimitiveContext ------------------------------------------------------------------
+
+LangParser::PrimitiveTypeContext* LangParser::TypePrimitiveContext::primitiveType() {
+  return getRuleContext<LangParser::PrimitiveTypeContext>(0);
+}
+
+LangParser::TypePrimitiveContext::TypePrimitiveContext(TypeContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::TypePrimitiveContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitTypePrimitive(this);
+  else
+    return visitor->visitChildren(this);
+}
+LangParser::TypeContext* LangParser::type() {
+  TypeContext *_localctx = _tracker.createInstance<TypeContext>(_ctx, getState());
+  enterRule(_localctx, 32, LangParser::RuleType);
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    setState(371);
+    _errHandler->sync(this);
+    switch (_input->LA(1)) {
+      case LangParser::INT:
+      case LangParser::FLOAT:
+      case LangParser::NUMBER:
+      case LangParser::STRING:
+      case LangParser::BOOL:
+      case LangParser::VOID:
+      case LangParser::NULL_:
+      case LangParser::FUNCTION:
+      case LangParser::COROUTINE: {
+        _localctx = _tracker.createInstance<LangParser::TypePrimitiveContext>(_localctx);
+        enterOuterAlt(_localctx, 1);
+        setState(366);
+        primitiveType();
+        break;
+      }
+
+      case LangParser::LIST: {
+        _localctx = _tracker.createInstance<LangParser::TypeListTypeContext>(_localctx);
+        enterOuterAlt(_localctx, 2);
+        setState(367);
+        listType();
+        break;
+      }
+
+      case LangParser::MAP: {
+        _localctx = _tracker.createInstance<LangParser::TypeMapContext>(_localctx);
+        enterOuterAlt(_localctx, 3);
+        setState(368);
+        mapType();
+        break;
+      }
+
+      case LangParser::ANY: {
+        _localctx = _tracker.createInstance<LangParser::TypeAnyContext>(_localctx);
+        enterOuterAlt(_localctx, 4);
+        setState(369);
+        match(LangParser::ANY);
+        break;
+      }
+
+      case LangParser::IDENTIFIER: {
+        _localctx = _tracker.createInstance<LangParser::TypeQualifiedIdentifierContext>(_localctx);
+        enterOuterAlt(_localctx, 5);
+        setState(370);
+        qualifiedIdentifier();
+        break;
+      }
+
+    default:
+      throw NoViableAltException(this);
+    }
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- QualifiedIdentifierContext ------------------------------------------------------------------
+
+LangParser::QualifiedIdentifierContext::QualifiedIdentifierContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+std::vector<tree::TerminalNode *> LangParser::QualifiedIdentifierContext::IDENTIFIER() {
+  return getTokens(LangParser::IDENTIFIER);
+}
+
+tree::TerminalNode* LangParser::QualifiedIdentifierContext::IDENTIFIER(size_t i) {
+  return getToken(LangParser::IDENTIFIER, i);
+}
+
+std::vector<tree::TerminalNode *> LangParser::QualifiedIdentifierContext::DOT() {
+  return getTokens(LangParser::DOT);
+}
+
+tree::TerminalNode* LangParser::QualifiedIdentifierContext::DOT(size_t i) {
+  return getToken(LangParser::DOT, i);
+}
+
+
+size_t LangParser::QualifiedIdentifierContext::getRuleIndex() const {
+  return LangParser::RuleQualifiedIdentifier;
+}
+
+
+std::any LangParser::QualifiedIdentifierContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitQualifiedIdentifier(this);
+  else
+    return visitor->visitChildren(this);
+}
+
+LangParser::QualifiedIdentifierContext* LangParser::qualifiedIdentifier() {
+  QualifiedIdentifierContext *_localctx = _tracker.createInstance<QualifiedIdentifierContext>(_ctx, getState());
+  enterRule(_localctx, 34, LangParser::RuleQualifiedIdentifier);
+  size_t _la = 0;
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    enterOuterAlt(_localctx, 1);
+    setState(373);
+    match(LangParser::IDENTIFIER);
+    setState(378);
+    _errHandler->sync(this);
+    _la = _input->LA(1);
+    while (_la == LangParser::DOT) {
+      setState(374);
+      match(LangParser::DOT);
+      setState(375);
+      match(LangParser::IDENTIFIER);
+      setState(380);
+      _errHandler->sync(this);
+      _la = _input->LA(1);
+    }
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- PrimitiveTypeContext ------------------------------------------------------------------
+
+LangParser::PrimitiveTypeContext::PrimitiveTypeContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+tree::TerminalNode* LangParser::PrimitiveTypeContext::INT() {
+  return getToken(LangParser::INT, 0);
+}
+
+tree::TerminalNode* LangParser::PrimitiveTypeContext::FLOAT() {
+  return getToken(LangParser::FLOAT, 0);
+}
+
+tree::TerminalNode* LangParser::PrimitiveTypeContext::NUMBER() {
+  return getToken(LangParser::NUMBER, 0);
+}
+
+tree::TerminalNode* LangParser::PrimitiveTypeContext::STRING() {
+  return getToken(LangParser::STRING, 0);
+}
+
+tree::TerminalNode* LangParser::PrimitiveTypeContext::BOOL() {
+  return getToken(LangParser::BOOL, 0);
+}
+
+tree::TerminalNode* LangParser::PrimitiveTypeContext::VOID() {
+  return getToken(LangParser::VOID, 0);
+}
+
+tree::TerminalNode* LangParser::PrimitiveTypeContext::NULL_() {
+  return getToken(LangParser::NULL_, 0);
+}
+
+tree::TerminalNode* LangParser::PrimitiveTypeContext::COROUTINE() {
+  return getToken(LangParser::COROUTINE, 0);
+}
+
+tree::TerminalNode* LangParser::PrimitiveTypeContext::FUNCTION() {
+  return getToken(LangParser::FUNCTION, 0);
+}
+
+
+size_t LangParser::PrimitiveTypeContext::getRuleIndex() const {
+  return LangParser::RulePrimitiveType;
+}
+
+
+std::any LangParser::PrimitiveTypeContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitPrimitiveType(this);
+  else
+    return visitor->visitChildren(this);
+}
+
+LangParser::PrimitiveTypeContext* LangParser::primitiveType() {
+  PrimitiveTypeContext *_localctx = _tracker.createInstance<PrimitiveTypeContext>(_ctx, getState());
+  enterRule(_localctx, 36, LangParser::RulePrimitiveType);
+  size_t _la = 0;
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    enterOuterAlt(_localctx, 1);
+    setState(381);
+    _la = _input->LA(1);
+    if (!((((_la & ~ 0x3fULL) == 0) &&
+      ((1ULL << _la) & 6590) != 0))) {
+    _errHandler->recoverInline(this);
+    }
+    else {
+      _errHandler->reportMatch(this);
+      consume();
+    }
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- ListTypeContext ------------------------------------------------------------------
+
+LangParser::ListTypeContext::ListTypeContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+tree::TerminalNode* LangParser::ListTypeContext::LIST() {
+  return getToken(LangParser::LIST, 0);
+}
+
+tree::TerminalNode* LangParser::ListTypeContext::LT() {
+  return getToken(LangParser::LT, 0);
+}
+
+LangParser::TypeContext* LangParser::ListTypeContext::type() {
+  return getRuleContext<LangParser::TypeContext>(0);
+}
+
+tree::TerminalNode* LangParser::ListTypeContext::GT() {
+  return getToken(LangParser::GT, 0);
+}
+
+
+size_t LangParser::ListTypeContext::getRuleIndex() const {
+  return LangParser::RuleListType;
+}
+
+
+std::any LangParser::ListTypeContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitListType(this);
+  else
+    return visitor->visitChildren(this);
+}
+
+LangParser::ListTypeContext* LangParser::listType() {
+  ListTypeContext *_localctx = _tracker.createInstance<ListTypeContext>(_ctx, getState());
+  enterRule(_localctx, 38, LangParser::RuleListType);
+  size_t _la = 0;
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    enterOuterAlt(_localctx, 1);
+    setState(383);
+    match(LangParser::LIST);
+    setState(388);
+    _errHandler->sync(this);
+
+    _la = _input->LA(1);
+    if (_la == LangParser::LT) {
+      setState(384);
+      match(LangParser::LT);
+      setState(385);
+      type();
+      setState(386);
+      match(LangParser::GT);
+    }
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- MapTypeContext ------------------------------------------------------------------
+
+LangParser::MapTypeContext::MapTypeContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+tree::TerminalNode* LangParser::MapTypeContext::MAP() {
+  return getToken(LangParser::MAP, 0);
+}
+
+tree::TerminalNode* LangParser::MapTypeContext::LT() {
+  return getToken(LangParser::LT, 0);
+}
+
+std::vector<LangParser::TypeContext *> LangParser::MapTypeContext::type() {
+  return getRuleContexts<LangParser::TypeContext>();
+}
+
+LangParser::TypeContext* LangParser::MapTypeContext::type(size_t i) {
+  return getRuleContext<LangParser::TypeContext>(i);
+}
+
+tree::TerminalNode* LangParser::MapTypeContext::COMMA() {
+  return getToken(LangParser::COMMA, 0);
+}
+
+tree::TerminalNode* LangParser::MapTypeContext::GT() {
+  return getToken(LangParser::GT, 0);
+}
+
+
+size_t LangParser::MapTypeContext::getRuleIndex() const {
+  return LangParser::RuleMapType;
+}
+
+
+std::any LangParser::MapTypeContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitMapType(this);
+  else
+    return visitor->visitChildren(this);
+}
+
+LangParser::MapTypeContext* LangParser::mapType() {
+  MapTypeContext *_localctx = _tracker.createInstance<MapTypeContext>(_ctx, getState());
+  enterRule(_localctx, 40, LangParser::RuleMapType);
+  size_t _la = 0;
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    enterOuterAlt(_localctx, 1);
+    setState(390);
+    match(LangParser::MAP);
+    setState(397);
+    _errHandler->sync(this);
+
+    _la = _input->LA(1);
+    if (_la == LangParser::LT) {
+      setState(391);
+      match(LangParser::LT);
+      setState(392);
+      type();
+      setState(393);
+      match(LangParser::COMMA);
+      setState(394);
+      type();
+      setState(395);
+      match(LangParser::GT);
+    }
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- ExpressionContext ------------------------------------------------------------------
+
+LangParser::ExpressionContext::ExpressionContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+LangParser::LogicalOrExpContext* LangParser::ExpressionContext::logicalOrExp() {
+  return getRuleContext<LangParser::LogicalOrExpContext>(0);
+}
+
+
+size_t LangParser::ExpressionContext::getRuleIndex() const {
+  return LangParser::RuleExpression;
+}
+
+
+std::any LangParser::ExpressionContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitExpression(this);
+  else
+    return visitor->visitChildren(this);
+}
+
+LangParser::ExpressionContext* LangParser::expression() {
+  ExpressionContext *_localctx = _tracker.createInstance<ExpressionContext>(_ctx, getState());
+  enterRule(_localctx, 42, LangParser::RuleExpression);
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    enterOuterAlt(_localctx, 1);
+    setState(399);
+    logicalOrExp();
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- ExpressionListContext ------------------------------------------------------------------
+
+LangParser::ExpressionListContext::ExpressionListContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+std::vector<LangParser::ExpressionContext *> LangParser::ExpressionListContext::expression() {
+  return getRuleContexts<LangParser::ExpressionContext>();
+}
+
+LangParser::ExpressionContext* LangParser::ExpressionListContext::expression(size_t i) {
+  return getRuleContext<LangParser::ExpressionContext>(i);
+}
+
+std::vector<tree::TerminalNode *> LangParser::ExpressionListContext::COMMA() {
+  return getTokens(LangParser::COMMA);
+}
+
+tree::TerminalNode* LangParser::ExpressionListContext::COMMA(size_t i) {
+  return getToken(LangParser::COMMA, i);
+}
+
+
+size_t LangParser::ExpressionListContext::getRuleIndex() const {
+  return LangParser::RuleExpressionList;
+}
+
+
+std::any LangParser::ExpressionListContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitExpressionList(this);
+  else
+    return visitor->visitChildren(this);
+}
+
+LangParser::ExpressionListContext* LangParser::expressionList() {
+  ExpressionListContext *_localctx = _tracker.createInstance<ExpressionListContext>(_ctx, getState());
+  enterRule(_localctx, 44, LangParser::RuleExpressionList);
+  size_t _la = 0;
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    enterOuterAlt(_localctx, 1);
+    setState(401);
+    expression();
+    setState(406);
+    _errHandler->sync(this);
+    _la = _input->LA(1);
+    while (_la == LangParser::COMMA) {
+      setState(402);
+      match(LangParser::COMMA);
+      setState(403);
+      expression();
+      setState(408);
+      _errHandler->sync(this);
+      _la = _input->LA(1);
+    }
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- LogicalOrExpContext ------------------------------------------------------------------
+
+LangParser::LogicalOrExpContext::LogicalOrExpContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+
+size_t LangParser::LogicalOrExpContext::getRuleIndex() const {
+  return LangParser::RuleLogicalOrExp;
+}
+
+void LangParser::LogicalOrExpContext::copyFrom(LogicalOrExpContext *ctx) {
+  ParserRuleContext::copyFrom(ctx);
+}
+
+//----------------- LogicalOrExpressionContext ------------------------------------------------------------------
+
+std::vector<LangParser::LogicalAndExpContext *> LangParser::LogicalOrExpressionContext::logicalAndExp() {
+  return getRuleContexts<LangParser::LogicalAndExpContext>();
+}
+
+LangParser::LogicalAndExpContext* LangParser::LogicalOrExpressionContext::logicalAndExp(size_t i) {
+  return getRuleContext<LangParser::LogicalAndExpContext>(i);
+}
+
+std::vector<tree::TerminalNode *> LangParser::LogicalOrExpressionContext::OR() {
+  return getTokens(LangParser::OR);
+}
+
+tree::TerminalNode* LangParser::LogicalOrExpressionContext::OR(size_t i) {
+  return getToken(LangParser::OR, i);
+}
+
+LangParser::LogicalOrExpressionContext::LogicalOrExpressionContext(LogicalOrExpContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::LogicalOrExpressionContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitLogicalOrExpression(this);
+  else
+    return visitor->visitChildren(this);
+}
+LangParser::LogicalOrExpContext* LangParser::logicalOrExp() {
+  LogicalOrExpContext *_localctx = _tracker.createInstance<LogicalOrExpContext>(_ctx, getState());
+  enterRule(_localctx, 46, LangParser::RuleLogicalOrExp);
+  size_t _la = 0;
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    _localctx = _tracker.createInstance<LangParser::LogicalOrExpressionContext>(_localctx);
+    enterOuterAlt(_localctx, 1);
+    setState(409);
+    logicalAndExp();
+    setState(414);
+    _errHandler->sync(this);
+    _la = _input->LA(1);
+    while (_la == LangParser::OR) {
+      setState(410);
+      match(LangParser::OR);
+      setState(411);
+      logicalAndExp();
+      setState(416);
+      _errHandler->sync(this);
+      _la = _input->LA(1);
+    }
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- LogicalAndExpContext ------------------------------------------------------------------
+
+LangParser::LogicalAndExpContext::LogicalAndExpContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+
+size_t LangParser::LogicalAndExpContext::getRuleIndex() const {
+  return LangParser::RuleLogicalAndExp;
+}
+
+void LangParser::LogicalAndExpContext::copyFrom(LogicalAndExpContext *ctx) {
+  ParserRuleContext::copyFrom(ctx);
+}
+
+//----------------- LogicalAndExpressionContext ------------------------------------------------------------------
+
+std::vector<LangParser::BitwiseOrExpContext *> LangParser::LogicalAndExpressionContext::bitwiseOrExp() {
+  return getRuleContexts<LangParser::BitwiseOrExpContext>();
+}
+
+LangParser::BitwiseOrExpContext* LangParser::LogicalAndExpressionContext::bitwiseOrExp(size_t i) {
+  return getRuleContext<LangParser::BitwiseOrExpContext>(i);
+}
+
+std::vector<tree::TerminalNode *> LangParser::LogicalAndExpressionContext::AND() {
+  return getTokens(LangParser::AND);
+}
+
+tree::TerminalNode* LangParser::LogicalAndExpressionContext::AND(size_t i) {
+  return getToken(LangParser::AND, i);
+}
+
+LangParser::LogicalAndExpressionContext::LogicalAndExpressionContext(LogicalAndExpContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::LogicalAndExpressionContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitLogicalAndExpression(this);
+  else
+    return visitor->visitChildren(this);
+}
+LangParser::LogicalAndExpContext* LangParser::logicalAndExp() {
+  LogicalAndExpContext *_localctx = _tracker.createInstance<LogicalAndExpContext>(_ctx, getState());
+  enterRule(_localctx, 48, LangParser::RuleLogicalAndExp);
+  size_t _la = 0;
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    _localctx = _tracker.createInstance<LangParser::LogicalAndExpressionContext>(_localctx);
+    enterOuterAlt(_localctx, 1);
+    setState(417);
+    bitwiseOrExp();
+    setState(422);
+    _errHandler->sync(this);
+    _la = _input->LA(1);
+    while (_la == LangParser::AND) {
+      setState(418);
+      match(LangParser::AND);
+      setState(419);
+      bitwiseOrExp();
+      setState(424);
+      _errHandler->sync(this);
+      _la = _input->LA(1);
+    }
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- BitwiseOrExpContext ------------------------------------------------------------------
+
+LangParser::BitwiseOrExpContext::BitwiseOrExpContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+
+size_t LangParser::BitwiseOrExpContext::getRuleIndex() const {
+  return LangParser::RuleBitwiseOrExp;
+}
+
+void LangParser::BitwiseOrExpContext::copyFrom(BitwiseOrExpContext *ctx) {
+  ParserRuleContext::copyFrom(ctx);
+}
+
+//----------------- BitwiseOrExpressionContext ------------------------------------------------------------------
+
+std::vector<LangParser::BitwiseXorExpContext *> LangParser::BitwiseOrExpressionContext::bitwiseXorExp() {
+  return getRuleContexts<LangParser::BitwiseXorExpContext>();
+}
+
+LangParser::BitwiseXorExpContext* LangParser::BitwiseOrExpressionContext::bitwiseXorExp(size_t i) {
+  return getRuleContext<LangParser::BitwiseXorExpContext>(i);
+}
+
+std::vector<tree::TerminalNode *> LangParser::BitwiseOrExpressionContext::BIT_OR() {
+  return getTokens(LangParser::BIT_OR);
+}
+
+tree::TerminalNode* LangParser::BitwiseOrExpressionContext::BIT_OR(size_t i) {
+  return getToken(LangParser::BIT_OR, i);
+}
+
+LangParser::BitwiseOrExpressionContext::BitwiseOrExpressionContext(BitwiseOrExpContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::BitwiseOrExpressionContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitBitwiseOrExpression(this);
+  else
+    return visitor->visitChildren(this);
+}
+LangParser::BitwiseOrExpContext* LangParser::bitwiseOrExp() {
+  BitwiseOrExpContext *_localctx = _tracker.createInstance<BitwiseOrExpContext>(_ctx, getState());
+  enterRule(_localctx, 50, LangParser::RuleBitwiseOrExp);
+  size_t _la = 0;
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    _localctx = _tracker.createInstance<LangParser::BitwiseOrExpressionContext>(_localctx);
+    enterOuterAlt(_localctx, 1);
+    setState(425);
+    bitwiseXorExp();
+    setState(430);
+    _errHandler->sync(this);
+    _la = _input->LA(1);
+    while (_la == LangParser::BIT_OR) {
+      setState(426);
+      match(LangParser::BIT_OR);
+      setState(427);
+      bitwiseXorExp();
+      setState(432);
+      _errHandler->sync(this);
+      _la = _input->LA(1);
+    }
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- BitwiseXorExpContext ------------------------------------------------------------------
+
+LangParser::BitwiseXorExpContext::BitwiseXorExpContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+
+size_t LangParser::BitwiseXorExpContext::getRuleIndex() const {
+  return LangParser::RuleBitwiseXorExp;
+}
+
+void LangParser::BitwiseXorExpContext::copyFrom(BitwiseXorExpContext *ctx) {
+  ParserRuleContext::copyFrom(ctx);
+}
+
+//----------------- BitwiseXorExpressionContext ------------------------------------------------------------------
+
+std::vector<LangParser::BitwiseAndExpContext *> LangParser::BitwiseXorExpressionContext::bitwiseAndExp() {
+  return getRuleContexts<LangParser::BitwiseAndExpContext>();
+}
+
+LangParser::BitwiseAndExpContext* LangParser::BitwiseXorExpressionContext::bitwiseAndExp(size_t i) {
+  return getRuleContext<LangParser::BitwiseAndExpContext>(i);
+}
+
+std::vector<tree::TerminalNode *> LangParser::BitwiseXorExpressionContext::BIT_XOR() {
+  return getTokens(LangParser::BIT_XOR);
+}
+
+tree::TerminalNode* LangParser::BitwiseXorExpressionContext::BIT_XOR(size_t i) {
+  return getToken(LangParser::BIT_XOR, i);
+}
+
+LangParser::BitwiseXorExpressionContext::BitwiseXorExpressionContext(BitwiseXorExpContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::BitwiseXorExpressionContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitBitwiseXorExpression(this);
+  else
+    return visitor->visitChildren(this);
+}
+LangParser::BitwiseXorExpContext* LangParser::bitwiseXorExp() {
+  BitwiseXorExpContext *_localctx = _tracker.createInstance<BitwiseXorExpContext>(_ctx, getState());
+  enterRule(_localctx, 52, LangParser::RuleBitwiseXorExp);
+  size_t _la = 0;
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    _localctx = _tracker.createInstance<LangParser::BitwiseXorExpressionContext>(_localctx);
+    enterOuterAlt(_localctx, 1);
+    setState(433);
+    bitwiseAndExp();
+    setState(438);
+    _errHandler->sync(this);
+    _la = _input->LA(1);
+    while (_la == LangParser::BIT_XOR) {
+      setState(434);
+      match(LangParser::BIT_XOR);
+      setState(435);
+      bitwiseAndExp();
+      setState(440);
+      _errHandler->sync(this);
+      _la = _input->LA(1);
+    }
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- BitwiseAndExpContext ------------------------------------------------------------------
+
+LangParser::BitwiseAndExpContext::BitwiseAndExpContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+
+size_t LangParser::BitwiseAndExpContext::getRuleIndex() const {
+  return LangParser::RuleBitwiseAndExp;
+}
+
+void LangParser::BitwiseAndExpContext::copyFrom(BitwiseAndExpContext *ctx) {
+  ParserRuleContext::copyFrom(ctx);
+}
+
+//----------------- BitwiseAndExpressionContext ------------------------------------------------------------------
+
+std::vector<LangParser::EqualityExpContext *> LangParser::BitwiseAndExpressionContext::equalityExp() {
+  return getRuleContexts<LangParser::EqualityExpContext>();
+}
+
+LangParser::EqualityExpContext* LangParser::BitwiseAndExpressionContext::equalityExp(size_t i) {
+  return getRuleContext<LangParser::EqualityExpContext>(i);
+}
+
+std::vector<tree::TerminalNode *> LangParser::BitwiseAndExpressionContext::BIT_AND() {
+  return getTokens(LangParser::BIT_AND);
+}
+
+tree::TerminalNode* LangParser::BitwiseAndExpressionContext::BIT_AND(size_t i) {
+  return getToken(LangParser::BIT_AND, i);
+}
+
+LangParser::BitwiseAndExpressionContext::BitwiseAndExpressionContext(BitwiseAndExpContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::BitwiseAndExpressionContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitBitwiseAndExpression(this);
+  else
+    return visitor->visitChildren(this);
+}
+LangParser::BitwiseAndExpContext* LangParser::bitwiseAndExp() {
+  BitwiseAndExpContext *_localctx = _tracker.createInstance<BitwiseAndExpContext>(_ctx, getState());
+  enterRule(_localctx, 54, LangParser::RuleBitwiseAndExp);
+  size_t _la = 0;
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    _localctx = _tracker.createInstance<LangParser::BitwiseAndExpressionContext>(_localctx);
+    enterOuterAlt(_localctx, 1);
+    setState(441);
+    equalityExp();
+    setState(446);
+    _errHandler->sync(this);
+    _la = _input->LA(1);
+    while (_la == LangParser::BIT_AND) {
+      setState(442);
+      match(LangParser::BIT_AND);
+      setState(443);
+      equalityExp();
+      setState(448);
+      _errHandler->sync(this);
+      _la = _input->LA(1);
+    }
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- EqualityExpContext ------------------------------------------------------------------
+
+LangParser::EqualityExpContext::EqualityExpContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+
+size_t LangParser::EqualityExpContext::getRuleIndex() const {
+  return LangParser::RuleEqualityExp;
+}
+
+void LangParser::EqualityExpContext::copyFrom(EqualityExpContext *ctx) {
+  ParserRuleContext::copyFrom(ctx);
+}
+
+//----------------- EqualityExpressionContext ------------------------------------------------------------------
+
+std::vector<LangParser::ComparisonExpContext *> LangParser::EqualityExpressionContext::comparisonExp() {
+  return getRuleContexts<LangParser::ComparisonExpContext>();
+}
+
+LangParser::ComparisonExpContext* LangParser::EqualityExpressionContext::comparisonExp(size_t i) {
+  return getRuleContext<LangParser::ComparisonExpContext>(i);
+}
+
+std::vector<LangParser::EqualityExpOpContext *> LangParser::EqualityExpressionContext::equalityExpOp() {
+  return getRuleContexts<LangParser::EqualityExpOpContext>();
+}
+
+LangParser::EqualityExpOpContext* LangParser::EqualityExpressionContext::equalityExpOp(size_t i) {
+  return getRuleContext<LangParser::EqualityExpOpContext>(i);
+}
+
+LangParser::EqualityExpressionContext::EqualityExpressionContext(EqualityExpContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::EqualityExpressionContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitEqualityExpression(this);
+  else
+    return visitor->visitChildren(this);
+}
+LangParser::EqualityExpContext* LangParser::equalityExp() {
+  EqualityExpContext *_localctx = _tracker.createInstance<EqualityExpContext>(_ctx, getState());
+  enterRule(_localctx, 56, LangParser::RuleEqualityExp);
+  size_t _la = 0;
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    _localctx = _tracker.createInstance<LangParser::EqualityExpressionContext>(_localctx);
+    enterOuterAlt(_localctx, 1);
+    setState(449);
+    comparisonExp();
+    setState(455);
+    _errHandler->sync(this);
+    _la = _input->LA(1);
+    while (_la == LangParser::EQ
+
+    || _la == LangParser::NEQ) {
+      setState(450);
+      equalityExpOp();
+      setState(451);
+      comparisonExp();
+      setState(457);
+      _errHandler->sync(this);
+      _la = _input->LA(1);
+    }
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- EqualityExpOpContext ------------------------------------------------------------------
+
+LangParser::EqualityExpOpContext::EqualityExpOpContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+tree::TerminalNode* LangParser::EqualityExpOpContext::EQ() {
+  return getToken(LangParser::EQ, 0);
+}
+
+tree::TerminalNode* LangParser::EqualityExpOpContext::NEQ() {
+  return getToken(LangParser::NEQ, 0);
+}
+
+
+size_t LangParser::EqualityExpOpContext::getRuleIndex() const {
+  return LangParser::RuleEqualityExpOp;
+}
+
+
+std::any LangParser::EqualityExpOpContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitEqualityExpOp(this);
+  else
+    return visitor->visitChildren(this);
+}
+
+LangParser::EqualityExpOpContext* LangParser::equalityExpOp() {
+  EqualityExpOpContext *_localctx = _tracker.createInstance<EqualityExpOpContext>(_ctx, getState());
+  enterRule(_localctx, 58, LangParser::RuleEqualityExpOp);
+  size_t _la = 0;
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    enterOuterAlt(_localctx, 1);
+    setState(458);
+    _la = _input->LA(1);
+    if (!(_la == LangParser::EQ
+
+    || _la == LangParser::NEQ)) {
+    _errHandler->recoverInline(this);
+    }
+    else {
+      _errHandler->reportMatch(this);
+      consume();
+    }
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- ComparisonExpContext ------------------------------------------------------------------
+
+LangParser::ComparisonExpContext::ComparisonExpContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+
+size_t LangParser::ComparisonExpContext::getRuleIndex() const {
+  return LangParser::RuleComparisonExp;
+}
+
+void LangParser::ComparisonExpContext::copyFrom(ComparisonExpContext *ctx) {
+  ParserRuleContext::copyFrom(ctx);
+}
+
+//----------------- ComparisonExpressionContext ------------------------------------------------------------------
+
+std::vector<LangParser::ShiftExpContext *> LangParser::ComparisonExpressionContext::shiftExp() {
+  return getRuleContexts<LangParser::ShiftExpContext>();
+}
+
+LangParser::ShiftExpContext* LangParser::ComparisonExpressionContext::shiftExp(size_t i) {
+  return getRuleContext<LangParser::ShiftExpContext>(i);
+}
+
+std::vector<LangParser::ComparisonExpOpContext *> LangParser::ComparisonExpressionContext::comparisonExpOp() {
+  return getRuleContexts<LangParser::ComparisonExpOpContext>();
+}
+
+LangParser::ComparisonExpOpContext* LangParser::ComparisonExpressionContext::comparisonExpOp(size_t i) {
+  return getRuleContext<LangParser::ComparisonExpOpContext>(i);
+}
+
+LangParser::ComparisonExpressionContext::ComparisonExpressionContext(ComparisonExpContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::ComparisonExpressionContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitComparisonExpression(this);
+  else
+    return visitor->visitChildren(this);
+}
+LangParser::ComparisonExpContext* LangParser::comparisonExp() {
+  ComparisonExpContext *_localctx = _tracker.createInstance<ComparisonExpContext>(_ctx, getState());
+  enterRule(_localctx, 60, LangParser::RuleComparisonExp);
+  size_t _la = 0;
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    _localctx = _tracker.createInstance<LangParser::ComparisonExpressionContext>(_localctx);
+    enterOuterAlt(_localctx, 1);
+    setState(460);
+    shiftExp();
+    setState(466);
+    _errHandler->sync(this);
+    _la = _input->LA(1);
+    while ((((_la & ~ 0x3fULL) == 0) &&
+      ((1ULL << _la) & 16888498602639360) != 0)) {
+      setState(461);
+      comparisonExpOp();
+      setState(462);
+      shiftExp();
+      setState(468);
+      _errHandler->sync(this);
+      _la = _input->LA(1);
+    }
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- ComparisonExpOpContext ------------------------------------------------------------------
+
+LangParser::ComparisonExpOpContext::ComparisonExpOpContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+tree::TerminalNode* LangParser::ComparisonExpOpContext::LT() {
+  return getToken(LangParser::LT, 0);
+}
+
+tree::TerminalNode* LangParser::ComparisonExpOpContext::GT() {
+  return getToken(LangParser::GT, 0);
+}
+
+tree::TerminalNode* LangParser::ComparisonExpOpContext::LTE() {
+  return getToken(LangParser::LTE, 0);
+}
+
+tree::TerminalNode* LangParser::ComparisonExpOpContext::GTE() {
+  return getToken(LangParser::GTE, 0);
+}
+
+
+size_t LangParser::ComparisonExpOpContext::getRuleIndex() const {
+  return LangParser::RuleComparisonExpOp;
+}
+
+
+std::any LangParser::ComparisonExpOpContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitComparisonExpOp(this);
+  else
+    return visitor->visitChildren(this);
+}
+
+LangParser::ComparisonExpOpContext* LangParser::comparisonExpOp() {
+  ComparisonExpOpContext *_localctx = _tracker.createInstance<ComparisonExpOpContext>(_ctx, getState());
+  enterRule(_localctx, 62, LangParser::RuleComparisonExpOp);
+  size_t _la = 0;
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    enterOuterAlt(_localctx, 1);
+    setState(469);
+    _la = _input->LA(1);
+    if (!((((_la & ~ 0x3fULL) == 0) &&
+      ((1ULL << _la) & 16888498602639360) != 0))) {
+    _errHandler->recoverInline(this);
+    }
+    else {
+      _errHandler->reportMatch(this);
+      consume();
+    }
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- ShiftExpContext ------------------------------------------------------------------
+
+LangParser::ShiftExpContext::ShiftExpContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+
+size_t LangParser::ShiftExpContext::getRuleIndex() const {
+  return LangParser::RuleShiftExp;
+}
+
+void LangParser::ShiftExpContext::copyFrom(ShiftExpContext *ctx) {
+  ParserRuleContext::copyFrom(ctx);
+}
+
+//----------------- ShiftExpressionContext ------------------------------------------------------------------
+
+std::vector<LangParser::ConcatExpContext *> LangParser::ShiftExpressionContext::concatExp() {
+  return getRuleContexts<LangParser::ConcatExpContext>();
+}
+
+LangParser::ConcatExpContext* LangParser::ShiftExpressionContext::concatExp(size_t i) {
+  return getRuleContext<LangParser::ConcatExpContext>(i);
+}
+
+std::vector<LangParser::ShiftExpOpContext *> LangParser::ShiftExpressionContext::shiftExpOp() {
+  return getRuleContexts<LangParser::ShiftExpOpContext>();
+}
+
+LangParser::ShiftExpOpContext* LangParser::ShiftExpressionContext::shiftExpOp(size_t i) {
+  return getRuleContext<LangParser::ShiftExpOpContext>(i);
+}
+
+LangParser::ShiftExpressionContext::ShiftExpressionContext(ShiftExpContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::ShiftExpressionContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitShiftExpression(this);
+  else
+    return visitor->visitChildren(this);
+}
+LangParser::ShiftExpContext* LangParser::shiftExp() {
+  ShiftExpContext *_localctx = _tracker.createInstance<ShiftExpContext>(_ctx, getState());
+  enterRule(_localctx, 64, LangParser::RuleShiftExp);
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    size_t alt;
+    _localctx = _tracker.createInstance<LangParser::ShiftExpressionContext>(_localctx);
+    enterOuterAlt(_localctx, 1);
+    setState(471);
+    concatExp();
+    setState(477);
+    _errHandler->sync(this);
+    alt = getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 51, _ctx);
+    while (alt != 2 && alt != atn::ATN::INVALID_ALT_NUMBER) {
+      if (alt == 1) {
+        setState(472);
+        shiftExpOp();
+        setState(473);
+        concatExp(); 
+      }
+      setState(479);
+      _errHandler->sync(this);
+      alt = getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 51, _ctx);
+    }
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- ShiftExpOpContext ------------------------------------------------------------------
+
+LangParser::ShiftExpOpContext::ShiftExpOpContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+tree::TerminalNode* LangParser::ShiftExpOpContext::LSHIFT() {
+  return getToken(LangParser::LSHIFT, 0);
+}
+
+std::vector<tree::TerminalNode *> LangParser::ShiftExpOpContext::GT() {
+  return getTokens(LangParser::GT);
+}
+
+tree::TerminalNode* LangParser::ShiftExpOpContext::GT(size_t i) {
+  return getToken(LangParser::GT, i);
+}
+
+
+size_t LangParser::ShiftExpOpContext::getRuleIndex() const {
+  return LangParser::RuleShiftExpOp;
+}
+
+
+std::any LangParser::ShiftExpOpContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitShiftExpOp(this);
+  else
+    return visitor->visitChildren(this);
+}
+
+LangParser::ShiftExpOpContext* LangParser::shiftExpOp() {
+  ShiftExpOpContext *_localctx = _tracker.createInstance<ShiftExpOpContext>(_ctx, getState());
+  enterRule(_localctx, 66, LangParser::RuleShiftExpOp);
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    enterOuterAlt(_localctx, 1);
+    setState(483);
+    _errHandler->sync(this);
+    switch (_input->LA(1)) {
+      case LangParser::LSHIFT: {
+        setState(480);
+        match(LangParser::LSHIFT);
+        break;
+      }
+
+      case LangParser::GT: {
+        setState(481);
+        match(LangParser::GT);
+        setState(482);
+        match(LangParser::GT);
+        break;
+      }
+
+    default:
+      throw NoViableAltException(this);
+    }
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- ConcatExpContext ------------------------------------------------------------------
+
+LangParser::ConcatExpContext::ConcatExpContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+
+size_t LangParser::ConcatExpContext::getRuleIndex() const {
+  return LangParser::RuleConcatExp;
+}
+
+void LangParser::ConcatExpContext::copyFrom(ConcatExpContext *ctx) {
+  ParserRuleContext::copyFrom(ctx);
+}
+
+//----------------- ConcatExpressionContext ------------------------------------------------------------------
+
+std::vector<LangParser::AddSubExpContext *> LangParser::ConcatExpressionContext::addSubExp() {
+  return getRuleContexts<LangParser::AddSubExpContext>();
+}
+
+LangParser::AddSubExpContext* LangParser::ConcatExpressionContext::addSubExp(size_t i) {
+  return getRuleContext<LangParser::AddSubExpContext>(i);
+}
+
+std::vector<tree::TerminalNode *> LangParser::ConcatExpressionContext::CONCAT() {
+  return getTokens(LangParser::CONCAT);
+}
+
+tree::TerminalNode* LangParser::ConcatExpressionContext::CONCAT(size_t i) {
+  return getToken(LangParser::CONCAT, i);
+}
+
+LangParser::ConcatExpressionContext::ConcatExpressionContext(ConcatExpContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::ConcatExpressionContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitConcatExpression(this);
+  else
+    return visitor->visitChildren(this);
+}
+LangParser::ConcatExpContext* LangParser::concatExp() {
+  ConcatExpContext *_localctx = _tracker.createInstance<ConcatExpContext>(_ctx, getState());
+  enterRule(_localctx, 68, LangParser::RuleConcatExp);
+  size_t _la = 0;
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    _localctx = _tracker.createInstance<LangParser::ConcatExpressionContext>(_localctx);
+    enterOuterAlt(_localctx, 1);
+    setState(485);
+    addSubExp();
+    setState(490);
+    _errHandler->sync(this);
+    _la = _input->LA(1);
+    while (_la == LangParser::CONCAT) {
+      setState(486);
+      match(LangParser::CONCAT);
+      setState(487);
+      addSubExp();
+      setState(492);
+      _errHandler->sync(this);
+      _la = _input->LA(1);
+    }
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- AddSubExpContext ------------------------------------------------------------------
+
+LangParser::AddSubExpContext::AddSubExpContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+
+size_t LangParser::AddSubExpContext::getRuleIndex() const {
+  return LangParser::RuleAddSubExp;
+}
+
+void LangParser::AddSubExpContext::copyFrom(AddSubExpContext *ctx) {
+  ParserRuleContext::copyFrom(ctx);
+}
+
+//----------------- AddSubExpressionContext ------------------------------------------------------------------
+
+std::vector<LangParser::MulDivModExpContext *> LangParser::AddSubExpressionContext::mulDivModExp() {
+  return getRuleContexts<LangParser::MulDivModExpContext>();
+}
+
+LangParser::MulDivModExpContext* LangParser::AddSubExpressionContext::mulDivModExp(size_t i) {
+  return getRuleContext<LangParser::MulDivModExpContext>(i);
+}
+
+std::vector<LangParser::AddSubExpOpContext *> LangParser::AddSubExpressionContext::addSubExpOp() {
+  return getRuleContexts<LangParser::AddSubExpOpContext>();
+}
+
+LangParser::AddSubExpOpContext* LangParser::AddSubExpressionContext::addSubExpOp(size_t i) {
+  return getRuleContext<LangParser::AddSubExpOpContext>(i);
+}
+
+LangParser::AddSubExpressionContext::AddSubExpressionContext(AddSubExpContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::AddSubExpressionContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitAddSubExpression(this);
+  else
+    return visitor->visitChildren(this);
+}
+LangParser::AddSubExpContext* LangParser::addSubExp() {
+  AddSubExpContext *_localctx = _tracker.createInstance<AddSubExpContext>(_ctx, getState());
+  enterRule(_localctx, 70, LangParser::RuleAddSubExp);
+  size_t _la = 0;
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    _localctx = _tracker.createInstance<LangParser::AddSubExpressionContext>(_localctx);
+    enterOuterAlt(_localctx, 1);
+    setState(493);
+    mulDivModExp();
+    setState(499);
+    _errHandler->sync(this);
+    _la = _input->LA(1);
+    while (_la == LangParser::ADD
+
+    || _la == LangParser::SUB) {
+      setState(494);
+      addSubExpOp();
+      setState(495);
+      mulDivModExp();
+      setState(501);
+      _errHandler->sync(this);
+      _la = _input->LA(1);
+    }
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- AddSubExpOpContext ------------------------------------------------------------------
+
+LangParser::AddSubExpOpContext::AddSubExpOpContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+tree::TerminalNode* LangParser::AddSubExpOpContext::ADD() {
+  return getToken(LangParser::ADD, 0);
+}
+
+tree::TerminalNode* LangParser::AddSubExpOpContext::SUB() {
+  return getToken(LangParser::SUB, 0);
+}
+
+
+size_t LangParser::AddSubExpOpContext::getRuleIndex() const {
+  return LangParser::RuleAddSubExpOp;
+}
+
+
+std::any LangParser::AddSubExpOpContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitAddSubExpOp(this);
+  else
+    return visitor->visitChildren(this);
+}
+
+LangParser::AddSubExpOpContext* LangParser::addSubExpOp() {
+  AddSubExpOpContext *_localctx = _tracker.createInstance<AddSubExpOpContext>(_ctx, getState());
+  enterRule(_localctx, 72, LangParser::RuleAddSubExpOp);
+  size_t _la = 0;
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    enterOuterAlt(_localctx, 1);
+    setState(502);
+    _la = _input->LA(1);
+    if (!(_la == LangParser::ADD
+
+    || _la == LangParser::SUB)) {
+    _errHandler->recoverInline(this);
+    }
+    else {
+      _errHandler->reportMatch(this);
+      consume();
+    }
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- MulDivModExpContext ------------------------------------------------------------------
+
+LangParser::MulDivModExpContext::MulDivModExpContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+
+size_t LangParser::MulDivModExpContext::getRuleIndex() const {
+  return LangParser::RuleMulDivModExp;
+}
+
+void LangParser::MulDivModExpContext::copyFrom(MulDivModExpContext *ctx) {
+  ParserRuleContext::copyFrom(ctx);
+}
+
+//----------------- MulDivModExpressionContext ------------------------------------------------------------------
+
+std::vector<LangParser::UnaryExpContext *> LangParser::MulDivModExpressionContext::unaryExp() {
+  return getRuleContexts<LangParser::UnaryExpContext>();
+}
+
+LangParser::UnaryExpContext* LangParser::MulDivModExpressionContext::unaryExp(size_t i) {
+  return getRuleContext<LangParser::UnaryExpContext>(i);
+}
+
+std::vector<LangParser::MulDivModExpOpContext *> LangParser::MulDivModExpressionContext::mulDivModExpOp() {
+  return getRuleContexts<LangParser::MulDivModExpOpContext>();
+}
+
+LangParser::MulDivModExpOpContext* LangParser::MulDivModExpressionContext::mulDivModExpOp(size_t i) {
+  return getRuleContext<LangParser::MulDivModExpOpContext>(i);
+}
+
+LangParser::MulDivModExpressionContext::MulDivModExpressionContext(MulDivModExpContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::MulDivModExpressionContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitMulDivModExpression(this);
+  else
+    return visitor->visitChildren(this);
+}
+LangParser::MulDivModExpContext* LangParser::mulDivModExp() {
+  MulDivModExpContext *_localctx = _tracker.createInstance<MulDivModExpContext>(_ctx, getState());
+  enterRule(_localctx, 74, LangParser::RuleMulDivModExp);
+  size_t _la = 0;
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    _localctx = _tracker.createInstance<LangParser::MulDivModExpressionContext>(_localctx);
+    enterOuterAlt(_localctx, 1);
+    setState(504);
+    unaryExp();
+    setState(510);
+    _errHandler->sync(this);
+    _la = _input->LA(1);
+    while ((((_la & ~ 0x3fULL) == 0) &&
+      ((1ULL << _la) & 1924145348608) != 0)) {
+      setState(505);
+      mulDivModExpOp();
+      setState(506);
+      unaryExp();
+      setState(512);
+      _errHandler->sync(this);
+      _la = _input->LA(1);
+    }
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- MulDivModExpOpContext ------------------------------------------------------------------
+
+LangParser::MulDivModExpOpContext::MulDivModExpOpContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+tree::TerminalNode* LangParser::MulDivModExpOpContext::MUL() {
+  return getToken(LangParser::MUL, 0);
+}
+
+tree::TerminalNode* LangParser::MulDivModExpOpContext::DIV() {
+  return getToken(LangParser::DIV, 0);
+}
+
+tree::TerminalNode* LangParser::MulDivModExpOpContext::MOD() {
+  return getToken(LangParser::MOD, 0);
+}
+
+
+size_t LangParser::MulDivModExpOpContext::getRuleIndex() const {
+  return LangParser::RuleMulDivModExpOp;
+}
+
+
+std::any LangParser::MulDivModExpOpContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitMulDivModExpOp(this);
+  else
+    return visitor->visitChildren(this);
+}
+
+LangParser::MulDivModExpOpContext* LangParser::mulDivModExpOp() {
+  MulDivModExpOpContext *_localctx = _tracker.createInstance<MulDivModExpOpContext>(_ctx, getState());
+  enterRule(_localctx, 76, LangParser::RuleMulDivModExpOp);
+  size_t _la = 0;
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    enterOuterAlt(_localctx, 1);
+    setState(513);
+    _la = _input->LA(1);
+    if (!((((_la & ~ 0x3fULL) == 0) &&
+      ((1ULL << _la) & 1924145348608) != 0))) {
+    _errHandler->recoverInline(this);
+    }
+    else {
+      _errHandler->reportMatch(this);
+      consume();
+    }
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- UnaryExpContext ------------------------------------------------------------------
+
+LangParser::UnaryExpContext::UnaryExpContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+
+size_t LangParser::UnaryExpContext::getRuleIndex() const {
+  return LangParser::RuleUnaryExp;
+}
+
+void LangParser::UnaryExpContext::copyFrom(UnaryExpContext *ctx) {
+  ParserRuleContext::copyFrom(ctx);
+}
+
+//----------------- UnaryPrefixContext ------------------------------------------------------------------
+
+LangParser::UnaryExpContext* LangParser::UnaryPrefixContext::unaryExp() {
+  return getRuleContext<LangParser::UnaryExpContext>(0);
+}
+
+tree::TerminalNode* LangParser::UnaryPrefixContext::NOT() {
+  return getToken(LangParser::NOT, 0);
+}
+
+tree::TerminalNode* LangParser::UnaryPrefixContext::SUB() {
+  return getToken(LangParser::SUB, 0);
+}
+
+tree::TerminalNode* LangParser::UnaryPrefixContext::LEN() {
+  return getToken(LangParser::LEN, 0);
+}
+
+tree::TerminalNode* LangParser::UnaryPrefixContext::BIT_NOT() {
+  return getToken(LangParser::BIT_NOT, 0);
+}
+
+LangParser::UnaryPrefixContext::UnaryPrefixContext(UnaryExpContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::UnaryPrefixContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitUnaryPrefix(this);
+  else
+    return visitor->visitChildren(this);
+}
+//----------------- UnaryToPostfixContext ------------------------------------------------------------------
+
+LangParser::PostfixExpContext* LangParser::UnaryToPostfixContext::postfixExp() {
+  return getRuleContext<LangParser::PostfixExpContext>(0);
+}
+
+LangParser::UnaryToPostfixContext::UnaryToPostfixContext(UnaryExpContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::UnaryToPostfixContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitUnaryToPostfix(this);
+  else
+    return visitor->visitChildren(this);
+}
+LangParser::UnaryExpContext* LangParser::unaryExp() {
+  UnaryExpContext *_localctx = _tracker.createInstance<UnaryExpContext>(_ctx, getState());
+  enterRule(_localctx, 78, LangParser::RuleUnaryExp);
+  size_t _la = 0;
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    setState(518);
+    _errHandler->sync(this);
+    switch (_input->LA(1)) {
+      case LangParser::SUB:
+      case LangParser::NOT:
+      case LangParser::LEN:
+      case LangParser::BIT_NOT: {
+        _localctx = _tracker.createInstance<LangParser::UnaryPrefixContext>(_localctx);
+        enterOuterAlt(_localctx, 1);
+        setState(515);
+        _la = _input->LA(1);
+        if (!((((_la & ~ 0x3fULL) == 0) &&
+          ((1ULL << _la) & 4971974126055981056) != 0))) {
+        _errHandler->recoverInline(this);
+        }
+        else {
+          _errHandler->reportMatch(this);
+          consume();
+        }
+        setState(516);
+        unaryExp();
+        break;
+      }
+
+      case LangParser::NULL_:
+      case LangParser::FUNCTION:
+      case LangParser::TRUE:
+      case LangParser::FALSE:
+      case LangParser::NEW:
+      case LangParser::OP:
+      case LangParser::OSB:
+      case LangParser::OCB:
+      case LangParser::DDD:
+      case LangParser::INTEGER:
+      case LangParser::FLOAT_LITERAL:
+      case LangParser::STRING_LITERAL:
+      case LangParser::IDENTIFIER: {
+        _localctx = _tracker.createInstance<LangParser::UnaryToPostfixContext>(_localctx);
+        enterOuterAlt(_localctx, 2);
+        setState(517);
+        postfixExp();
+        break;
+      }
+
+    default:
+      throw NoViableAltException(this);
+    }
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- PostfixExpContext ------------------------------------------------------------------
+
+LangParser::PostfixExpContext::PostfixExpContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+
+size_t LangParser::PostfixExpContext::getRuleIndex() const {
+  return LangParser::RulePostfixExp;
+}
+
+void LangParser::PostfixExpContext::copyFrom(PostfixExpContext *ctx) {
+  ParserRuleContext::copyFrom(ctx);
+}
+
+//----------------- PostfixExpressionContext ------------------------------------------------------------------
+
+LangParser::PrimaryExpContext* LangParser::PostfixExpressionContext::primaryExp() {
+  return getRuleContext<LangParser::PrimaryExpContext>(0);
+}
+
+std::vector<LangParser::PostfixSuffixContext *> LangParser::PostfixExpressionContext::postfixSuffix() {
+  return getRuleContexts<LangParser::PostfixSuffixContext>();
+}
+
+LangParser::PostfixSuffixContext* LangParser::PostfixExpressionContext::postfixSuffix(size_t i) {
+  return getRuleContext<LangParser::PostfixSuffixContext>(i);
+}
+
+LangParser::PostfixExpressionContext::PostfixExpressionContext(PostfixExpContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::PostfixExpressionContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitPostfixExpression(this);
+  else
+    return visitor->visitChildren(this);
+}
+LangParser::PostfixExpContext* LangParser::postfixExp() {
+  PostfixExpContext *_localctx = _tracker.createInstance<PostfixExpContext>(_ctx, getState());
+  enterRule(_localctx, 80, LangParser::RulePostfixExp);
+  size_t _la = 0;
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    _localctx = _tracker.createInstance<LangParser::PostfixExpressionContext>(_localctx);
+    enterOuterAlt(_localctx, 1);
+    setState(520);
+    primaryExp();
+    setState(524);
+    _errHandler->sync(this);
+    _la = _input->LA(1);
+    while (((((_la - 65) & ~ 0x3fULL) == 0) &&
+      ((1ULL << (_la - 65)) & 389) != 0)) {
+      setState(521);
+      postfixSuffix();
+      setState(526);
+      _errHandler->sync(this);
+      _la = _input->LA(1);
+    }
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- PostfixSuffixContext ------------------------------------------------------------------
+
+LangParser::PostfixSuffixContext::PostfixSuffixContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+
+size_t LangParser::PostfixSuffixContext::getRuleIndex() const {
+  return LangParser::RulePostfixSuffix;
+}
+
+void LangParser::PostfixSuffixContext::copyFrom(PostfixSuffixContext *ctx) {
+  ParserRuleContext::copyFrom(ctx);
+}
+
+//----------------- PostfixMemberSuffixContext ------------------------------------------------------------------
+
+tree::TerminalNode* LangParser::PostfixMemberSuffixContext::DOT() {
+  return getToken(LangParser::DOT, 0);
+}
+
+tree::TerminalNode* LangParser::PostfixMemberSuffixContext::IDENTIFIER() {
+  return getToken(LangParser::IDENTIFIER, 0);
+}
+
+LangParser::PostfixMemberSuffixContext::PostfixMemberSuffixContext(PostfixSuffixContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::PostfixMemberSuffixContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitPostfixMemberSuffix(this);
+  else
+    return visitor->visitChildren(this);
+}
+//----------------- PostfixColonLookupSuffixContext ------------------------------------------------------------------
+
+tree::TerminalNode* LangParser::PostfixColonLookupSuffixContext::COL() {
+  return getToken(LangParser::COL, 0);
+}
+
+tree::TerminalNode* LangParser::PostfixColonLookupSuffixContext::IDENTIFIER() {
+  return getToken(LangParser::IDENTIFIER, 0);
+}
+
+LangParser::PostfixColonLookupSuffixContext::PostfixColonLookupSuffixContext(PostfixSuffixContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::PostfixColonLookupSuffixContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitPostfixColonLookupSuffix(this);
+  else
+    return visitor->visitChildren(this);
+}
+//----------------- PostfixIndexSuffixContext ------------------------------------------------------------------
+
+tree::TerminalNode* LangParser::PostfixIndexSuffixContext::OSB() {
+  return getToken(LangParser::OSB, 0);
+}
+
+LangParser::ExpressionContext* LangParser::PostfixIndexSuffixContext::expression() {
+  return getRuleContext<LangParser::ExpressionContext>(0);
+}
+
+tree::TerminalNode* LangParser::PostfixIndexSuffixContext::CSB() {
+  return getToken(LangParser::CSB, 0);
+}
+
+LangParser::PostfixIndexSuffixContext::PostfixIndexSuffixContext(PostfixSuffixContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::PostfixIndexSuffixContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitPostfixIndexSuffix(this);
+  else
+    return visitor->visitChildren(this);
+}
+//----------------- PostfixCallSuffixContext ------------------------------------------------------------------
+
+tree::TerminalNode* LangParser::PostfixCallSuffixContext::OP() {
+  return getToken(LangParser::OP, 0);
+}
+
+tree::TerminalNode* LangParser::PostfixCallSuffixContext::CP() {
+  return getToken(LangParser::CP, 0);
+}
+
+LangParser::ArgumentsContext* LangParser::PostfixCallSuffixContext::arguments() {
+  return getRuleContext<LangParser::ArgumentsContext>(0);
+}
+
+LangParser::PostfixCallSuffixContext::PostfixCallSuffixContext(PostfixSuffixContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::PostfixCallSuffixContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitPostfixCallSuffix(this);
+  else
+    return visitor->visitChildren(this);
+}
+LangParser::PostfixSuffixContext* LangParser::postfixSuffix() {
+  PostfixSuffixContext *_localctx = _tracker.createInstance<PostfixSuffixContext>(_ctx, getState());
+  enterRule(_localctx, 82, LangParser::RulePostfixSuffix);
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    setState(540);
+    _errHandler->sync(this);
+    switch (_input->LA(1)) {
+      case LangParser::OSB: {
+        _localctx = _tracker.createInstance<LangParser::PostfixIndexSuffixContext>(_localctx);
+        enterOuterAlt(_localctx, 1);
+        setState(527);
+        match(LangParser::OSB);
+        setState(528);
+        expression();
+        setState(529);
+        match(LangParser::CSB);
+        break;
+      }
+
+      case LangParser::DOT: {
+        _localctx = _tracker.createInstance<LangParser::PostfixMemberSuffixContext>(_localctx);
+        enterOuterAlt(_localctx, 2);
+        setState(531);
+        match(LangParser::DOT);
+        setState(532);
+        match(LangParser::IDENTIFIER);
+        break;
+      }
+
+      case LangParser::COL: {
+        _localctx = _tracker.createInstance<LangParser::PostfixColonLookupSuffixContext>(_localctx);
+        enterOuterAlt(_localctx, 3);
+        setState(533);
+        match(LangParser::COL);
+        setState(534);
+        match(LangParser::IDENTIFIER);
+        break;
+      }
+
+      case LangParser::OP: {
+        _localctx = _tracker.createInstance<LangParser::PostfixCallSuffixContext>(_localctx);
+        enterOuterAlt(_localctx, 4);
+        setState(535);
+        match(LangParser::OP);
+        setState(537);
+        _errHandler->sync(this);
+
+        switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 58, _ctx)) {
+        case 1: {
+          setState(536);
+          arguments();
+          break;
+        }
+
+        default:
+          break;
+        }
+        setState(539);
+        match(LangParser::CP);
+        break;
+      }
+
+    default:
+      throw NoViableAltException(this);
+    }
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- PrimaryExpContext ------------------------------------------------------------------
+
+LangParser::PrimaryExpContext::PrimaryExpContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+
+size_t LangParser::PrimaryExpContext::getRuleIndex() const {
+  return LangParser::RulePrimaryExp;
+}
+
+void LangParser::PrimaryExpContext::copyFrom(PrimaryExpContext *ctx) {
+  ParserRuleContext::copyFrom(ctx);
+}
+
+//----------------- PrimaryAtomContext ------------------------------------------------------------------
+
+LangParser::AtomexpContext* LangParser::PrimaryAtomContext::atomexp() {
+  return getRuleContext<LangParser::AtomexpContext>(0);
+}
+
+LangParser::PrimaryAtomContext::PrimaryAtomContext(PrimaryExpContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::PrimaryAtomContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitPrimaryAtom(this);
+  else
+    return visitor->visitChildren(this);
+}
+//----------------- PrimaryParenExpContext ------------------------------------------------------------------
+
+tree::TerminalNode* LangParser::PrimaryParenExpContext::OP() {
+  return getToken(LangParser::OP, 0);
+}
+
+LangParser::ExpressionContext* LangParser::PrimaryParenExpContext::expression() {
+  return getRuleContext<LangParser::ExpressionContext>(0);
+}
+
+tree::TerminalNode* LangParser::PrimaryParenExpContext::CP() {
+  return getToken(LangParser::CP, 0);
+}
+
+LangParser::PrimaryParenExpContext::PrimaryParenExpContext(PrimaryExpContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::PrimaryParenExpContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitPrimaryParenExp(this);
+  else
+    return visitor->visitChildren(this);
+}
+//----------------- PrimaryLambdaContext ------------------------------------------------------------------
+
+LangParser::LambdaExpressionContext* LangParser::PrimaryLambdaContext::lambdaExpression() {
+  return getRuleContext<LangParser::LambdaExpressionContext>(0);
+}
+
+LangParser::PrimaryLambdaContext::PrimaryLambdaContext(PrimaryExpContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::PrimaryLambdaContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitPrimaryLambda(this);
+  else
+    return visitor->visitChildren(this);
+}
+//----------------- PrimaryListLiteralContext ------------------------------------------------------------------
+
+LangParser::ListExpressionContext* LangParser::PrimaryListLiteralContext::listExpression() {
+  return getRuleContext<LangParser::ListExpressionContext>(0);
+}
+
+LangParser::PrimaryListLiteralContext::PrimaryListLiteralContext(PrimaryExpContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::PrimaryListLiteralContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitPrimaryListLiteral(this);
+  else
+    return visitor->visitChildren(this);
+}
+//----------------- PrimaryMapLiteralContext ------------------------------------------------------------------
+
+LangParser::MapExpressionContext* LangParser::PrimaryMapLiteralContext::mapExpression() {
+  return getRuleContext<LangParser::MapExpressionContext>(0);
+}
+
+LangParser::PrimaryMapLiteralContext::PrimaryMapLiteralContext(PrimaryExpContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::PrimaryMapLiteralContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitPrimaryMapLiteral(this);
+  else
+    return visitor->visitChildren(this);
+}
+//----------------- PrimaryIdentifierContext ------------------------------------------------------------------
+
+tree::TerminalNode* LangParser::PrimaryIdentifierContext::IDENTIFIER() {
+  return getToken(LangParser::IDENTIFIER, 0);
+}
+
+LangParser::PrimaryIdentifierContext::PrimaryIdentifierContext(PrimaryExpContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::PrimaryIdentifierContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitPrimaryIdentifier(this);
+  else
+    return visitor->visitChildren(this);
+}
+//----------------- PrimaryNewContext ------------------------------------------------------------------
+
+LangParser::NewExpContext* LangParser::PrimaryNewContext::newExp() {
+  return getRuleContext<LangParser::NewExpContext>(0);
+}
+
+LangParser::PrimaryNewContext::PrimaryNewContext(PrimaryExpContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::PrimaryNewContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitPrimaryNew(this);
+  else
+    return visitor->visitChildren(this);
+}
+//----------------- PrimaryVarArgsContext ------------------------------------------------------------------
+
+tree::TerminalNode* LangParser::PrimaryVarArgsContext::DDD() {
+  return getToken(LangParser::DDD, 0);
+}
+
+LangParser::PrimaryVarArgsContext::PrimaryVarArgsContext(PrimaryExpContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::PrimaryVarArgsContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitPrimaryVarArgs(this);
+  else
+    return visitor->visitChildren(this);
+}
+LangParser::PrimaryExpContext* LangParser::primaryExp() {
+  PrimaryExpContext *_localctx = _tracker.createInstance<PrimaryExpContext>(_ctx, getState());
+  enterRule(_localctx, 84, LangParser::RulePrimaryExp);
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    setState(553);
+    _errHandler->sync(this);
+    switch (_input->LA(1)) {
+      case LangParser::NULL_:
+      case LangParser::TRUE:
+      case LangParser::FALSE:
+      case LangParser::INTEGER:
+      case LangParser::FLOAT_LITERAL:
+      case LangParser::STRING_LITERAL: {
+        _localctx = _tracker.createInstance<LangParser::PrimaryAtomContext>(_localctx);
+        enterOuterAlt(_localctx, 1);
+        setState(542);
+        atomexp();
+        break;
+      }
+
+      case LangParser::OSB: {
+        _localctx = _tracker.createInstance<LangParser::PrimaryListLiteralContext>(_localctx);
+        enterOuterAlt(_localctx, 2);
+        setState(543);
+        listExpression();
+        break;
+      }
+
+      case LangParser::OCB: {
+        _localctx = _tracker.createInstance<LangParser::PrimaryMapLiteralContext>(_localctx);
+        enterOuterAlt(_localctx, 3);
+        setState(544);
+        mapExpression();
+        break;
+      }
+
+      case LangParser::IDENTIFIER: {
+        _localctx = _tracker.createInstance<LangParser::PrimaryIdentifierContext>(_localctx);
+        enterOuterAlt(_localctx, 4);
+        setState(545);
+        match(LangParser::IDENTIFIER);
+        break;
+      }
+
+      case LangParser::DDD: {
+        _localctx = _tracker.createInstance<LangParser::PrimaryVarArgsContext>(_localctx);
+        enterOuterAlt(_localctx, 5);
+        setState(546);
+        match(LangParser::DDD);
+        break;
+      }
+
+      case LangParser::OP: {
+        _localctx = _tracker.createInstance<LangParser::PrimaryParenExpContext>(_localctx);
+        enterOuterAlt(_localctx, 6);
+        setState(547);
+        match(LangParser::OP);
+        setState(548);
+        expression();
+        setState(549);
+        match(LangParser::CP);
+        break;
+      }
+
+      case LangParser::NEW: {
+        _localctx = _tracker.createInstance<LangParser::PrimaryNewContext>(_localctx);
+        enterOuterAlt(_localctx, 7);
+        setState(551);
+        newExp();
+        break;
+      }
+
+      case LangParser::FUNCTION: {
+        _localctx = _tracker.createInstance<LangParser::PrimaryLambdaContext>(_localctx);
+        enterOuterAlt(_localctx, 8);
+        setState(552);
+        lambdaExpression();
+        break;
+      }
+
+    default:
+      throw NoViableAltException(this);
+    }
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- AtomexpContext ------------------------------------------------------------------
+
+LangParser::AtomexpContext::AtomexpContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+tree::TerminalNode* LangParser::AtomexpContext::NULL_() {
+  return getToken(LangParser::NULL_, 0);
+}
+
+tree::TerminalNode* LangParser::AtomexpContext::TRUE() {
+  return getToken(LangParser::TRUE, 0);
+}
+
+tree::TerminalNode* LangParser::AtomexpContext::FALSE() {
+  return getToken(LangParser::FALSE, 0);
+}
+
+tree::TerminalNode* LangParser::AtomexpContext::INTEGER() {
+  return getToken(LangParser::INTEGER, 0);
+}
+
+tree::TerminalNode* LangParser::AtomexpContext::FLOAT_LITERAL() {
+  return getToken(LangParser::FLOAT_LITERAL, 0);
+}
+
+tree::TerminalNode* LangParser::AtomexpContext::STRING_LITERAL() {
+  return getToken(LangParser::STRING_LITERAL, 0);
+}
+
+
+size_t LangParser::AtomexpContext::getRuleIndex() const {
+  return LangParser::RuleAtomexp;
+}
+
+
+std::any LangParser::AtomexpContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitAtomexp(this);
+  else
+    return visitor->visitChildren(this);
+}
+
+LangParser::AtomexpContext* LangParser::atomexp() {
+  AtomexpContext *_localctx = _tracker.createInstance<AtomexpContext>(_ctx, getState());
+  enterRule(_localctx, 86, LangParser::RuleAtomexp);
+  size_t _la = 0;
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    enterOuterAlt(_localctx, 1);
+    setState(555);
+    _la = _input->LA(1);
+    if (!((((_la & ~ 0x3fULL) == 0) &&
+      ((1ULL << _la) & 12583168) != 0) || ((((_la - 76) & ~ 0x3fULL) == 0) &&
+      ((1ULL << (_la - 76)) & 7) != 0))) {
+    _errHandler->recoverInline(this);
+    }
+    else {
+      _errHandler->reportMatch(this);
+      consume();
+    }
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- LambdaExpressionContext ------------------------------------------------------------------
+
+LangParser::LambdaExpressionContext::LambdaExpressionContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+
+size_t LangParser::LambdaExpressionContext::getRuleIndex() const {
+  return LangParser::RuleLambdaExpression;
+}
+
+void LangParser::LambdaExpressionContext::copyFrom(LambdaExpressionContext *ctx) {
+  ParserRuleContext::copyFrom(ctx);
+}
+
+//----------------- LambdaExprDefContext ------------------------------------------------------------------
+
+tree::TerminalNode* LangParser::LambdaExprDefContext::FUNCTION() {
+  return getToken(LangParser::FUNCTION, 0);
+}
+
+tree::TerminalNode* LangParser::LambdaExprDefContext::OP() {
+  return getToken(LangParser::OP, 0);
+}
+
+tree::TerminalNode* LangParser::LambdaExprDefContext::CP() {
+  return getToken(LangParser::CP, 0);
+}
+
+tree::TerminalNode* LangParser::LambdaExprDefContext::ARROW() {
+  return getToken(LangParser::ARROW, 0);
+}
+
+LangParser::BlockStatementContext* LangParser::LambdaExprDefContext::blockStatement() {
+  return getRuleContext<LangParser::BlockStatementContext>(0);
+}
+
+LangParser::TypeContext* LangParser::LambdaExprDefContext::type() {
+  return getRuleContext<LangParser::TypeContext>(0);
+}
+
+tree::TerminalNode* LangParser::LambdaExprDefContext::MUTIVAR() {
+  return getToken(LangParser::MUTIVAR, 0);
+}
+
+LangParser::ParameterListContext* LangParser::LambdaExprDefContext::parameterList() {
+  return getRuleContext<LangParser::ParameterListContext>(0);
+}
+
+LangParser::LambdaExprDefContext::LambdaExprDefContext(LambdaExpressionContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::LambdaExprDefContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitLambdaExprDef(this);
+  else
+    return visitor->visitChildren(this);
+}
+LangParser::LambdaExpressionContext* LangParser::lambdaExpression() {
+  LambdaExpressionContext *_localctx = _tracker.createInstance<LambdaExpressionContext>(_ctx, getState());
+  enterRule(_localctx, 88, LangParser::RuleLambdaExpression);
+  size_t _la = 0;
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    _localctx = _tracker.createInstance<LangParser::LambdaExprDefContext>(_localctx);
+    enterOuterAlt(_localctx, 1);
+    setState(557);
+    match(LangParser::FUNCTION);
+    setState(558);
+    match(LangParser::OP);
+    setState(560);
+    _errHandler->sync(this);
+
+    _la = _input->LA(1);
+    if ((((_la & ~ 0x3fULL) == 0) &&
+      ((1ULL << _la) & 8190) != 0) || _la == LangParser::DDD
+
+    || _la == LangParser::IDENTIFIER) {
+      setState(559);
+      parameterList();
+    }
+    setState(562);
+    match(LangParser::CP);
+    setState(563);
+    match(LangParser::ARROW);
+    setState(566);
+    _errHandler->sync(this);
+    switch (_input->LA(1)) {
+      case LangParser::INT:
+      case LangParser::FLOAT:
+      case LangParser::NUMBER:
+      case LangParser::STRING:
+      case LangParser::BOOL:
+      case LangParser::ANY:
+      case LangParser::VOID:
+      case LangParser::NULL_:
+      case LangParser::LIST:
+      case LangParser::MAP:
+      case LangParser::FUNCTION:
+      case LangParser::COROUTINE:
+      case LangParser::IDENTIFIER: {
+        setState(564);
+        type();
+        break;
+      }
+
+      case LangParser::MUTIVAR: {
+        setState(565);
+        match(LangParser::MUTIVAR);
+        break;
+      }
+
+    default:
+      throw NoViableAltException(this);
+    }
+    setState(568);
+    blockStatement();
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- ListExpressionContext ------------------------------------------------------------------
+
+LangParser::ListExpressionContext::ListExpressionContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+
+size_t LangParser::ListExpressionContext::getRuleIndex() const {
+  return LangParser::RuleListExpression;
+}
+
+void LangParser::ListExpressionContext::copyFrom(ListExpressionContext *ctx) {
+  ParserRuleContext::copyFrom(ctx);
+}
+
+//----------------- ListLiteralDefContext ------------------------------------------------------------------
+
+tree::TerminalNode* LangParser::ListLiteralDefContext::OSB() {
+  return getToken(LangParser::OSB, 0);
+}
+
+tree::TerminalNode* LangParser::ListLiteralDefContext::CSB() {
+  return getToken(LangParser::CSB, 0);
+}
+
+LangParser::ExpressionListContext* LangParser::ListLiteralDefContext::expressionList() {
+  return getRuleContext<LangParser::ExpressionListContext>(0);
+}
+
+LangParser::ListLiteralDefContext::ListLiteralDefContext(ListExpressionContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::ListLiteralDefContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitListLiteralDef(this);
+  else
+    return visitor->visitChildren(this);
+}
+LangParser::ListExpressionContext* LangParser::listExpression() {
+  ListExpressionContext *_localctx = _tracker.createInstance<ListExpressionContext>(_ctx, getState());
+  enterRule(_localctx, 90, LangParser::RuleListExpression);
+  size_t _la = 0;
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    _localctx = _tracker.createInstance<LangParser::ListLiteralDefContext>(_localctx);
+    enterOuterAlt(_localctx, 1);
+    setState(570);
+    match(LangParser::OSB);
+    setState(572);
+    _errHandler->sync(this);
+
+    _la = _input->LA(1);
+    if ((((_la & ~ 0x3fULL) == 0) &&
+      ((1ULL << _la) & 4971974160428304640) != 0) || ((((_la - 65) & ~ 0x3fULL) == 0) &&
+      ((1ULL << (_la - 65)) & 31765) != 0)) {
+      setState(571);
+      expressionList();
+    }
+    setState(574);
+    match(LangParser::CSB);
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- MapExpressionContext ------------------------------------------------------------------
+
+LangParser::MapExpressionContext::MapExpressionContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+
+size_t LangParser::MapExpressionContext::getRuleIndex() const {
+  return LangParser::RuleMapExpression;
+}
+
+void LangParser::MapExpressionContext::copyFrom(MapExpressionContext *ctx) {
+  ParserRuleContext::copyFrom(ctx);
+}
+
+//----------------- MapLiteralDefContext ------------------------------------------------------------------
+
+tree::TerminalNode* LangParser::MapLiteralDefContext::OCB() {
+  return getToken(LangParser::OCB, 0);
+}
+
+tree::TerminalNode* LangParser::MapLiteralDefContext::CCB() {
+  return getToken(LangParser::CCB, 0);
+}
+
+LangParser::MapEntryListContext* LangParser::MapLiteralDefContext::mapEntryList() {
+  return getRuleContext<LangParser::MapEntryListContext>(0);
+}
+
+LangParser::MapLiteralDefContext::MapLiteralDefContext(MapExpressionContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::MapLiteralDefContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitMapLiteralDef(this);
+  else
+    return visitor->visitChildren(this);
+}
+LangParser::MapExpressionContext* LangParser::mapExpression() {
+  MapExpressionContext *_localctx = _tracker.createInstance<MapExpressionContext>(_ctx, getState());
+  enterRule(_localctx, 92, LangParser::RuleMapExpression);
+  size_t _la = 0;
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    _localctx = _tracker.createInstance<LangParser::MapLiteralDefContext>(_localctx);
+    enterOuterAlt(_localctx, 1);
+    setState(576);
+    match(LangParser::OCB);
+    setState(578);
+    _errHandler->sync(this);
+
+    _la = _input->LA(1);
+    if (((((_la - 67) & ~ 0x3fULL) == 0) &&
+      ((1ULL << (_la - 67)) & 6145) != 0)) {
+      setState(577);
+      mapEntryList();
+    }
+    setState(580);
+    match(LangParser::CCB);
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- MapEntryListContext ------------------------------------------------------------------
+
+LangParser::MapEntryListContext::MapEntryListContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+std::vector<LangParser::MapEntryContext *> LangParser::MapEntryListContext::mapEntry() {
+  return getRuleContexts<LangParser::MapEntryContext>();
+}
+
+LangParser::MapEntryContext* LangParser::MapEntryListContext::mapEntry(size_t i) {
+  return getRuleContext<LangParser::MapEntryContext>(i);
+}
+
+std::vector<tree::TerminalNode *> LangParser::MapEntryListContext::COMMA() {
+  return getTokens(LangParser::COMMA);
+}
+
+tree::TerminalNode* LangParser::MapEntryListContext::COMMA(size_t i) {
+  return getToken(LangParser::COMMA, i);
+}
+
+
+size_t LangParser::MapEntryListContext::getRuleIndex() const {
+  return LangParser::RuleMapEntryList;
+}
+
+
+std::any LangParser::MapEntryListContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitMapEntryList(this);
+  else
+    return visitor->visitChildren(this);
+}
+
+LangParser::MapEntryListContext* LangParser::mapEntryList() {
+  MapEntryListContext *_localctx = _tracker.createInstance<MapEntryListContext>(_ctx, getState());
+  enterRule(_localctx, 94, LangParser::RuleMapEntryList);
+  size_t _la = 0;
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    enterOuterAlt(_localctx, 1);
+    setState(582);
+    mapEntry();
+    setState(587);
+    _errHandler->sync(this);
+    _la = _input->LA(1);
+    while (_la == LangParser::COMMA) {
+      setState(583);
+      match(LangParser::COMMA);
+      setState(584);
+      mapEntry();
+      setState(589);
+      _errHandler->sync(this);
+      _la = _input->LA(1);
+    }
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- MapEntryContext ------------------------------------------------------------------
+
+LangParser::MapEntryContext::MapEntryContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+
+size_t LangParser::MapEntryContext::getRuleIndex() const {
+  return LangParser::RuleMapEntry;
+}
+
+void LangParser::MapEntryContext::copyFrom(MapEntryContext *ctx) {
+  ParserRuleContext::copyFrom(ctx);
+}
+
+//----------------- MapEntryExprKeyContext ------------------------------------------------------------------
+
+tree::TerminalNode* LangParser::MapEntryExprKeyContext::OSB() {
+  return getToken(LangParser::OSB, 0);
+}
+
+std::vector<LangParser::ExpressionContext *> LangParser::MapEntryExprKeyContext::expression() {
+  return getRuleContexts<LangParser::ExpressionContext>();
+}
+
+LangParser::ExpressionContext* LangParser::MapEntryExprKeyContext::expression(size_t i) {
+  return getRuleContext<LangParser::ExpressionContext>(i);
+}
+
+tree::TerminalNode* LangParser::MapEntryExprKeyContext::CSB() {
+  return getToken(LangParser::CSB, 0);
+}
+
+tree::TerminalNode* LangParser::MapEntryExprKeyContext::COL() {
+  return getToken(LangParser::COL, 0);
+}
+
+LangParser::MapEntryExprKeyContext::MapEntryExprKeyContext(MapEntryContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::MapEntryExprKeyContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitMapEntryExprKey(this);
+  else
+    return visitor->visitChildren(this);
+}
+//----------------- MapEntryIdentKeyContext ------------------------------------------------------------------
+
+tree::TerminalNode* LangParser::MapEntryIdentKeyContext::IDENTIFIER() {
+  return getToken(LangParser::IDENTIFIER, 0);
+}
+
+tree::TerminalNode* LangParser::MapEntryIdentKeyContext::COL() {
+  return getToken(LangParser::COL, 0);
+}
+
+LangParser::ExpressionContext* LangParser::MapEntryIdentKeyContext::expression() {
+  return getRuleContext<LangParser::ExpressionContext>(0);
+}
+
+LangParser::MapEntryIdentKeyContext::MapEntryIdentKeyContext(MapEntryContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::MapEntryIdentKeyContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitMapEntryIdentKey(this);
+  else
+    return visitor->visitChildren(this);
+}
+//----------------- MapEntryStringKeyContext ------------------------------------------------------------------
+
+tree::TerminalNode* LangParser::MapEntryStringKeyContext::STRING_LITERAL() {
+  return getToken(LangParser::STRING_LITERAL, 0);
+}
+
+tree::TerminalNode* LangParser::MapEntryStringKeyContext::COL() {
+  return getToken(LangParser::COL, 0);
+}
+
+LangParser::ExpressionContext* LangParser::MapEntryStringKeyContext::expression() {
+  return getRuleContext<LangParser::ExpressionContext>(0);
+}
+
+LangParser::MapEntryStringKeyContext::MapEntryStringKeyContext(MapEntryContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::MapEntryStringKeyContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitMapEntryStringKey(this);
+  else
+    return visitor->visitChildren(this);
+}
+LangParser::MapEntryContext* LangParser::mapEntry() {
+  MapEntryContext *_localctx = _tracker.createInstance<MapEntryContext>(_ctx, getState());
+  enterRule(_localctx, 96, LangParser::RuleMapEntry);
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    setState(602);
+    _errHandler->sync(this);
+    switch (_input->LA(1)) {
+      case LangParser::IDENTIFIER: {
+        _localctx = _tracker.createInstance<LangParser::MapEntryIdentKeyContext>(_localctx);
+        enterOuterAlt(_localctx, 1);
+        setState(590);
+        match(LangParser::IDENTIFIER);
+        setState(591);
+        match(LangParser::COL);
+        setState(592);
+        expression();
+        break;
+      }
+
+      case LangParser::OSB: {
+        _localctx = _tracker.createInstance<LangParser::MapEntryExprKeyContext>(_localctx);
+        enterOuterAlt(_localctx, 2);
+        setState(593);
+        match(LangParser::OSB);
+        setState(594);
+        expression();
+        setState(595);
+        match(LangParser::CSB);
+        setState(596);
+        match(LangParser::COL);
+        setState(597);
+        expression();
+        break;
+      }
+
+      case LangParser::STRING_LITERAL: {
+        _localctx = _tracker.createInstance<LangParser::MapEntryStringKeyContext>(_localctx);
+        enterOuterAlt(_localctx, 3);
+        setState(599);
+        match(LangParser::STRING_LITERAL);
+        setState(600);
+        match(LangParser::COL);
+        setState(601);
+        expression();
+        break;
+      }
+
+    default:
+      throw NoViableAltException(this);
+    }
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- NewExpContext ------------------------------------------------------------------
+
+LangParser::NewExpContext::NewExpContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+
+size_t LangParser::NewExpContext::getRuleIndex() const {
+  return LangParser::RuleNewExp;
+}
+
+void LangParser::NewExpContext::copyFrom(NewExpContext *ctx) {
+  ParserRuleContext::copyFrom(ctx);
+}
+
+//----------------- NewExpressionDefContext ------------------------------------------------------------------
+
+tree::TerminalNode* LangParser::NewExpressionDefContext::NEW() {
+  return getToken(LangParser::NEW, 0);
+}
+
+LangParser::QualifiedIdentifierContext* LangParser::NewExpressionDefContext::qualifiedIdentifier() {
+  return getRuleContext<LangParser::QualifiedIdentifierContext>(0);
+}
+
+tree::TerminalNode* LangParser::NewExpressionDefContext::OP() {
+  return getToken(LangParser::OP, 0);
+}
+
+tree::TerminalNode* LangParser::NewExpressionDefContext::CP() {
+  return getToken(LangParser::CP, 0);
+}
+
+LangParser::ArgumentsContext* LangParser::NewExpressionDefContext::arguments() {
+  return getRuleContext<LangParser::ArgumentsContext>(0);
+}
+
+LangParser::NewExpressionDefContext::NewExpressionDefContext(NewExpContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::NewExpressionDefContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitNewExpressionDef(this);
+  else
+    return visitor->visitChildren(this);
+}
+LangParser::NewExpContext* LangParser::newExp() {
+  NewExpContext *_localctx = _tracker.createInstance<NewExpContext>(_ctx, getState());
+  enterRule(_localctx, 98, LangParser::RuleNewExp);
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    _localctx = _tracker.createInstance<LangParser::NewExpressionDefContext>(_localctx);
+    enterOuterAlt(_localctx, 1);
+    setState(604);
+    match(LangParser::NEW);
+    setState(605);
+    qualifiedIdentifier();
+
+    setState(606);
+    match(LangParser::OP);
+    setState(608);
+    _errHandler->sync(this);
+
+    switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 67, _ctx)) {
+    case 1: {
+      setState(607);
+      arguments();
+      break;
+    }
+
+    default:
+      break;
+    }
+    setState(610);
+    match(LangParser::CP);
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- IfStatementContext ------------------------------------------------------------------
+
+LangParser::IfStatementContext::IfStatementContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+std::vector<tree::TerminalNode *> LangParser::IfStatementContext::IF() {
+  return getTokens(LangParser::IF);
+}
+
+tree::TerminalNode* LangParser::IfStatementContext::IF(size_t i) {
+  return getToken(LangParser::IF, i);
+}
+
+std::vector<tree::TerminalNode *> LangParser::IfStatementContext::OP() {
+  return getTokens(LangParser::OP);
+}
+
+tree::TerminalNode* LangParser::IfStatementContext::OP(size_t i) {
+  return getToken(LangParser::OP, i);
+}
+
+std::vector<LangParser::ExpressionContext *> LangParser::IfStatementContext::expression() {
+  return getRuleContexts<LangParser::ExpressionContext>();
+}
+
+LangParser::ExpressionContext* LangParser::IfStatementContext::expression(size_t i) {
+  return getRuleContext<LangParser::ExpressionContext>(i);
+}
+
+std::vector<tree::TerminalNode *> LangParser::IfStatementContext::CP() {
+  return getTokens(LangParser::CP);
+}
+
+tree::TerminalNode* LangParser::IfStatementContext::CP(size_t i) {
+  return getToken(LangParser::CP, i);
+}
+
+std::vector<LangParser::BlockStatementContext *> LangParser::IfStatementContext::blockStatement() {
+  return getRuleContexts<LangParser::BlockStatementContext>();
+}
+
+LangParser::BlockStatementContext* LangParser::IfStatementContext::blockStatement(size_t i) {
+  return getRuleContext<LangParser::BlockStatementContext>(i);
+}
+
+std::vector<tree::TerminalNode *> LangParser::IfStatementContext::ELSE() {
+  return getTokens(LangParser::ELSE);
+}
+
+tree::TerminalNode* LangParser::IfStatementContext::ELSE(size_t i) {
+  return getToken(LangParser::ELSE, i);
+}
+
+
+size_t LangParser::IfStatementContext::getRuleIndex() const {
+  return LangParser::RuleIfStatement;
+}
+
+
+std::any LangParser::IfStatementContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitIfStatement(this);
+  else
+    return visitor->visitChildren(this);
+}
+
+LangParser::IfStatementContext* LangParser::ifStatement() {
+  IfStatementContext *_localctx = _tracker.createInstance<IfStatementContext>(_ctx, getState());
+  enterRule(_localctx, 100, LangParser::RuleIfStatement);
+  size_t _la = 0;
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    size_t alt;
+    enterOuterAlt(_localctx, 1);
+    setState(612);
+    match(LangParser::IF);
+    setState(613);
+    match(LangParser::OP);
+    setState(614);
+    expression();
+    setState(615);
+    match(LangParser::CP);
+    setState(616);
+    blockStatement();
+    setState(626);
+    _errHandler->sync(this);
+    alt = getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 68, _ctx);
+    while (alt != 2 && alt != atn::ATN::INVALID_ALT_NUMBER) {
+      if (alt == 1) {
+        setState(617);
+        match(LangParser::ELSE);
+        setState(618);
+        match(LangParser::IF);
+        setState(619);
+        match(LangParser::OP);
+        setState(620);
+        expression();
+        setState(621);
+        match(LangParser::CP);
+        setState(622);
+        blockStatement(); 
+      }
+      setState(628);
+      _errHandler->sync(this);
+      alt = getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 68, _ctx);
+    }
+    setState(631);
+    _errHandler->sync(this);
+
+    _la = _input->LA(1);
+    if (_la == LangParser::ELSE) {
+      setState(629);
+      match(LangParser::ELSE);
+      setState(630);
+      blockStatement();
+    }
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- WhileStatementContext ------------------------------------------------------------------
+
+LangParser::WhileStatementContext::WhileStatementContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+tree::TerminalNode* LangParser::WhileStatementContext::WHILE() {
+  return getToken(LangParser::WHILE, 0);
+}
+
+tree::TerminalNode* LangParser::WhileStatementContext::OP() {
+  return getToken(LangParser::OP, 0);
+}
+
+LangParser::ExpressionContext* LangParser::WhileStatementContext::expression() {
+  return getRuleContext<LangParser::ExpressionContext>(0);
+}
+
+tree::TerminalNode* LangParser::WhileStatementContext::CP() {
+  return getToken(LangParser::CP, 0);
+}
+
+LangParser::BlockStatementContext* LangParser::WhileStatementContext::blockStatement() {
+  return getRuleContext<LangParser::BlockStatementContext>(0);
+}
+
+
+size_t LangParser::WhileStatementContext::getRuleIndex() const {
+  return LangParser::RuleWhileStatement;
+}
+
+
+std::any LangParser::WhileStatementContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitWhileStatement(this);
+  else
+    return visitor->visitChildren(this);
+}
+
+LangParser::WhileStatementContext* LangParser::whileStatement() {
+  WhileStatementContext *_localctx = _tracker.createInstance<WhileStatementContext>(_ctx, getState());
+  enterRule(_localctx, 102, LangParser::RuleWhileStatement);
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    enterOuterAlt(_localctx, 1);
+    setState(633);
+    match(LangParser::WHILE);
+    setState(634);
+    match(LangParser::OP);
+    setState(635);
+    expression();
+    setState(636);
+    match(LangParser::CP);
+    setState(637);
+    blockStatement();
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- ForStatementContext ------------------------------------------------------------------
+
+LangParser::ForStatementContext::ForStatementContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+tree::TerminalNode* LangParser::ForStatementContext::FOR() {
+  return getToken(LangParser::FOR, 0);
+}
+
+tree::TerminalNode* LangParser::ForStatementContext::OP() {
+  return getToken(LangParser::OP, 0);
+}
+
+LangParser::ForControlContext* LangParser::ForStatementContext::forControl() {
+  return getRuleContext<LangParser::ForControlContext>(0);
+}
+
+tree::TerminalNode* LangParser::ForStatementContext::CP() {
+  return getToken(LangParser::CP, 0);
+}
+
+LangParser::BlockStatementContext* LangParser::ForStatementContext::blockStatement() {
+  return getRuleContext<LangParser::BlockStatementContext>(0);
+}
+
+
+size_t LangParser::ForStatementContext::getRuleIndex() const {
+  return LangParser::RuleForStatement;
+}
+
+
+std::any LangParser::ForStatementContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitForStatement(this);
+  else
+    return visitor->visitChildren(this);
+}
+
+LangParser::ForStatementContext* LangParser::forStatement() {
+  ForStatementContext *_localctx = _tracker.createInstance<ForStatementContext>(_ctx, getState());
+  enterRule(_localctx, 104, LangParser::RuleForStatement);
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    enterOuterAlt(_localctx, 1);
+    setState(639);
+    match(LangParser::FOR);
+    setState(640);
+    match(LangParser::OP);
+    setState(641);
+    forControl();
+    setState(642);
+    match(LangParser::CP);
+    setState(643);
+    blockStatement();
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- ForControlContext ------------------------------------------------------------------
+
+LangParser::ForControlContext::ForControlContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+
+size_t LangParser::ForControlContext::getRuleIndex() const {
+  return LangParser::RuleForControl;
+}
+
+void LangParser::ForControlContext::copyFrom(ForControlContext *ctx) {
+  ParserRuleContext::copyFrom(ctx);
+}
+
+//----------------- ForEachExplicitControlContext ------------------------------------------------------------------
+
+std::vector<LangParser::Declaration_itemContext *> LangParser::ForEachExplicitControlContext::declaration_item() {
+  return getRuleContexts<LangParser::Declaration_itemContext>();
+}
+
+LangParser::Declaration_itemContext* LangParser::ForEachExplicitControlContext::declaration_item(size_t i) {
+  return getRuleContext<LangParser::Declaration_itemContext>(i);
+}
+
+tree::TerminalNode* LangParser::ForEachExplicitControlContext::COL() {
+  return getToken(LangParser::COL, 0);
+}
+
+LangParser::ExpressionContext* LangParser::ForEachExplicitControlContext::expression() {
+  return getRuleContext<LangParser::ExpressionContext>(0);
+}
+
+std::vector<tree::TerminalNode *> LangParser::ForEachExplicitControlContext::COMMA() {
+  return getTokens(LangParser::COMMA);
+}
+
+tree::TerminalNode* LangParser::ForEachExplicitControlContext::COMMA(size_t i) {
+  return getToken(LangParser::COMMA, i);
+}
+
+LangParser::ForEachExplicitControlContext::ForEachExplicitControlContext(ForControlContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::ForEachExplicitControlContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitForEachExplicitControl(this);
+  else
+    return visitor->visitChildren(this);
+}
+//----------------- ForCStyleControlContext ------------------------------------------------------------------
+
+LangParser::ForInitStatementContext* LangParser::ForCStyleControlContext::forInitStatement() {
+  return getRuleContext<LangParser::ForInitStatementContext>(0);
+}
+
+std::vector<tree::TerminalNode *> LangParser::ForCStyleControlContext::SEMICOLON() {
+  return getTokens(LangParser::SEMICOLON);
+}
+
+tree::TerminalNode* LangParser::ForCStyleControlContext::SEMICOLON(size_t i) {
+  return getToken(LangParser::SEMICOLON, i);
+}
+
+LangParser::ExpressionContext* LangParser::ForCStyleControlContext::expression() {
+  return getRuleContext<LangParser::ExpressionContext>(0);
+}
+
+LangParser::ForUpdateContext* LangParser::ForCStyleControlContext::forUpdate() {
+  return getRuleContext<LangParser::ForUpdateContext>(0);
+}
+
+LangParser::ForCStyleControlContext::ForCStyleControlContext(ForControlContext *ctx) { copyFrom(ctx); }
+
+
+std::any LangParser::ForCStyleControlContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitForCStyleControl(this);
+  else
+    return visitor->visitChildren(this);
+}
+LangParser::ForControlContext* LangParser::forControl() {
+  ForControlContext *_localctx = _tracker.createInstance<ForControlContext>(_ctx, getState());
+  enterRule(_localctx, 106, LangParser::RuleForControl);
+  size_t _la = 0;
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    setState(665);
+    _errHandler->sync(this);
+    switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 73, _ctx)) {
+    case 1: {
+      _localctx = _tracker.createInstance<LangParser::ForCStyleControlContext>(_localctx);
+      enterOuterAlt(_localctx, 1);
+      setState(645);
+      forInitStatement();
+      setState(646);
+      match(LangParser::SEMICOLON);
+      setState(648);
+      _errHandler->sync(this);
+
+      _la = _input->LA(1);
+      if ((((_la & ~ 0x3fULL) == 0) &&
+        ((1ULL << _la) & 4971974160428304640) != 0) || ((((_la - 65) & ~ 0x3fULL) == 0) &&
+        ((1ULL << (_la - 65)) & 31765) != 0)) {
+        setState(647);
+        expression();
+      }
+      setState(650);
+      match(LangParser::SEMICOLON);
+      setState(652);
+      _errHandler->sync(this);
+
+      _la = _input->LA(1);
+      if ((((_la & ~ 0x3fULL) == 0) &&
+        ((1ULL << _la) & 4971974160428304640) != 0) || ((((_la - 65) & ~ 0x3fULL) == 0) &&
+        ((1ULL << (_la - 65)) & 31765) != 0)) {
+        setState(651);
+        forUpdate();
+      }
+      break;
+    }
+
+    case 2: {
+      _localctx = _tracker.createInstance<LangParser::ForEachExplicitControlContext>(_localctx);
+      enterOuterAlt(_localctx, 2);
+      setState(654);
+      declaration_item();
+      setState(659);
+      _errHandler->sync(this);
+      _la = _input->LA(1);
+      while (_la == LangParser::COMMA) {
+        setState(655);
+        match(LangParser::COMMA);
+        setState(656);
+        declaration_item();
+        setState(661);
+        _errHandler->sync(this);
+        _la = _input->LA(1);
+      }
+      setState(662);
+      match(LangParser::COL);
+      setState(663);
+      expression();
+      break;
+    }
+
+    default:
+      break;
+    }
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- ForUpdateContext ------------------------------------------------------------------
+
+LangParser::ForUpdateContext::ForUpdateContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+std::vector<LangParser::ForUpdateSingleContext *> LangParser::ForUpdateContext::forUpdateSingle() {
+  return getRuleContexts<LangParser::ForUpdateSingleContext>();
+}
+
+LangParser::ForUpdateSingleContext* LangParser::ForUpdateContext::forUpdateSingle(size_t i) {
+  return getRuleContext<LangParser::ForUpdateSingleContext>(i);
+}
+
+std::vector<tree::TerminalNode *> LangParser::ForUpdateContext::COMMA() {
+  return getTokens(LangParser::COMMA);
+}
+
+tree::TerminalNode* LangParser::ForUpdateContext::COMMA(size_t i) {
+  return getToken(LangParser::COMMA, i);
+}
+
+
+size_t LangParser::ForUpdateContext::getRuleIndex() const {
+  return LangParser::RuleForUpdate;
+}
+
+
+std::any LangParser::ForUpdateContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitForUpdate(this);
+  else
+    return visitor->visitChildren(this);
+}
+
+LangParser::ForUpdateContext* LangParser::forUpdate() {
+  ForUpdateContext *_localctx = _tracker.createInstance<ForUpdateContext>(_ctx, getState());
+  enterRule(_localctx, 108, LangParser::RuleForUpdate);
+  size_t _la = 0;
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    enterOuterAlt(_localctx, 1);
+    setState(667);
+    forUpdateSingle();
+    setState(672);
+    _errHandler->sync(this);
+    _la = _input->LA(1);
+    while (_la == LangParser::COMMA) {
+      setState(668);
+      match(LangParser::COMMA);
+      setState(669);
+      forUpdateSingle();
+      setState(674);
+      _errHandler->sync(this);
+      _la = _input->LA(1);
+    }
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- ForUpdateSingleContext ------------------------------------------------------------------
+
+LangParser::ForUpdateSingleContext::ForUpdateSingleContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+LangParser::ExpressionContext* LangParser::ForUpdateSingleContext::expression() {
+  return getRuleContext<LangParser::ExpressionContext>(0);
+}
+
+LangParser::UpdateStatementContext* LangParser::ForUpdateSingleContext::updateStatement() {
+  return getRuleContext<LangParser::UpdateStatementContext>(0);
+}
+
+LangParser::AssignStatementContext* LangParser::ForUpdateSingleContext::assignStatement() {
+  return getRuleContext<LangParser::AssignStatementContext>(0);
+}
+
+
+size_t LangParser::ForUpdateSingleContext::getRuleIndex() const {
+  return LangParser::RuleForUpdateSingle;
+}
+
+
+std::any LangParser::ForUpdateSingleContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitForUpdateSingle(this);
+  else
+    return visitor->visitChildren(this);
+}
+
+LangParser::ForUpdateSingleContext* LangParser::forUpdateSingle() {
+  ForUpdateSingleContext *_localctx = _tracker.createInstance<ForUpdateSingleContext>(_ctx, getState());
+  enterRule(_localctx, 110, LangParser::RuleForUpdateSingle);
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    setState(678);
+    _errHandler->sync(this);
+    switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 75, _ctx)) {
+    case 1: {
+      enterOuterAlt(_localctx, 1);
+      setState(675);
+      expression();
+      break;
+    }
+
+    case 2: {
+      enterOuterAlt(_localctx, 2);
+      setState(676);
+      updateStatement();
+      break;
+    }
+
+    case 3: {
+      enterOuterAlt(_localctx, 3);
+      setState(677);
+      assignStatement();
+      break;
+    }
+
+    default:
+      break;
+    }
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- ForInitStatementContext ------------------------------------------------------------------
+
+LangParser::ForInitStatementContext::ForInitStatementContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+LangParser::MultiDeclarationContext* LangParser::ForInitStatementContext::multiDeclaration() {
+  return getRuleContext<LangParser::MultiDeclarationContext>(0);
+}
+
+LangParser::AssignStatementContext* LangParser::ForInitStatementContext::assignStatement() {
+  return getRuleContext<LangParser::AssignStatementContext>(0);
+}
+
+LangParser::ExpressionListContext* LangParser::ForInitStatementContext::expressionList() {
+  return getRuleContext<LangParser::ExpressionListContext>(0);
+}
+
+
+size_t LangParser::ForInitStatementContext::getRuleIndex() const {
+  return LangParser::RuleForInitStatement;
+}
+
+
+std::any LangParser::ForInitStatementContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitForInitStatement(this);
+  else
+    return visitor->visitChildren(this);
+}
+
+LangParser::ForInitStatementContext* LangParser::forInitStatement() {
+  ForInitStatementContext *_localctx = _tracker.createInstance<ForInitStatementContext>(_ctx, getState());
+  enterRule(_localctx, 112, LangParser::RuleForInitStatement);
+  size_t _la = 0;
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    setState(686);
+    _errHandler->sync(this);
+    switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 77, _ctx)) {
+    case 1: {
+      enterOuterAlt(_localctx, 1);
+      setState(680);
+      multiDeclaration();
+      break;
+    }
+
+    case 2: {
+      enterOuterAlt(_localctx, 2);
+      setState(681);
+      assignStatement();
+      break;
+    }
+
+    case 3: {
+      enterOuterAlt(_localctx, 3);
+      setState(683);
+      _errHandler->sync(this);
+
+      _la = _input->LA(1);
+      if ((((_la & ~ 0x3fULL) == 0) &&
+        ((1ULL << _la) & 4971974160428304640) != 0) || ((((_la - 65) & ~ 0x3fULL) == 0) &&
+        ((1ULL << (_la - 65)) & 31765) != 0)) {
+        setState(682);
+        expressionList();
+      }
+      break;
+    }
+
+    case 4: {
+      enterOuterAlt(_localctx, 4);
+
+      break;
+    }
+
+    default:
+      break;
+    }
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- MultiDeclarationContext ------------------------------------------------------------------
+
+LangParser::MultiDeclarationContext::MultiDeclarationContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+std::vector<LangParser::Declaration_itemContext *> LangParser::MultiDeclarationContext::declaration_item() {
+  return getRuleContexts<LangParser::Declaration_itemContext>();
+}
+
+LangParser::Declaration_itemContext* LangParser::MultiDeclarationContext::declaration_item(size_t i) {
+  return getRuleContext<LangParser::Declaration_itemContext>(i);
+}
+
+std::vector<tree::TerminalNode *> LangParser::MultiDeclarationContext::ASSIGN() {
+  return getTokens(LangParser::ASSIGN);
+}
+
+tree::TerminalNode* LangParser::MultiDeclarationContext::ASSIGN(size_t i) {
+  return getToken(LangParser::ASSIGN, i);
+}
+
+std::vector<LangParser::ExpressionContext *> LangParser::MultiDeclarationContext::expression() {
+  return getRuleContexts<LangParser::ExpressionContext>();
+}
+
+LangParser::ExpressionContext* LangParser::MultiDeclarationContext::expression(size_t i) {
+  return getRuleContext<LangParser::ExpressionContext>(i);
+}
+
+std::vector<tree::TerminalNode *> LangParser::MultiDeclarationContext::COMMA() {
+  return getTokens(LangParser::COMMA);
+}
+
+tree::TerminalNode* LangParser::MultiDeclarationContext::COMMA(size_t i) {
+  return getToken(LangParser::COMMA, i);
+}
+
+
+size_t LangParser::MultiDeclarationContext::getRuleIndex() const {
+  return LangParser::RuleMultiDeclaration;
+}
+
+
+std::any LangParser::MultiDeclarationContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitMultiDeclaration(this);
+  else
+    return visitor->visitChildren(this);
+}
+
+LangParser::MultiDeclarationContext* LangParser::multiDeclaration() {
+  MultiDeclarationContext *_localctx = _tracker.createInstance<MultiDeclarationContext>(_ctx, getState());
+  enterRule(_localctx, 114, LangParser::RuleMultiDeclaration);
+  size_t _la = 0;
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    enterOuterAlt(_localctx, 1);
+    setState(688);
+    declaration_item();
+    setState(691);
+    _errHandler->sync(this);
+
+    _la = _input->LA(1);
+    if (_la == LangParser::ASSIGN) {
+      setState(689);
+      match(LangParser::ASSIGN);
+      setState(690);
+      expression();
+    }
+    setState(701);
+    _errHandler->sync(this);
+    _la = _input->LA(1);
+    while (_la == LangParser::COMMA) {
+      setState(693);
+      match(LangParser::COMMA);
+      setState(694);
+      declaration_item();
+      setState(697);
+      _errHandler->sync(this);
+
+      _la = _input->LA(1);
+      if (_la == LangParser::ASSIGN) {
+        setState(695);
+        match(LangParser::ASSIGN);
+        setState(696);
+        expression();
+      }
+      setState(703);
+      _errHandler->sync(this);
+      _la = _input->LA(1);
+    }
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- ParameterListContext ------------------------------------------------------------------
+
+LangParser::ParameterListContext::ParameterListContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+std::vector<LangParser::ParameterContext *> LangParser::ParameterListContext::parameter() {
+  return getRuleContexts<LangParser::ParameterContext>();
+}
+
+LangParser::ParameterContext* LangParser::ParameterListContext::parameter(size_t i) {
+  return getRuleContext<LangParser::ParameterContext>(i);
+}
+
+std::vector<tree::TerminalNode *> LangParser::ParameterListContext::COMMA() {
+  return getTokens(LangParser::COMMA);
+}
+
+tree::TerminalNode* LangParser::ParameterListContext::COMMA(size_t i) {
+  return getToken(LangParser::COMMA, i);
+}
+
+tree::TerminalNode* LangParser::ParameterListContext::DDD() {
+  return getToken(LangParser::DDD, 0);
+}
+
+
+size_t LangParser::ParameterListContext::getRuleIndex() const {
+  return LangParser::RuleParameterList;
+}
+
+
+std::any LangParser::ParameterListContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitParameterList(this);
+  else
+    return visitor->visitChildren(this);
+}
+
+LangParser::ParameterListContext* LangParser::parameterList() {
+  ParameterListContext *_localctx = _tracker.createInstance<ParameterListContext>(_ctx, getState());
+  enterRule(_localctx, 116, LangParser::RuleParameterList);
+  size_t _la = 0;
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    size_t alt;
+    setState(717);
+    _errHandler->sync(this);
+    switch (_input->LA(1)) {
+      case LangParser::INT:
+      case LangParser::FLOAT:
+      case LangParser::NUMBER:
+      case LangParser::STRING:
+      case LangParser::BOOL:
+      case LangParser::ANY:
+      case LangParser::VOID:
+      case LangParser::NULL_:
+      case LangParser::LIST:
+      case LangParser::MAP:
+      case LangParser::FUNCTION:
+      case LangParser::COROUTINE:
+      case LangParser::IDENTIFIER: {
+        enterOuterAlt(_localctx, 1);
+        setState(704);
+        parameter();
+        setState(709);
+        _errHandler->sync(this);
+        alt = getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 81, _ctx);
+        while (alt != 2 && alt != atn::ATN::INVALID_ALT_NUMBER) {
+          if (alt == 1) {
+            setState(705);
+            match(LangParser::COMMA);
+            setState(706);
+            parameter(); 
+          }
+          setState(711);
+          _errHandler->sync(this);
+          alt = getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 81, _ctx);
+        }
+        setState(714);
+        _errHandler->sync(this);
+
+        _la = _input->LA(1);
+        if (_la == LangParser::COMMA) {
+          setState(712);
+          match(LangParser::COMMA);
+          setState(713);
+          match(LangParser::DDD);
+        }
+        break;
+      }
+
+      case LangParser::DDD: {
+        enterOuterAlt(_localctx, 2);
+        setState(716);
+        match(LangParser::DDD);
+        break;
+      }
+
+    default:
+      throw NoViableAltException(this);
+    }
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- ParameterContext ------------------------------------------------------------------
+
+LangParser::ParameterContext::ParameterContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+LangParser::TypeContext* LangParser::ParameterContext::type() {
+  return getRuleContext<LangParser::TypeContext>(0);
+}
+
+tree::TerminalNode* LangParser::ParameterContext::IDENTIFIER() {
+  return getToken(LangParser::IDENTIFIER, 0);
+}
+
+
+size_t LangParser::ParameterContext::getRuleIndex() const {
+  return LangParser::RuleParameter;
+}
+
+
+std::any LangParser::ParameterContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitParameter(this);
+  else
+    return visitor->visitChildren(this);
+}
+
+LangParser::ParameterContext* LangParser::parameter() {
+  ParameterContext *_localctx = _tracker.createInstance<ParameterContext>(_ctx, getState());
+  enterRule(_localctx, 118, LangParser::RuleParameter);
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    enterOuterAlt(_localctx, 1);
+    setState(719);
+    type();
+    setState(720);
+    match(LangParser::IDENTIFIER);
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- ArgumentsContext ------------------------------------------------------------------
+
+LangParser::ArgumentsContext::ArgumentsContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+LangParser::ExpressionListContext* LangParser::ArgumentsContext::expressionList() {
+  return getRuleContext<LangParser::ExpressionListContext>(0);
+}
+
+
+size_t LangParser::ArgumentsContext::getRuleIndex() const {
+  return LangParser::RuleArguments;
+}
+
+
+std::any LangParser::ArgumentsContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<LangParserVisitor*>(visitor))
+    return parserVisitor->visitArguments(this);
+  else
+    return visitor->visitChildren(this);
+}
+
+LangParser::ArgumentsContext* LangParser::arguments() {
+  ArgumentsContext *_localctx = _tracker.createInstance<ArgumentsContext>(_ctx, getState());
+  enterRule(_localctx, 120, LangParser::RuleArguments);
+  size_t _la = 0;
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    enterOuterAlt(_localctx, 1);
+    setState(723);
+    _errHandler->sync(this);
+
+    _la = _input->LA(1);
+    if ((((_la & ~ 0x3fULL) == 0) &&
+      ((1ULL << _la) & 4971974160428304640) != 0) || ((((_la - 65) & ~ 0x3fULL) == 0) &&
+      ((1ULL << (_la - 65)) & 31765) != 0)) {
+      setState(722);
+      expressionList();
+    }
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+void LangParser::initialize() {
+#if ANTLR4_USE_THREAD_LOCAL_CACHE
+  langparserParserInitialize();
+#else
+  ::antlr4::internal::call_once(langparserParserOnceFlag, langparserParserInitialize);
+#endif
+}

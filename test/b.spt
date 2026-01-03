@@ -1,0 +1,8 @@
+//b.spt
+export class Rectangle {
+    int width;
+    int height;
+    int add(){
+        return 0;
+    }
+}
