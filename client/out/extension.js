@@ -76,9 +76,8 @@ function activate(context) {
         console.error('[SptScript Client] CRITICAL: Failed to determine server path. Aborting activation.');
         return; // 无法启动服务器，退出激活函数
     }
-    serverCommand = 'C:\\Users\\ftp\\Desktop\\sptscript-lsp\\cmake-build-debug\\sptscript-lsp.exe';
+    serverCommand = 'C:\\Users\\ftp\\Desktop\\spt-lsp\\cmake-build-debug\\sptscript-lsp.exe';
     // serverCommand = 'C:\\Users\\ftp\\Desktop\\sptscript-lsp\\cmake-build-release-mingw-clang64\\sptscript-lsp.exe';
-    // (可选但推荐) 检查文件是否存在 - 需要导入 'fs' 模块
     /*
     import * as fs from 'fs';
     if (!fs.existsSync(serverCommand)) {
@@ -107,7 +106,7 @@ function activate(context) {
         // synchronize: {
         //     configurationSection: 'sptscript.lsp' // 将 sptscript.lsp 下的所有设置同步给服务器 (服务器需处理 workspace/didChangeConfiguration)
         // },
-        // (推荐) 文件事件同步：当工作区中的 .flx 文件发生变动时通知服务器
+        // (推荐) 文件事件同步：当工作区中的 .spt 文件发生变动时通知服务器
         synchronize: {
             fileEvents: vscode.workspace.createFileSystemWatcher('**/*.flx')
         },

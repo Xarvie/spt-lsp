@@ -87,7 +87,7 @@ export function activate(context: vscode.ExtensionContext) {
         //     configurationSection: 'sptscript.lsp' // 将 sptscript.lsp 下的所有设置同步给服务器 (服务器需处理 workspace/didChangeConfiguration)
         // },
 
-        // (推荐) 文件事件同步：当工作区中的 .flx 文件发生变动时通知服务器
+        // (推荐) 文件事件同步：当工作区中的 .spt 文件发生变动时通知服务器
         synchronize: {
             fileEvents: vscode.workspace.createFileSystemWatcher('**/*.flx')
         },

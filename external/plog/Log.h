@@ -121,7 +121,7 @@
 #define PLOGN_IF_(instanceId, condition)         PLOG_NONE_IF_(instanceId, condition)
 
 // Old macro names for downward compatibility. To bypass including these macro names, add
-// #define PLOG_OMIT_LOG_DEFINES before #include <plog/Log.h>
+// #define PLOG_OMIT_LOG_DEFINES before
 #ifndef PLOG_OMIT_LOG_DEFINES
 
 //////////////////////////////////////////////////////////////////////////

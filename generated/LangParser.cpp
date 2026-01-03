@@ -69,7 +69,7 @@ void langparserParserInitialize() {
     },
     std::vector<std::string>{
       "", "'int'", "'float'", "'number'", "'string'", "'bool'", "'any'", 
-      "'void'", "'null'", "'list'", "'map'", "'function'", "'coro'", "'mutivar'", 
+      "'void'", "'null'", "'list'", "'map'", "'function'", "'fiber'", "'mutivar'", 
       "'if'", "'else'", "'while'", "'for'", "'break'", "'continue'", "'return'", 
       "'defer'", "'true'", "'false'", "'const'", "'auto'", "'global'", "'static'", 
       "'import'", "'as'", "'type'", "'from'", "'private'", "'export'", "'class'", 
@@ -81,7 +81,7 @@ void langparserParserInitialize() {
     },
     std::vector<std::string>{
       "", "INT", "FLOAT", "NUMBER", "STRING", "BOOL", "ANY", "VOID", "NULL_", 
-      "LIST", "MAP", "FUNCTION", "COROUTINE", "MUTIVAR", "IF", "ELSE", "WHILE", 
+      "LIST", "MAP", "FUNCTION", "FIBER", "MUTIVAR", "IF", "ELSE", "WHILE", 
       "FOR", "BREAK", "CONTINUE", "RETURN", "DEFER", "TRUE", "FALSE", "CONST", 
       "AUTO", "GLOBAL", "STATIC", "IMPORT", "AS", "TYPE", "FROM", "PRIVATE", 
       "EXPORT", "CLASS", "NEW", "ADD", "SUB", "MUL", "DIV", "MOD", "ASSIGN", 
@@ -1903,7 +1903,7 @@ LangParser::VariableDeclarationContext* LangParser::variableDeclaration() {
       case LangParser::LIST:
       case LangParser::MAP:
       case LangParser::FUNCTION:
-      case LangParser::COROUTINE:
+      case LangParser::FIBER:
       case LangParser::CONST:
       case LangParser::AUTO:
       case LangParser::GLOBAL:
@@ -2077,7 +2077,7 @@ LangParser::Declaration_itemContext* LangParser::declaration_item() {
       case LangParser::LIST:
       case LangParser::MAP:
       case LangParser::FUNCTION:
-      case LangParser::COROUTINE:
+      case LangParser::FIBER:
       case LangParser::IDENTIFIER: {
         setState(286);
         type();
@@ -2790,7 +2790,7 @@ LangParser::TypeContext* LangParser::type() {
       case LangParser::VOID:
       case LangParser::NULL_:
       case LangParser::FUNCTION:
-      case LangParser::COROUTINE: {
+      case LangParser::FIBER: {
         _localctx = _tracker.createInstance<LangParser::TypePrimitiveContext>(_localctx);
         enterOuterAlt(_localctx, 1);
         setState(366);
@@ -2952,8 +2952,8 @@ tree::TerminalNode* LangParser::PrimitiveTypeContext::NULL_() {
   return getToken(LangParser::NULL_, 0);
 }
 
-tree::TerminalNode* LangParser::PrimitiveTypeContext::COROUTINE() {
-  return getToken(LangParser::COROUTINE, 0);
+tree::TerminalNode* LangParser::PrimitiveTypeContext::FIBER() {
+  return getToken(LangParser::FIBER, 0);
 }
 
 tree::TerminalNode* LangParser::PrimitiveTypeContext::FUNCTION() {
@@ -5360,7 +5360,7 @@ LangParser::LambdaExpressionContext* LangParser::lambdaExpression() {
       case LangParser::LIST:
       case LangParser::MAP:
       case LangParser::FUNCTION:
-      case LangParser::COROUTINE:
+      case LangParser::FIBER:
       case LangParser::IDENTIFIER: {
         setState(564);
         type();
@@ -6748,7 +6748,7 @@ LangParser::ParameterListContext* LangParser::parameterList() {
       case LangParser::LIST:
       case LangParser::MAP:
       case LangParser::FUNCTION:
-      case LangParser::COROUTINE:
+      case LangParser::FIBER:
       case LangParser::IDENTIFIER: {
         enterOuterAlt(_localctx, 1);
         setState(704);

@@ -1,419 +1,980 @@
-#include "lsp_server.h" // 引入 LSP 服务器类头文件
-#include <cstdio>       // 引入 C 标准输入输出库 (用于 setbuf)
-#include <exception>    // 引入标准异常库
-#include <iostream>     // 引入标准输入输出流库 (用于底层错误)
-#include <locale>       // 引入区域设置库
-
-// --- 引入 plog 日志库相关头文件 ---
-#include <plog/Log.h>
-// 选择一个 Appender，例如输出到控制台 (stderr)
-#include <plog/Appenders/ConsoleAppender.h>
-// 选择一个 Formatter，例如 TXT 格式
-#include <plog/Formatters/TxtFormatter.h>
-// 如果需要初始化器，例如滚动文件初始化器
-#include "plog/Appenders/ConsoleAppender.h"
-#include "plog/Initializers/RollingFileInitializer.h"
-#include "plog/Log.h"
-#include <plog/Initializers/RollingFileInitializer.h>
-
-// 如果在 Windows 上编译，引入特定头文件用于设置二进制模式
-#ifdef _WIN32
-#include <fcntl.h> // 包含 _O_BINARY
-#include <io.h>    // 包含 _setmode
-#endif
-
-void setup_plog_logger() {
-  // 配置日志文件路径和滚动选项
-  // 例如：logs/sptscript_lsp.log, 最大 5MB, 保留 3 个文件
-  static plog::RollingFileAppender<plog::TxtFormatter> fileAppender(
-      "C:/Users/ftp/Desktop/sptscript-lsp/cmake-build-debug/logs/sptscript_lsp.log",
-      1024 * 1024 * 5, 3);
-  //    static plog::ConsoleAppender<plog::TxtFormatter> consoleAppender; //
-  plog::init(plog::info, &fileAppender); // 只输出到文件
-
-  // 可以用 PLOG_INFO 等宏记录初始化完成
-  PLOGI << "Plog logger initialized successfully."; // I 表示 Info 级别
-}
-#if 0
-
 /**
- * @brief LSP 服务器主函数入口点。
- * @param argc 命令行参数数量。
- * @param argv 命令行参数数组。
- * @return 程序退出代码 (0 表示成功)。
+ * @file main.cpp
+ * @brief Lang Language Server Main Entry Point
+ * 
+ * This file implements the JSON-RPC transport layer for the LSP protocol,
+ * connecting stdio communication with the LspService backend.
+ * 
+ * Features:
+ * - JSON-RPC 2.0 message parsing and serialization
+ * - Stdio-based transport (standard LSP)
+ * - Request/Response/Notification handling
+ * - Graceful shutdown
+ * 
+ * @copyright Copyright (c) 2024-2025
  */
-int main(int argc, char* argv[]) {
-    // --- 初始化阶段 ---
 
-    // 1. 初始化 plog 日志库
-    setup_plog_logger();
+#include "LspService.h"
 
-    PLOG_INFO << "SptScript LSP 服务器正在启动..."; // 使用 plog 记录启动信息
+#include <nlohmann/json.hpp>
 
-    // 2. (可选但推荐) 设置 locale 以支持 UTF-8
-    try {
-        PLOG_VERBOSE << "尝试设置 Locale..."; // 使用 VERBOSE 级别记录细节
-        // 使用 C 风格的 setlocale 尝试设置
-        // (请根据您的系统环境调整 locale 字符串)
-        if (std::setlocale(LC_ALL, ".UTF-8") == nullptr &&
-            std::setlocale(LC_ALL, "C.UTF-8") == nullptr &&
-            std::setlocale(LC_ALL, "en_US.UTF-8") == nullptr && // 备用选项
-            std::setlocale(LC_ALL, "") == nullptr // 依赖系统默认
-                )
-        {
-            PLOG_WARNING << "无法自动设置 UTF-8 Locale，非 ASCII 字符处理可能不正确。";
-        }
-        PLOG_INFO << "当前 Locale 设置为: " << (std::setlocale(LC_ALL, nullptr) ? std::setlocale(LC_ALL, nullptr) : "<未知>");
-
-    } catch (const std::exception& e) {
-        PLOG_WARNING << "设置 locale 时发生异常: " << e.what();
-    }
-
-    // 3. (关键!) 配置标准输入输出流
-    PLOG_INFO << "正在配置标准输入输出流...";
-#ifdef _WIN32
-    // 在 Windows 上，设置 stdin 和 stdout 为二进制模式
-    if (_setmode(_fileno(stdin), _O_BINARY) == -1) {
-        PLOG_FATAL << "无法将 stdin 设置为二进制模式。错误: " << strerror(errno);
-        return 1;
-    }
-    if (_setmode(_fileno(stdout), _O_BINARY) == -1) {
-        PLOG_FATAL << "无法将 stdout 设置为二进制模式。错误: " << strerror(errno);
-        return 1;
-    }
-    PLOG_INFO << "已将 stdin 和 stdout 设置为二进制模式 (Windows)。";
-#endif
-    // 禁用 stdout 和 stderr 的缓冲，确保响应和日志能立即发送
-    if (setvbuf(stdout, nullptr, _IONBF, 0) != 0) {
-        PLOG_WARNING << "无法禁用 stdout 的缓冲。";
-    }
-    if (setvbuf(stderr, nullptr, _IONBF, 0) != 0) {
-        // 注意：如果 plog 配置为输出到 stderr，禁用 stderr 缓冲可能影响 plog
-        // 但对于 LSP 来说，stderr 通常用于日志，无缓冲通常更好
-        // 如果 plog 出现问题，可以考虑不禁用 stderr 缓冲
-        PLOG_WARNING << "无法禁用 stderr 的缓冲。";
-    }
-    PLOG_INFO << "标准输入输出流配置完成。";
-
-    std::ios_base::sync_with_stdio(false);
-    // --- 服务器启动与运行 ---
-    PLOG_INFO << "创建 LSP 服务器实例...";
-    LspServer server; // 创建服务器对象
-
-    PLOG_INFO << "开始运行服务器主循环...";
-    // 运行服务器的主消息循环，并在最外层捕获任何未处理的异常
-    try {
-        server.run(); // 启动服务器，此函数将阻塞直到服务器退出
-        PLOG_INFO << "服务器主循环正常结束。";
-        return 0; // 正常退出码
-    } catch (const std::exception& e) {
-        // 记录未能处理的严重错误
-        PLOG_FATAL << "服务器运行期间发生未捕获的标准异常: " << e.what();
-        return 1; // 返回错误码
-    } catch (...) {
-        // 捕获所有其他类型的未知异常
-        PLOG_FATAL << "服务器运行期间发生未知类型的未捕获异常。";
-        return 1; // 返回错误码
-    }
-}
-#else
-
-#include "json.hpp" // 确保 include 路径正确
-#include <chrono>   // 用于添加延时 (调试用)
+#include <atomic>
+#include <chrono>
 #include <iostream>
-#include <map>
-#include <sstream>
-#include <stdexcept>
+#include <mutex>
+#include <optional>
 #include <string>
-#include <thread> // 用于添加延时 (调试用)
+#include <variant>
 #include <vector>
-
-// 如果在 Windows 上
-#ifdef _WIN32
-#include <fcntl.h> // for _O_BINARY
-#include <io.h>    // for _setmode
-#include <windows.h>
-#endif
-// 如果在 Linux/macOS 上
-#ifdef __unix__
-#include <unistd.h>
-#define MAX_PATH 260
-#endif
-
-using json = nlohmann::json;
-
-// --- 工具函数 ---
-// 确保日志立即刷新
-void log_error(const std::string &message) {
-  PLOGI << "[Server ERROR] " << message << std::endl << std::flush;
-}
-
-void log_warn(const std::string &message) {
-  PLOGI << "[Server WARN] " << message << std::endl << std::flush;
-}
-
-void log_info(const std::string &message) {
-  PLOGI << "[Server INFO] " << message << std::endl << std::flush;
-}
-
-void log_debug(const std::string &message) {
-  // 可以通过注释掉下面的输出来控制是否显示 DEBUG 日志
-  PLOGI << "[Server DEBUG] " << message << std::endl << std::flush;
-}
-
-// 发送 JSON 消息到 stdout
-void sendMessage(const json &msg) {
-  std::string msg_str = msg.dump();
-  log_debug("Preparing to send message: " + msg_str);
-  // 必须严格按照 LSP 协议格式发送
-  std::cout << "Content-Length: " << msg_str.length() << "\r\n";
-  // 根据 LSP 规范，Content-Type 是可选的，但 VS Code 常常需要它
-  std::cout << "Content-Type: application/vscode-jsonrpc; charset=utf-8\r\n";
-  std::cout << "\r\n";                // Header 和 Body 之间的空行是必须的
-  std::cout << msg_str << std::flush; // ！！！极其重要：必须刷新 stdout ！！！
-  log_info("Message sent. Length: " + std::to_string(msg_str.length()));
-}
-
-// --- 消息处理函数
-json handleInitialize(const json &request) {
-  log_info("Handling 'initialize' request id: " + request["id"].dump());
-  json capabilities = {{"textDocumentSync",
-                        {
-                            {"openClose", true}, {"change", 0} // 0 = None
-                        }}};
-  json result = {{"capabilities", capabilities}};
-  json response = {{"jsonrpc", "2.0"}, {"id", request["id"]}, {"result", result}};
-  return response;
-}
-
-void handleDidOpen(const json &notification) {
-  log_info("Handling 'textDocument/didOpen' notification.");
-  if (notification.contains("params") && notification["params"].contains("textDocument")) {
-    // 获取文档信息
-    const auto &textDocument = notification["params"]["textDocument"];
-    std::string uri = textDocument.value("uri", "unknown_uri"); // 获取 URI
-    std::string text = textDocument.value("text", "");          // 获取文本内容
-    int version = textDocument.value("version", 0);             // 获取版本
-    std::string langId = textDocument.value("languageId", "");  // 获取语言 ID
-
-    log_info("  URI: " + uri);
-    log_info("  LanguageID: " + langId);
-    log_info("  Version: " + std::to_string(version));
-    log_info("  Text length: " + std::to_string(text.length()));
-    log_debug("  Initial text: " + text.substr(0, 100) +
-              (text.length() > 100 ? "..." : "")); // 打印部分文本
-
-    // *******************************************
-    // ** 在这里添加你的核心逻辑 **
-    // 例如：将文档内容存储在内存中
-    // document_store[uri] = text; // 假设 document_store 是一个 std::map<std::string, std::string>
-    //
-    // 或者：开始解析文档内容
-    // auto ast = parseDocument(text);
-    //
-    // 或者：进行初步的静态分析并发送诊断信息
-    // auto diagnostics = analyzeDocument(text);
-    // publishDiagnostics(uri, diagnostics); // (需要额外实现 publishDiagnostics)
-    // *******************************************
-
-  } else {
-    log_warn("Malformed 'textDocument/didOpen' notification.");
-  }
-  // 通知不需要响应
-}
-
 #include <chrono>
 #include <thread>
 
-// --- 主函数 ---
-int main(int argc, char *argv[]) {
-  setup_plog_logger();
-  log_info("--------------------------------------------------");
-  log_info("Server process started.");
-  log_info("--------------------------------------------------");
+using json = nlohmann::json;
 
-  // (可选) 打印工作目录 - 帮助诊断路径问题
-  char cwd[MAX_PATH];
-#ifdef _WIN32
-  if (GetCurrentDirectoryA(MAX_PATH, cwd)) {
-    log_info("Current Working Directory: " + std::string(cwd));
-  } else {
-    log_warn("Failed to get Current Working Directory.");
-  }
-  // !!! 重要: 在 Windows 上，为 stdin/stdout 设置二进制模式 !!!
-  // 防止 C++ 标准库对 \n 和 \r\n 进行转换，LSP 需要精确的 \r\n
-  _setmode(_fileno(stdin), _O_BINARY);
-  _setmode(_fileno(stdout), _O_BINARY);
-  log_info("Set stdin/stdout to binary mode (Windows).");
-#elif __unix__
-  if (getcwd(cwd, sizeof(cwd)) != nullptr) {
-    log_info("Current Working Directory: " + std::string(cwd));
-  } else {
-    log_warn("Failed to get Current Working Directory.");
-  }
-#endif
+namespace lang {
+namespace lsp {
 
-  // 禁用 C++ stdio 与 C stdio 的同步，可能提高性能
-  std::ios_base::sync_with_stdio(false);
-  // 解除 cin 和 cout 的绑定，可能提高性能 (但也可能导致输出顺序问题，调试时可注释掉)
-  // std::cin.tie(nullptr);
-  log_info("iostream sync_with_stdio(false) called.");
+// ============================================================================
+// JSON-RPC Types
+// ============================================================================
 
-  bool shutdown_received = false;
+/// JSON-RPC request ID (can be string, int, or null)
+using JsonRpcId = std::variant<std::nullptr_t, int, std::string>;
 
-  log_info("Entering main communication loop...");
-  LspServer ls;
-//  std::this_thread::sleep_for(std::chrono::seconds(8));
-  while (true) { // 使用更健壮的循环条件
-    // log_debug("------------------ New Loop Iteration ------------------");
+/// JSON-RPC error codes
+namespace JsonRpcErrorCode {
+    constexpr int ParseError = -32700;
+    constexpr int InvalidRequest = -32600;
+    constexpr int MethodNotFound = -32601;
+    constexpr int InvalidParams = -32602;
+    constexpr int InternalError = -32603;
+    constexpr int ServerNotInitialized = -32002;
+    constexpr int RequestCancelled = -32800;
+}
 
-    // 1. 读取 Headers
-    long long contentLength = -1;
-    std::string line;
-    // log_debug("Attempting to read headers...");
-    // std::this_thread::sleep_for(std::chrono::seconds(8));
-    try {
-      while (true) {
-        // 注意：直接用 std::getline 可能在读取空行或只有\r的行时行为不确定
-        // 更健壮的方法是逐字符读取，但这会更复杂。我们先尝试 getline。
-        if (!std::getline(std::cin, line)) {
-          // 如果 getline 失败 (例如 EOF 或流错误)
-          if (std::cin.eof()) {
-            // log_info("EOF reached while reading headers. Exiting loop.");
-          } else {
-            log_error("std::getline failed while reading headers. Stream state: fail=" +
-                      std::to_string(std::cin.fail()) + ", bad=" + std::to_string(std::cin.bad()));
-          }
-          goto end_loop; // 跳出外层 while 循环
+// ============================================================================
+// JSON Serialization for LSP Types
+// ============================================================================
+
+// Position
+inline void to_json(json& j, const Position& p) {
+    j = json{{"line", p.line - 1}, {"character", p.column - 1}};  // Convert to 0-based
+}
+
+inline void from_json(const json& j, Position& p) {
+    p.line = j.at("line").get<uint32_t>() + 1;      // Convert from 0-based
+    p.column = j.at("character").get<uint32_t>() + 1;
+}
+
+// Range
+inline void to_json(json& j, const Range& r) {
+    j = json{{"start", r.start}, {"end", r.end}};
+}
+
+inline void from_json(const json& j, Range& r) {
+    j.at("start").get_to(r.start);
+    j.at("end").get_to(r.end);
+}
+
+// Location
+inline void to_json(json& j, const Location& l) {
+    j = json{{"uri", l.uri}, {"range", l.range}};
+}
+
+// LocationLink
+inline void to_json(json& j, const LocationLink& l) {
+    j = json{
+        {"targetUri", l.targetUri},
+        {"targetRange", l.targetRange},
+        {"targetSelectionRange", l.targetSelectionRange}
+    };
+    if (l.originSelectionRange) {
+        j["originSelectionRange"] = *l.originSelectionRange;
+    }
+}
+
+// Diagnostic
+inline void to_json(json& j, const Diagnostic& d) {
+    j = json{
+        {"range", d.range},
+        {"severity", static_cast<int>(d.severity)},
+        {"message", d.message}
+    };
+    if (!d.code.empty()) {
+        j["code"] = d.code;
+    }
+    if (!d.source.empty()) {
+        j["source"] = d.source;
+    }
+}
+
+// HoverResult -> Hover
+inline void to_json(json& j, const HoverResult& h) {
+    j = json{{"contents", {{"kind", "markdown"}, {"value", h.contents}}}};
+    if (h.range) {
+        j["range"] = *h.range;
+    }
+}
+
+// CompletionItem
+inline void to_json(json& j, const CompletionItem& c) {
+    j = json{
+        {"label", c.label},
+        {"kind", static_cast<int>(c.kind)}
+    };
+    if (!c.detail.empty()) {
+        j["detail"] = c.detail;
+    }
+    if (!c.documentation.empty()) {
+        j["documentation"] = {{"kind", "markdown"}, {"value", c.documentation}};
+    }
+    if (!c.insertText.empty()) {
+        j["insertText"] = c.insertText;
+    }
+    if (!c.filterText.empty()) {
+        j["filterText"] = c.filterText;
+    }
+    if (!c.sortText.empty()) {
+        j["sortText"] = c.sortText;
+    }
+    if (c.deprecated) {
+        j["deprecated"] = true;
+    }
+}
+
+// CompletionResult -> CompletionList
+inline void to_json(json& j, const CompletionResult& r) {
+    j = json{
+        {"isIncomplete", r.isIncomplete},
+        {"items", r.items}
+    };
+}
+
+// SignatureHelp
+inline void to_json(json& j, const ParameterInformation& p) {
+    j = json{{"label", p.label}};
+    if (!p.documentation.empty()) {
+        j["documentation"] = p.documentation;
+    }
+}
+
+inline void to_json(json& j, const SignatureInformation& s) {
+    j = json{
+        {"label", s.label},
+        {"parameters", s.parameters}
+    };
+    if (!s.documentation.empty()) {
+        j["documentation"] = s.documentation;
+    }
+}
+
+inline void to_json(json& j, const SignatureHelp& s) {
+    j = json{
+        {"signatures", s.signatures},
+        {"activeSignature", s.activeSignature},
+        {"activeParameter", s.activeParameter}
+    };
+}
+
+// DocumentSymbol
+inline void to_json(json& j, const DocumentSymbol& s) {
+    j = json{
+        {"name", s.name},
+        {"kind", static_cast<int>(s.kind)},
+        {"range", s.range},
+        {"selectionRange", s.selectionRange}
+    };
+    if (!s.detail.empty()) {
+        j["detail"] = s.detail;
+    }
+    if (!s.children.empty()) {
+        j["children"] = s.children;
+    }
+}
+
+// WorkspaceSymbol -> SymbolInformation
+inline void to_json(json& j, const WorkspaceSymbol& s) {
+    j = json{
+        {"name", s.name},
+        {"kind", static_cast<int>(s.kind)},
+        {"location", s.location}
+    };
+    if (!s.containerName.empty()) {
+        j["containerName"] = s.containerName;
+    }
+}
+
+// TextEdit
+inline void to_json(json& j, const TextEdit& e) {
+    j = json{{"range", e.range}, {"newText", e.newText}};
+}
+
+// WorkspaceEdit
+inline void to_json(json& j, const WorkspaceEdit& e) {
+    j = json{{"changes", json::object()}};
+    for (const auto& [uri, edits] : e.changes) {
+        j["changes"][uri] = edits;
+    }
+}
+
+// SemanticTokensResult
+inline void to_json(json& j, const SemanticTokensResult& r) {
+    j = json{{"data", r.data}};
+    if (!r.resultId.empty()) {
+        j["resultId"] = r.resultId;
+    }
+}
+
+// ============================================================================
+// LSP Server Class
+// ============================================================================
+
+/**
+ * @brief LSP Server implementing JSON-RPC transport over stdio
+ */
+class LspServer {
+public:
+    LspServer() = default;
+    
+    /**
+     * @brief Run the server main loop
+     * @return Exit code (0 for clean shutdown)
+     */
+    int run() {
+        // Set up diagnostics callback
+        service_.onDiagnosticsChanged([this](const std::string& uri, 
+                                              const std::vector<Diagnostic>& diagnostics) {
+            publishDiagnostics(uri, diagnostics);
+        });
+        
+        // Main message loop
+        while (running_) {
+            auto msg = readMessage();
+            if (!msg) {
+                if (!running_) break;
+                continue;
+            }
+            
+            handleMessage(*msg);
         }
-
-        // 移除行尾可能的回车符 \r (跨平台兼容性)
-        if (!line.empty() && line.back() == '\r') {
-          line.pop_back();
-          log_debug("Removed trailing '\\r'. Line is now: [" + line + "]");
-        } else {
-          log_debug("Raw header line received: [" + line + "]");
-        }
-
-        // 检查是否是空行 (Header 结束标志)
-        if (line.empty()) {
-          // log_debug("Empty line received, headers finished.");
-          break; // 跳出读取 header 的循环
-        }
-
-        // 解析 Content-Length (忽略大小写)
-        std::string header_key_lower = "content-length: ";
-        std::string line_lower = line;
-        // 转为小写比较
-        std::transform(line_lower.begin(), line_lower.end(), line_lower.begin(), ::tolower);
-
-        size_t pos = line_lower.find(header_key_lower);
-        if (pos == 0) { // 确保是行首匹配
-          try {
-            contentLength = std::stoll(line.substr(header_key_lower.length()));
-            // log_info("Parsed Content-Length: " + std::to_string(contentLength));
-          } catch (const std::invalid_argument &ia) {
-            log_error("Invalid argument converting Content-Length: " +
-                      line.substr(header_key_lower.length()));
-            contentLength = -1; // 重置为无效
-          } catch (const std::out_of_range &oor) {
-            log_error("Out of range converting Content-Length: " +
-                      line.substr(header_key_lower.length()));
-            contentLength = -1; // 重置为无效
-          }
-        } else {
-          // 忽略其他 Header，例如 Content-Type
-          // log_debug("Ignoring header line: " + line);
-        }
-      } // 结束读取 Header 的循环
-
-      // 检查 Content-Length 是否有效
-      if (contentLength < 0) {
-        log_error("Invalid or missing Content-Length header received.");
-        // 这里可以决定是继续尝试读取下一条消息还是退出
-        continue; // 尝试下一次循环迭代
-      }
-      if (contentLength == 0) {
-        log_warn("Content-Length is 0. Skipping body read.");
-        // 虽然长度为0，但仍然可能有方法调用（如 exit 通知），需要解析空body或继续
-      }
-
-      // 2. 读取 Body (JSON content)
-      std::vector<char> buffer(contentLength); // 创建足够大的缓冲区
-      if (contentLength > 0) {
-        log_debug("Attempting to read body of length: " + std::to_string(contentLength));
-        // 直接从 std::cin 读取指定长度的字节
-        std::cin.read(buffer.data(), contentLength);
-
-        // 检查读取操作是否成功，并且是否读到了期望的字节数
-        if (!std::cin || std::cin.gcount() != contentLength) {
-          log_error("Failed to read expected body length. Read " +
-                    std::to_string(std::cin.gcount()) + " bytes. Stream state: fail=" +
-                    std::to_string(std::cin.fail()) + ", bad=" + std::to_string(std::cin.bad()) +
-                    ", eof=" + std::to_string(std::cin.eof()));
-          // 如果读取失败，可能流已损坏，难以恢复，选择退出
-          goto end_loop;
-        }
-        // log_debug("Successfully read " + std::to_string(std::cin.gcount()) + " bytes for body.");
-      } else {
-        // log_debug("Skipped reading body as ContentLength is 0.");
-      }
-
-      // 3. 解析 JSON
-      std::string json_str(buffer.begin(), buffer.end());
-      // log_debug("Raw JSON received: " + json_str); // 调试时打印原始 JSON
-      json request_msg;
-      try {
-        if (json_str.empty() && contentLength == 0) {
-          log_warn("Received empty body with ContentLength=0. Assuming no JSON payload.");
-          // 对于某些通知(如 exit)，可能没有 params，空 payload 是可能的
-          // 但这里我们假设大多数消息需要 payload，如果为空则跳过处理
-          continue;
-        } else if (json_str.empty() && contentLength > 0) {
-          log_error("Read empty body despite ContentLength > 0. Aborting processing.");
-          continue;
-        }
-        request_msg = json::parse(json_str);
-        log_debug("JSON parsed successfully.");
-      } catch (const json::parse_error &e) {
-        log_error("JSON Parse Error: " + std::string(e.what()) + ". Raw JSON was: " + json_str);
-        continue; // 忽略无法解析的消息，尝试读取下一条
-      }
-
-      // 4. 处理消息
-      if (!request_msg.contains("method")) {
-        // 可能是响应消息，也可能是格式错误
-        if (request_msg.contains("id") &&
-            (request_msg.contains("result") || request_msg.contains("error"))) {
-          log_warn("Received a Response message, which the server shouldn't get. Ignoring.");
-        } else {
-          log_warn("Received message without 'method' field. Ignoring.");
-        }
-        continue;
-      }
-      std::string method = request_msg["method"];
-      ls.handleMessage(request_msg);
-
-    } catch (const std::exception &e) {
-      log_error("!!! Exception caught in main loop: " + std::string(e.what()));
-      // 考虑是否要继续循环或退出
-    } catch (...) {
-      log_error("!!! Unknown exception caught in main loop.");
-      // 考虑是否要继续循环或退出
+        
+        return shutdownReceived_ ? 0 : 1;
     }
 
-    //(可选) 添加少量延时，防止CPU满载 (如果循环意外地空转)
-    // std::this_thread::sleep_for(std::chrono::milliseconds(10));
+private:
+    // ========================================================================
+    // Message I/O
+    // ========================================================================
+    
+    /**
+     * @brief Read a JSON-RPC message from stdin
+     */
+    std::optional<json> readMessage() {
+        // Read headers
+        long contentLength = -1;
+        std::string line;
+        
+        while (std::getline(std::cin, line)) {
+            // Remove trailing \r if present (Windows line endings)
+            if (!line.empty() && line.back() == '\r') {
+                line.pop_back();
+            }
+            
+            // Parse Content-Length header
+            const std::string prefix = "Content-Length: ";
+            if (line.rfind(prefix, 0) == 0) {
+                try {
+                    contentLength = std::stol(line.substr(prefix.length()));
+                } catch (...) {
+                    contentLength = -1;
+                }
+            }
+            // Empty line indicates end of headers
+            else if (line.empty()) {
+                break;
+            }
+            
+            // Check for EOF
+            if (std::cin.eof() || std::cin.bad()) {
+                running_ = false;
+                return std::nullopt;
+            }
+        }
+        
+        if (contentLength <= 0) {
+            if (std::cin.eof() || std::cin.bad()) {
+                running_ = false;
+            }
+            return std::nullopt;
+        }
+        
+        // Read content
+        std::string content(contentLength, '\0');
+        std::cin.read(content.data(), contentLength);
+        
+        if (!std::cin || std::cin.gcount() != contentLength) {
+            running_ = false;
+            return std::nullopt;
+        }
+        
+        // Parse JSON
+        try {
+            return json::parse(content);
+        } catch (const json::parse_error&) {
+            return std::nullopt;
+        }
+    }
+    
+    /**
+     * @brief Write a JSON-RPC message to stdout
+     */
+    void writeMessage(const json& msg) {
+        std::string content = msg.dump(-1, ' ', false, json::error_handler_t::replace);
+        
+        std::lock_guard<std::mutex> lock(outputMutex_);
+        std::cout << "Content-Length: " << content.length() << "\r\n";
+        std::cout << "\r\n";
+        std::cout << content << std::flush;
+    }
+    
+    /**
+     * @brief Send a JSON-RPC response
+     */
+    void writeResponse(const JsonRpcId& id, const json& result) {
+        if (std::holds_alternative<std::nullptr_t>(id)) {
+            return;  // Don't respond to null IDs
+        }
+        
+        json response = {{"jsonrpc", "2.0"}, {"result", result}};
+        std::visit([&response](auto&& arg) { response["id"] = arg; }, id);
+        writeMessage(response);
+    }
+    
+    /**
+     * @brief Send a JSON-RPC error response
+     */
+    void writeErrorResponse(const JsonRpcId& id, int code, const std::string& message) {
+        json response = {
+            {"jsonrpc", "2.0"},
+            {"error", {{"code", code}, {"message", message}}}
+        };
+        std::visit([&response](auto&& arg) { response["id"] = arg; }, id);
+        writeMessage(response);
+    }
+    
+    /**
+     * @brief Send a JSON-RPC notification
+     */
+    void writeNotification(const std::string& method, const json& params) {
+        json notification = {{"jsonrpc", "2.0"}, {"method", method}};
+        if (!params.is_null()) {
+            notification["params"] = params;
+        }
+        writeMessage(notification);
+    }
+    
+    // ========================================================================
+    // Message Handling
+    // ========================================================================
+    
+    /**
+     * @brief Handle an incoming JSON-RPC message
+     */
+    void handleMessage(const json& msg) {
+        if (!msg.is_object()) return;
+        if (!msg.contains("jsonrpc") || msg.value("jsonrpc", "") != "2.0") return;
+        
+        // Request or notification?
+        if (msg.contains("id")) {
+            // This is a request
+            JsonRpcId id = parseId(msg.at("id"));
+            
+            if (msg.contains("method")) {
+                std::string method = msg.value("method", "");
+                json params = msg.value("params", json(nullptr));
+                
+                // Check server state
+                if (shutdownReceived_) {
+                    writeErrorResponse(id, JsonRpcErrorCode::InvalidRequest, "Server shutting down");
+                    return;
+                }
+                
+                if (!initialized_ && method != "initialize") {
+                    writeErrorResponse(id, JsonRpcErrorCode::ServerNotInitialized, "Server not initialized");
+                    return;
+                }
+                
+                // Dispatch request
+                handleRequest(method, id, params);
+            }
+        } else if (msg.contains("method")) {
+            // This is a notification
+            std::string method = msg.value("method", "");
+            json params = msg.value("params", json(nullptr));
+            
+            if (shutdownReceived_ && method != "exit") {
+                return;
+            }
+            
+            // Ignore $/ prefixed notifications
+            if (method.rfind("$/", 0) == 0) {
+                return;
+            }
+            
+            handleNotification(method, params);
+        }
+    }
+    
+    /**
+     * @brief Parse JSON-RPC ID
+     */
+    JsonRpcId parseId(const json& idJson) {
+        if (idJson.is_string()) return idJson.get<std::string>();
+        if (idJson.is_number_integer()) return idJson.get<int>();
+        return nullptr;
+    }
+    
+    /**
+     * @brief Handle a JSON-RPC request
+     */
+    void handleRequest(const std::string& method, const JsonRpcId& id, const json& params) {
+        if (method == "initialize") {
+            handleInitialize(id, params);
+        } else if (method == "shutdown") {
+            handleShutdown(id);
+        } else if (method == "textDocument/completion") {
+            handleCompletion(id, params);
+        } else if (method == "textDocument/hover") {
+            handleHover(id, params);
+        } else if (method == "textDocument/definition") {
+            handleDefinition(id, params);
+        } else if (method == "textDocument/declaration") {
+            handleDeclaration(id, params);
+        } else if (method == "textDocument/typeDefinition") {
+            handleTypeDefinition(id, params);
+        } else if (method == "textDocument/references") {
+            handleReferences(id, params);
+        } else if (method == "textDocument/documentSymbol") {
+            handleDocumentSymbol(id, params);
+        } else if (method == "workspace/symbol") {
+            handleWorkspaceSymbol(id, params);
+        } else if (method == "textDocument/rename") {
+            handleRename(id, params);
+        } else if (method == "textDocument/prepareRename") {
+            handlePrepareRename(id, params);
+        } else if (method == "textDocument/signatureHelp") {
+            handleSignatureHelp(id, params);
+        } else if (method == "textDocument/formatting") {
+            handleFormatting(id, params);
+        } else if (method == "textDocument/rangeFormatting") {
+            handleRangeFormatting(id, params);
+        } else if (method == "textDocument/semanticTokens/full") {
+            handleSemanticTokensFull(id, params);
+        } else if (method == "textDocument/codeAction") {
+            handleCodeAction(id, params);
+        } else {
+            writeErrorResponse(id, JsonRpcErrorCode::MethodNotFound, "Method not found: " + method);
+        }
+    }
+    
+    /**
+     * @brief Handle a JSON-RPC notification
+     */
+    void handleNotification(const std::string& method, const json& params) {
+        if (method == "initialized") {
+            handleInitialized(params);
+        } else if (method == "exit") {
+            handleExit();
+        } else if (method == "textDocument/didOpen") {
+            handleDidOpen(params);
+        } else if (method == "textDocument/didChange") {
+            handleDidChange(params);
+        } else if (method == "textDocument/didClose") {
+            handleDidClose(params);
+        } else if (method == "textDocument/didSave") {
+            handleDidSave(params);
+        }
+        // Unknown notifications are silently ignored
+    }
+    
+    // ========================================================================
+    // Lifecycle Handlers
+    // ========================================================================
+    
+    void handleInitialize(const JsonRpcId& id, const json& params) {
+        // Extract root path
+        std::string rootPath;
+        if (params.contains("rootUri") && !params["rootUri"].is_null()) {
+            rootPath = uri::uriToPath(params["rootUri"].get<std::string>());
+        } else if (params.contains("rootPath") && !params["rootPath"].is_null()) {
+            rootPath = params["rootPath"].get<std::string>();
+        }
+        
+        // Initialize service
+        service_.initialize(rootPath);
+        
+        // Build capabilities response
+        json capabilities = {
+            {"textDocumentSync", {
+                {"openClose", true},
+                {"change", 1},  // Full sync
+                {"save", {{"includeText", false}}}
+            }},
+            {"hoverProvider", true},
+            {"completionProvider", {
+                {"triggerCharacters", {".", ":"}},
+                {"resolveProvider", false}
+            }},
+            {"signatureHelpProvider", {
+                {"triggerCharacters", {"(", ","}}
+            }},
+            {"definitionProvider", true},
+            {"declarationProvider", true},
+            {"typeDefinitionProvider", true},
+            {"referencesProvider", true},
+            {"documentSymbolProvider", true},
+            {"workspaceSymbolProvider", true},
+            {"renameProvider", {
+                {"prepareProvider", true}
+            }},
+            {"documentFormattingProvider", true},
+            {"documentRangeFormattingProvider", true},
+            {"codeActionProvider", true},
+            {"semanticTokensProvider", {
+                {"legend", {
+                    {"tokenTypes", {
+                        "namespace", "type", "class", "enum", "interface",
+                        "struct", "typeParameter", "parameter", "variable",
+                        "property", "enumMember", "event", "function", "method",
+                        "macro", "keyword", "modifier", "comment", "string",
+                        "number", "regexp", "operator"
+                    }},
+                    {"tokenModifiers", {
+                        "declaration", "definition", "readonly", "static",
+                        "deprecated", "abstract", "async", "modification",
+                        "documentation", "defaultLibrary"
+                    }}
+                }},
+                {"full", true},
+                {"delta", false}
+            }}
+        };
+        
+        json result = {
+            {"capabilities", capabilities},
+            {"serverInfo", {
+                {"name", "lang-lsp"},
+                {"version", "1.0.0"}
+            }}
+        };
+        
+        writeResponse(id, result);
+    }
+    
+    void handleInitialized(const json& /*params*/) {
+        initialized_ = true;
+    }
+    
+    void handleShutdown(const JsonRpcId& id) {
+        shutdownReceived_ = true;
+        service_.shutdown();
+        writeResponse(id, nullptr);
+    }
+    
+    void handleExit() {
+        running_ = false;
+    }
+    
+    // ========================================================================
+    // Document Synchronization Handlers
+    // ========================================================================
+    
+    void handleDidOpen(const json& params) {
+        if (!params.contains("textDocument")) return;
+        
+        const auto& doc = params["textDocument"];
+        std::string uri = doc.value("uri", "");
+        std::string text = doc.value("text", "");
+        int64_t version = doc.value("version", 0);
+        
+        service_.didOpen(uri, std::move(text), version);
+    }
+    
+    void handleDidChange(const json& params) {
+        if (!params.contains("textDocument") || !params.contains("contentChanges")) return;
+        
+        const auto& doc = params["textDocument"];
+        std::string uri = doc.value("uri", "");
+        int64_t version = doc.value("version", 0);
+        
+        const auto& changes = params["contentChanges"];
+        if (changes.empty()) return;
+        
+        // For full sync, use the last change
+        std::string newContent = changes.back().value("text", "");
+        service_.didChange(uri, std::move(newContent), version);
+    }
+    
+    void handleDidClose(const json& params) {
+        if (!params.contains("textDocument")) return;
+        
+        std::string uri = params["textDocument"].value("uri", "");
+        service_.didClose(uri);
+        
+        // Clear diagnostics
+        publishDiagnostics(uri, {});
+    }
+    
+    void handleDidSave(const json& params) {
+        if (!params.contains("textDocument")) return;
+        
+        std::string uri = params["textDocument"].value("uri", "");
+        service_.didSave(uri);
+    }
+    
+    // ========================================================================
+    // Language Feature Handlers
+    // ========================================================================
+    
+    void handleCompletion(const JsonRpcId& id, const json& params) {
+        auto [uri, position] = extractTextDocumentPosition(params);
+        if (uri.empty()) {
+            writeErrorResponse(id, JsonRpcErrorCode::InvalidParams, "Invalid params");
+            return;
+        }
+        
+        // Extract trigger character if present
+        std::optional<char> triggerChar;
+        if (params.contains("context") && params["context"].contains("triggerCharacter")) {
+            std::string tc = params["context"]["triggerCharacter"].get<std::string>();
+            if (!tc.empty()) {
+                triggerChar = tc[0];
+            }
+        }
+        
+        auto result = service_.completion(uri, position, triggerChar);
+        writeResponse(id, result);
+    }
+    
+    void handleHover(const JsonRpcId& id, const json& params) {
+        auto [uri, position] = extractTextDocumentPosition(params);
+        if (uri.empty()) {
+            writeErrorResponse(id, JsonRpcErrorCode::InvalidParams, "Invalid params");
+            return;
+        }
+        
+        auto result = service_.hover(uri, position);
+        if (result.isEmpty()) {
+            writeResponse(id, nullptr);
+        } else {
+            writeResponse(id, result);
+        }
+    }
+    
+    void handleSignatureHelp(const JsonRpcId& id, const json& params) {
+        auto [uri, position] = extractTextDocumentPosition(params);
+        if (uri.empty()) {
+            writeErrorResponse(id, JsonRpcErrorCode::InvalidParams, "Invalid params");
+            return;
+        }
+        
+        auto result = service_.signatureHelp(uri, position);
+        if (result.isEmpty()) {
+            writeResponse(id, nullptr);
+        } else {
+            writeResponse(id, result);
+        }
+    }
+    
+    void handleDefinition(const JsonRpcId& id, const json& params) {
+        auto [uri, position] = extractTextDocumentPosition(params);
+        if (uri.empty()) {
+            writeErrorResponse(id, JsonRpcErrorCode::InvalidParams, "Invalid params");
+            return;
+        }
+        
+        auto result = service_.definition(uri, position);
+        if (result.empty()) {
+            writeResponse(id, nullptr);
+        } else {
+            writeResponse(id, result);
+        }
+    }
+    
+    void handleDeclaration(const JsonRpcId& id, const json& params) {
+        auto [uri, position] = extractTextDocumentPosition(params);
+        if (uri.empty()) {
+            writeErrorResponse(id, JsonRpcErrorCode::InvalidParams, "Invalid params");
+            return;
+        }
+        
+        auto result = service_.declaration(uri, position);
+        if (result.empty()) {
+            writeResponse(id, nullptr);
+        } else {
+            writeResponse(id, result);
+        }
+    }
+    
+    void handleTypeDefinition(const JsonRpcId& id, const json& params) {
+        auto [uri, position] = extractTextDocumentPosition(params);
+        if (uri.empty()) {
+            writeErrorResponse(id, JsonRpcErrorCode::InvalidParams, "Invalid params");
+            return;
+        }
+        
+        auto result = service_.typeDefinition(uri, position);
+        if (result.empty()) {
+            writeResponse(id, nullptr);
+        } else {
+            writeResponse(id, result);
+        }
+    }
+    
+    void handleReferences(const JsonRpcId& id, const json& params) {
+        auto [uri, position] = extractTextDocumentPosition(params);
+        if (uri.empty()) {
+            writeErrorResponse(id, JsonRpcErrorCode::InvalidParams, "Invalid params");
+            return;
+        }
+        
+        bool includeDeclaration = true;
+        if (params.contains("context") && params["context"].contains("includeDeclaration")) {
+            includeDeclaration = params["context"]["includeDeclaration"].get<bool>();
+        }
+        
+        auto result = service_.references(uri, position, includeDeclaration);
+        if (result.empty()) {
+            writeResponse(id, json::array());
+        } else {
+            writeResponse(id, result);
+        }
+    }
+    
+    void handleDocumentSymbol(const JsonRpcId& id, const json& params) {
+        if (!params.contains("textDocument")) {
+            writeErrorResponse(id, JsonRpcErrorCode::InvalidParams, "Invalid params");
+            return;
+        }
+        
+        std::string uri = params["textDocument"].value("uri", "");
+        auto result = service_.documentSymbols(uri);
+        writeResponse(id, result);
+    }
+    
+    void handleWorkspaceSymbol(const JsonRpcId& id, const json& params) {
+        std::string query = params.value("query", "");
+        auto result = service_.workspaceSymbols(query);
+        writeResponse(id, result);
+    }
+    
+    void handleRename(const JsonRpcId& id, const json& params) {
+        auto [uri, position] = extractTextDocumentPosition(params);
+        if (uri.empty()) {
+            writeErrorResponse(id, JsonRpcErrorCode::InvalidParams, "Invalid params");
+            return;
+        }
+        
+        std::string newName = params.value("newName", "");
+        if (newName.empty()) {
+            writeErrorResponse(id, JsonRpcErrorCode::InvalidParams, "New name is required");
+            return;
+        }
+        
+        auto result = service_.rename(uri, position, newName);
+        if (result) {
+            writeResponse(id, *result);
+        } else {
+            writeResponse(id, nullptr);
+        }
+    }
+    
+    void handlePrepareRename(const JsonRpcId& id, const json& params) {
+        auto [uri, position] = extractTextDocumentPosition(params);
+        if (uri.empty()) {
+            writeErrorResponse(id, JsonRpcErrorCode::InvalidParams, "Invalid params");
+            return;
+        }
+        
+        auto result = service_.prepareRename(uri, position);
+        if (result) {
+            writeResponse(id, *result);
+        } else {
+            writeResponse(id, nullptr);
+        }
+    }
+    
+    void handleFormatting(const JsonRpcId& id, const json& params) {
+        if (!params.contains("textDocument")) {
+            writeErrorResponse(id, JsonRpcErrorCode::InvalidParams, "Invalid params");
+            return;
+        }
+        
+        std::string uri = params["textDocument"].value("uri", "");
+        
+        FormattingOptions options;
+        if (params.contains("options")) {
+            const auto& opts = params["options"];
+            options.tabSize = opts.value("tabSize", 4u);
+            options.insertSpaces = opts.value("insertSpaces", true);
+            options.trimTrailingWhitespace = opts.value("trimTrailingWhitespace", true);
+            options.insertFinalNewline = opts.value("insertFinalNewline", true);
+            options.trimFinalNewlines = opts.value("trimFinalNewlines", true);
+        }
+        
+        auto result = service_.formatting(uri, options);
+        if (result.empty()) {
+            writeResponse(id, json::array());
+        } else {
+            writeResponse(id, result);
+        }
+    }
+    
+    void handleRangeFormatting(const JsonRpcId& id, const json& params) {
+        if (!params.contains("textDocument") || !params.contains("range")) {
+            writeErrorResponse(id, JsonRpcErrorCode::InvalidParams, "Invalid params");
+            return;
+        }
+        
+        std::string uri = params["textDocument"].value("uri", "");
+        Range range;
+        params["range"].get_to(range);
+        
+        FormattingOptions options;
+        if (params.contains("options")) {
+            const auto& opts = params["options"];
+            options.tabSize = opts.value("tabSize", 4u);
+            options.insertSpaces = opts.value("insertSpaces", true);
+        }
+        
+        auto result = service_.rangeFormatting(uri, range, options);
+        if (result.empty()) {
+            writeResponse(id, json::array());
+        } else {
+            writeResponse(id, result);
+        }
+    }
+    
+    void handleSemanticTokensFull(const JsonRpcId& id, const json& params) {
+        if (!params.contains("textDocument")) {
+            writeErrorResponse(id, JsonRpcErrorCode::InvalidParams, "Invalid params");
+            return;
+        }
+        
+        std::string uri = params["textDocument"].value("uri", "");
+        auto result = service_.semanticTokensFull(uri);
+        writeResponse(id, result);
+    }
+    
+    void handleCodeAction(const JsonRpcId& id, const json& params) {
+        if (!params.contains("textDocument") || !params.contains("range")) {
+            writeErrorResponse(id, JsonRpcErrorCode::InvalidParams, "Invalid params");
+            return;
+        }
+        
+        std::string uri = params["textDocument"].value("uri", "");
+        Range range;
+        params["range"].get_to(range);
+        
+        // Extract diagnostics from context
+        std::vector<Diagnostic> diagnostics;
+        // Note: Would need to parse diagnostics from params["context"]["diagnostics"]
+        
+        auto result = service_.codeActions(uri, range, diagnostics);
+        
+        // Convert to JSON
+        json actions = json::array();
+        for (const auto& action : result) {
+            json actionJson = {
+                {"title", action.title},
+                {"kind", "quickfix"}
+            };
+            if (!action.edit.changes.empty()) {
+                actionJson["edit"] = action.edit;
+            }
+            actions.push_back(actionJson);
+        }
+        
+        writeResponse(id, actions);
+    }
+    
+    // ========================================================================
+    // Diagnostics
+    // ========================================================================
+    
+    void publishDiagnostics(const std::string& uri, const std::vector<Diagnostic>& diagnostics) {
+        json params = {
+            {"uri", uri},
+            {"diagnostics", diagnostics}
+        };
+        writeNotification("textDocument/publishDiagnostics", params);
+    }
+    
+    // ========================================================================
+    // Utility Functions
+    // ========================================================================
+    
+    /**
+     * @brief Extract URI and position from textDocument/position params
+     */
+    std::pair<std::string, Position> extractTextDocumentPosition(const json& params) {
+        std::string uri;
+        Position position{0, 0};
+        
+        if (params.contains("textDocument") && params.contains("position")) {
+            uri = params["textDocument"].value("uri", "");
+            params["position"].get_to(position);
+        }
+        
+        return {uri, position};
+    }
+    
+    // ========================================================================
+    // Member Variables
+    // ========================================================================
+    
+    LspService service_;
+    std::mutex outputMutex_;
+    std::atomic<bool> running_{true};
+    std::atomic<bool> initialized_{false};
+    std::atomic<bool> shutdownReceived_{false};
+};
 
-  } // 结束主 while 循环
+} // namespace lsp
+} // namespace lang
 
-end_loop: // 循环结束或出错跳转点
-  log_info("--------------------------------------------------");
-  log_info("Exiting server process. Final state: shutdown_received=" +
-           std::to_string(shutdown_received));
-  log_info("--------------------------------------------------");
-
-  // 根据 LSP 规范，exit code 应该是 0 (如果收到 shutdown) 或 1 (如果未收到 shutdown)
-  return shutdown_received ? 0 : 1;
-}
+// ============================================================================
+// Main Entry Point
+// ============================================================================
+#ifdef _WIN32
+#include <fcntl.h>
+#include <io.h>
 #endif
+int main(int argc, char* argv[]) {
+#ifdef _WIN32
+  // Windows 下必须设置为二进制模式，否则读取 Content-Length 会出错
+  _setmode(_fileno(stdin), _O_BINARY);
+  _setmode(_fileno(stdout), _O_BINARY);
+#endif
+    std::ios_base::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+//    std::this_thread::sleep_for(std::chrono::seconds(6));
+    // Parse command line arguments
+    for (int i = 1; i < argc; ++i) {
+        std::string arg = argv[i];
+        if (arg == "--version" || arg == "-v") {
+            std::cout << "lang-lsp version 1.0.0\n";
+            return 0;
+        } else if (arg == "--help" || arg == "-h") {
+            std::cout << "Usage: lang-lsp [options]\n";
+            std::cout << "Options:\n";
+            std::cout << "  --version, -v  Show version information\n";
+            std::cout << "  --help, -h     Show this help message\n";
+            return 0;
+        }
+    }
+    
+    // Run the LSP server
+    lang::lsp::LspServer server;
+    return server.run();
+}

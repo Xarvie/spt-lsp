@@ -11,7 +11,7 @@ null
 'list'
 'map'
 'function'
-'coro'
+'fiber'
 'mutivar'
 'if'
 'else'
@@ -96,7 +96,7 @@ NULL_
 LIST
 MAP
 FUNCTION
-COROUTINE
+FIBER
 MUTIVAR
 IF
 ELSE

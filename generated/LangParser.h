@@ -13,7 +13,7 @@ class  LangParser : public antlr4::Parser {
 public:
   enum {
     INT = 1, FLOAT = 2, NUMBER = 3, STRING = 4, BOOL = 5, ANY = 6, VOID = 7, 
-    NULL_ = 8, LIST = 9, MAP = 10, FUNCTION = 11, COROUTINE = 12, MUTIVAR = 13, 
+    NULL_ = 8, LIST = 9, MAP = 10, FUNCTION = 11, FIBER = 12, MUTIVAR = 13, 
     IF = 14, ELSE = 15, WHILE = 16, FOR = 17, BREAK = 18, CONTINUE = 19, 
     RETURN = 20, DEFER = 21, TRUE = 22, FALSE = 23, CONST = 24, AUTO = 25, 
     GLOBAL = 26, STATIC = 27, IMPORT = 28, AS = 29, TYPE = 30, FROM = 31, 
@@ -827,7 +827,7 @@ public:
     antlr4::tree::TerminalNode *BOOL();
     antlr4::tree::TerminalNode *VOID();
     antlr4::tree::TerminalNode *NULL_();
-    antlr4::tree::TerminalNode *COROUTINE();
+    antlr4::tree::TerminalNode *FIBER();
     antlr4::tree::TerminalNode *FUNCTION();
 
 
