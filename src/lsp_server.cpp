@@ -735,7 +735,7 @@ void LspServer::handleDefinition(const JsonRpcId &id, const json &params) {
     return;
   }
 
-  std::optional<Location> location = analyzer.findDefinition(uri, position);
+  std::optional<DefinitionLink> location = analyzer.findDefinition(uri, position, docManager);
 
   if (location.has_value()) {
     // LSP v3 定义返回值可以是 Location | Location[] | LocationLink[]

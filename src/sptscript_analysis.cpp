@@ -260,7 +260,7 @@ void SemanticAnalyzerVisitor::recordScopeRange(std::shared_ptr<Scope> scope,
 /**
  * @brief 从 ANTLR 解析规则上下文获取 LSP Range。(修正)
  */
-Range SemanticAnalyzerVisitor::getRange(antlr4::ParserRuleContext *ctx) {
+Range getRange(antlr4::ParserRuleContext *ctx) {
   if (!ctx)
     return Range{Position{0, 0}, Position{0, 1}};
   antlr4::Token *startToken = ctx->getStart();
@@ -275,7 +275,7 @@ Range SemanticAnalyzerVisitor::getRange(antlr4::ParserRuleContext *ctx) {
 /**
  * @brief 从 ANTLR 终端节点获取 LSP Range。(修正)
  */
-Range SemanticAnalyzerVisitor::getRange(antlr4::tree::TerminalNode *node) {
+Range getRange(antlr4::tree::TerminalNode *node) {
   if (!node)
     return Range{Position{0, 0}, Position{0, 1}};
   return getTokenRange(node->getSymbol()); // 调用单个 token 的版本
@@ -284,7 +284,7 @@ Range SemanticAnalyzerVisitor::getRange(antlr4::tree::TerminalNode *node) {
 /**
  * @brief 从单个 ANTLR Token 获取 LSP Range。
  */
-Range SemanticAnalyzerVisitor::getTokenRange(antlr4::Token *token) {
+Range getTokenRange(antlr4::Token *token) {
   if (!token)
     return Range{Position{0, 0}, Position{0, 1}};
   long line = static_cast<long>(token->getLine()) - 1;
@@ -300,7 +300,7 @@ Range SemanticAnalyzerVisitor::getTokenRange(antlr4::Token *token) {
 /**
  * @brief 从开始和结束 ANTLR Token 获取跨越两者的 LSP Range。(修正后的实现)
  */
-Range SemanticAnalyzerVisitor::getTokenRange(antlr4::Token *startToken, antlr4::Token *stopToken) {
+Range getTokenRange(antlr4::Token *startToken, antlr4::Token *stopToken) {
   if (!startToken || !stopToken)
     return Range{Position{0, 0}, Position{0, 1}};
   long startLine = static_cast<long>(startToken->getLine()) - 1;
@@ -1419,7 +1419,7 @@ SemanticAnalyzerVisitor::visitClassDeclarationDef(LangParser::ClassDeclarationDe
   }
   std::string className = ctx->IDENTIFIER()->getText();
   PLOGD << "visitClassDeclarationDef: " << className;
-  Location defLoc = getLocation(ctx->IDENTIFIER());
+  Location defLoc = getLocation(ctx);
 
   // 1. 创建类类型信息 (ClassType)
   // 类作用域将在后面创建并关联
@@ -2741,7 +2741,7 @@ TypeInfoPtr SemanticAnalyzerVisitor::inferBinaryOperationType(const TypeInfoPtr 
                     "相等性运算符 '" + op + "' 不能用于不兼容的类型 '" + leftType->toString() +
                         "' 和 '" + rightType->toString() + "'",
                     DiagnosticSeverity::Warning); // 可能只是警告
-      return BoolType; // 即使类型可能不匹配，结果也应该是 bool
+      return BoolType;                            // 即使类型可能不匹配，结果也应该是 bool
     }
   }
 
@@ -2788,24 +2788,24 @@ TypeInfoPtr SemanticAnalyzerVisitor::inferBinaryOperationType(const TypeInfoPtr 
   std::any SemanticAnalyzerVisitor::visit##NodeName(LangParser::NodeName##Context *ctx) {          \
     PLOGV << "visit" #NodeName ": " << ctx->getText();                                             \
     if (ctx->children.size() < 3) {                                                                \
-      /* 如果只有一个子节点，说明没有发生二元运算，直接访问子节点 */   \
+      /* 如果只有一个子节点，说明没有发生二元运算，直接访问子节点 */                               \
       return visit(ctx->children[0]);                                                              \
     }                                                                                              \
-    /* 处理二元运算 */                                                                       \
+    /* 处理二元运算 */                                                                             \
     TypeInfoPtr leftType = UnknownType;                                                            \
     std::any leftResult = visit(ctx->children[0]);                                                 \
     try {                                                                                          \
       leftType = std::any_cast<TypeInfoPtr>(leftResult);                                           \
       if (!leftType)                                                                               \
         leftType = UnknownType;                                                                    \
-    } catch (...) { /* 忽略 */                                                                   \
+    } catch (...) { /* 忽略 */                                                                     \
     }                                                                                              \
                                                                                                    \
-    TypeInfoPtr finalType = leftType; /* 初始类型为最左操作数类型 */                   \
-    /* 迭代处理所有操作符和右操作数 */                                               \
+    TypeInfoPtr finalType = leftType; /* 初始类型为最左操作数类型 */                               \
+    /* 迭代处理所有操作符和右操作数 */                                                             \
     for (size_t i = 1; i < ctx->children.size(); i += 2) {                                         \
       if (finalType == UnknownType)                                                                \
-        break; /* 如果中间类型未知，停止推断 */                                       \
+        break; /* 如果中间类型未知，停止推断 */                                                    \
       antlr4::tree::ParseTree *opNode = ctx->children[i];                                          \
       antlr4::tree::ParseTree *rightNode = ctx->children[i + 1];                                   \
       std::string opText = opNode->getText();                                                      \
@@ -2816,10 +2816,10 @@ TypeInfoPtr SemanticAnalyzerVisitor::inferBinaryOperationType(const TypeInfoPtr 
         rightType = std::any_cast<TypeInfoPtr>(rightResult);                                       \
         if (!rightType)                                                                            \
           rightType = UnknownType;                                                                 \
-      } catch (...) { /* 忽略 */                                                                 \
+      } catch (...) { /* 忽略 */                                                                   \
       }                                                                                            \
                                                                                                    \
-      /* 推断当前操作的结果类型 */                                                      \
+      /* 推断当前操作的结果类型 */                                                                 \
       finalType = inferBinaryOperationType(finalType, opText, rightType,                           \
                                            dynamic_cast<ParserRuleContext *>(ctx));                \
     }                                                                                              \
@@ -4006,11 +4006,11 @@ std::any SemanticAnalyzerVisitor::visitImportNamedStmt(LangParser::ImportNamedSt
     // 4. 在当前作用域定义一个新的符号，复制类型和种类等信息
     Location defLoc = getLocation(specCtx); // 定义位置是 import specifier 的位置
     SymbolInfoPtr localSymbol =
-        std::make_shared<SymbolInfo>(importName,                    // 使用相同的名称
-                                     importedSymbol->kind,          // 复制种类
-                                     importedSymbol->type,          // 复制类型
-                                     defLoc,                        // 定义位置是 import 处
-                                     symbolTable.getCurrentScope(), // 作用域是当前作用域
+        std::make_shared<SymbolInfo>(importName,                         // 使用相同的名称
+                                     importedSymbol->kind,               // 复制种类
+                                     importedSymbol->type,               // 复制类型
+                                     importedSymbol->definitionLocation, // 定义位置是 import 处
+                                     symbolTable.getCurrentScope(),      // 作用域是当前作用域
                                      specCtx);
     localSymbol->isConst = importedSymbol->isConst; // 复制 constness
     // isGlobal, isStatic 通常不适用于导入的别名
@@ -4181,7 +4181,6 @@ std::any SemanticAnalyzerVisitor::visitMultiReturnClassMethodMember(
   // 4. 处理 'this' 和上下文
   bool previousInStatic = isInStaticMethod;
   isInStaticMethod = isStatic;
-
 
   // 5. 压入预期返回类型 (nullptr 代表 mutivar)
   expectedReturnTypeStack.push(nullptr);
@@ -5253,13 +5252,10 @@ std::optional<Uri> SptScriptAnalyzer::resolveImportPath(const Uri &currentUri,
     // 确保路径以 / 开头 (对于 Unix-like) 或 C:/ (对于 Windows)
     // Windows: C:\path\to -> /C:/path/to
 #ifdef _WIN32
-    if (resolvedPathStr.length() > 1 && resolvedPathStr[1] == ':') {
-      resolvedPathStr[1] = resolvedPathStr[0]; // 盘符移到后面
-      resolvedPathStr[0] = '/';
-      std::replace(resolvedPathStr.begin(), resolvedPathStr.end(), '\\', '/');
-    } else if (resolvedPathStr.length() > 0 && resolvedPathStr[0] != '/') {
+    if (resolvedPathStr.length() > 0 && resolvedPathStr[0] != '/') {
       resolvedPathStr.insert(0, "/"); // 添加前缀斜杠
     }
+    std::replace(resolvedPathStr.begin(), resolvedPathStr.end(), '\\', '/');
 #else
     if (resolvedPathStr.empty() || resolvedPathStr[0] != '/') {
       resolvedPathStr.insert(0, "/");
@@ -5364,9 +5360,9 @@ std::vector<Diagnostic> SptScriptAnalyzer::getDiagnostics(const Uri &uri) {
 /**
  * @brief 实现查找定义的核心逻辑。(修正：移除 getTokenRange/getRange 调用)
  */
-std::optional<Location>
+std::optional<DefinitionLink>
 SptScriptAnalyzer::findDefinitionLocation(const std::shared_ptr<const AnalysisResult> &analysis,
-                                          Position position) {
+                                          Position position, DocumentManager &docManager) {
   PLOGD << "SptScriptAnalyzer::findDefinitionLocation";
   if (!analysis || !analysis->symbolTable || !analysis->parseRes->cstRoot)
     return std::nullopt;
@@ -5379,17 +5375,45 @@ SptScriptAnalyzer::findDefinitionLocation(const std::shared_ptr<const AnalysisRe
         << " (" << typeid(*node).name() << ")";
   SymbolInfoPtr symbol = nullptr;
   std::string symbolName;
-  if (auto termNode = dynamic_cast<antlr4::tree::TerminalNode *>(node)) {
+
+  std::shared_ptr<Scope> scopeToSearch = findScopeAtPosition(*analysis, position);
+  if (!scopeToSearch)
+    scopeToSearch = analysis->symbolTable->getGlobalScope();
+
+  TerminalNode *termNode = nullptr;
+
+  if (termNode = dynamic_cast<TerminalNode *>(node)) {
     if (termNode->getSymbol()->getType() == LangLexer::IDENTIFIER) {
       symbolName = termNode->getText();
-      PLOGW << " -> 找到标识符终端节点 '" << symbolName
-            << "'，但符号解析逻辑未实现"; /* TODO: symbol = resolveSymbolAtNode(termNode); */
+      symbol = analysis->symbolTable->resolveSymbol(symbolName);
+      PLOGW << " -> 找到标识符终端节点 '" << symbolName << "'，但符号解析逻辑未实现";
+    }
+  } else if (auto typeCtx = dynamic_cast<LangParser::TypeQualifiedIdentifierContext *>(node)) {
+    termNode = typeCtx->qualifiedIdentifier()->IDENTIFIER()[0];
+    if (termNode->getSymbol()->getType() == LangLexer::IDENTIFIER) {
+      symbolName = termNode->getText();
+      symbol = scopeToSearch->resolve(symbolName);
+      if (auto classType = dynamic_cast<ClassType *>(symbol->type.get())) {
+        auto *def = static_cast<LangParser::ClassDeclarationDefContext *>(classType->definitionNode);
+        auto startToken = def->getStart();
+        auto stopToken = def->getStop();
+        return DefinitionLink{
+            getRange(termNode), symbol->definitionLocation.uri,
+            Range{
+                Position{(long)startToken->getLine() - 1,
+                         (long)startToken->getCharPositionInLine()},
+                Position{(long)stopToken->getLine() - 1, (long)stopToken->getCharPositionInLine()},
+            },
+            symbol->definitionLocation.range};
+      };
+      PLOGW << " -> 找到标识符终端节点 '" << symbolName << "'，但符号解析逻辑未实现";
     }
   }
   if (symbol) {
     PLOGI << " -> 找到符号 '" << symbol->name << "' 的定义";
     if (!symbol->definitionLocation.uri.empty()) {
-      return symbol->definitionLocation;
+      return DefinitionLink{getRange(termNode), symbol->definitionLocation.uri,
+                            symbol->definitionLocation.range, symbol->definitionLocation.range};
     } else {
       PLOGW << " -> 符号 '" << symbol->name << "' 缺少有效的定义位置信息";
     }
@@ -5402,7 +5426,8 @@ SptScriptAnalyzer::findDefinitionLocation(const std::shared_ptr<const AnalysisRe
 /**
  * @brief 查找指定位置符号的定义。(修正：使用 getCachedAnalysis)
  */
-std::optional<Location> SptScriptAnalyzer::findDefinition(const Uri &uri, Position position) {
+std::optional<DefinitionLink> SptScriptAnalyzer::findDefinition(const Uri &uri, Position position,
+                                                                DocumentManager &docManager) {
   PLOGD << "SptScriptAnalyzer::findDefinition at " << uri.str() << ":" << position.line + 1 << ":"
         << position.character + 1;
   // *** 修正：调用私有辅助函数 getCachedAnalysis ***
@@ -5411,5 +5436,5 @@ std::optional<Location> SptScriptAnalyzer::findDefinition(const Uri &uri, Positi
     PLOGW << " -> Cannot find definition: analysis not available or incomplete for " << uri.str();
     return std::nullopt;
   }
-  return findDefinitionLocation(analysis, position);
+  return findDefinitionLocation(analysis, position, docManager);
 }

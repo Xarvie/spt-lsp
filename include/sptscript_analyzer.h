@@ -4,8 +4,8 @@
 #include "document_manager.h"
 #include "parser_engine.h"  // 引入 ParseResult 定义 (包含 Diagnostic, CST Root, Token Stream)
 #include "protocol_types.h" // 引入 LSP 协议类型定义 (CompletionList, Hover, Location 等)
-#include "semantic_info.h" // 引入语义信息结构定义 (TypeInfo, SymbolInfo, Scope, SymbolTable)
-#include "uri.h"           // 引入 Uri 类
+#include "semantic_info.h"  // 引入语义信息结构定义 (TypeInfo, SymbolInfo, Scope, SymbolTable)
+#include "uri.h"            // 引入 Uri 类
 
 #include <memory>        // 引入 C++ 标准内存管理库 (用于 shared_ptr, unique_ptr)
 #include <mutex>         // 引入 C++ 标准互斥量库 (用于缓存线程安全)
@@ -139,8 +139,8 @@ private:
    * @param position 请求查找定义的位置。
    * @return 可选的 Location 信息。
    */
-  std::optional<Location>
-  findDefinitionLocation(const std::shared_ptr<const AnalysisResult> &analysis, Position position);
+  std::optional<DefinitionLink>
+  findDefinitionLocation(const std::shared_ptr<const AnalysisResult> &analysis, Position position, DocumentManager &docManager);
 
   /**
    * @brief 辅助函数，安全地从缓存中获取分析结果。
@@ -226,7 +226,8 @@ public:
    * @param position 请求跳转定义的位置。
    * @return 包含定义位置的 Location 结构 (可选)。
    */
-  std::optional<Location> findDefinition(const Uri &uri, Position position);
+  std::optional<DefinitionLink> findDefinition(const Uri &uri, Position position,
+                                               DocumentManager &docManager);
 
   /**
    * @brief 当文档关闭时，从缓存中清除其分析结果，释放资源。

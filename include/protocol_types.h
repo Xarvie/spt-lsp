@@ -53,37 +53,37 @@ constexpr const char *WillSaveWaitUntil =
 constexpr const char *PublishDiagnostics = "textDocument/publishDiagnostics"; // 发布诊断信息通知
 
 // 语言特性 (Language Features)
-constexpr const char *Completion = "textDocument/completion";         // 代码补全请求
-constexpr const char *CompletionResolve = "completionItem/resolve";   // 补全项详情解析请求
-constexpr const char *Hover = "textDocument/hover";                   // 悬停提示请求
-constexpr const char *SignatureHelp = "textDocument/signatureHelp";   // 签名帮助请求
-constexpr const char *Definition = "textDocument/definition";         // 跳转到定义请求
-constexpr const char *TypeDefinition = "textDocument/typeDefinition"; // 跳转到类型定义请求
-constexpr const char *Implementation = "textDocument/implementation"; // 跳转到实现请求
-constexpr const char *References = "textDocument/references";         // 查找引用请求
+constexpr const char *Completion = "textDocument/completion";               // 代码补全请求
+constexpr const char *CompletionResolve = "completionItem/resolve";         // 补全项详情解析请求
+constexpr const char *Hover = "textDocument/hover";                         // 悬停提示请求
+constexpr const char *SignatureHelp = "textDocument/signatureHelp";         // 签名帮助请求
+constexpr const char *Definition = "textDocument/definition";               // 跳转到定义请求
+constexpr const char *TypeDefinition = "textDocument/typeDefinition";       // 跳转到类型定义请求
+constexpr const char *Implementation = "textDocument/implementation";       // 跳转到实现请求
+constexpr const char *References = "textDocument/references";               // 查找引用请求
 constexpr const char *DocumentHighlight = "textDocument/documentHighlight"; // 文档高亮请求
 constexpr const char *DocumentSymbol = "textDocument/documentSymbol";       // 文档符号请求
 constexpr const char *WorkspaceSymbol = "workspace/symbol";                 // 工作区符号请求
 constexpr const char *CodeAction = "textDocument/codeAction";               // 代码动作请求
 constexpr const char *CodeLens = "textDocument/codeLens";                   // 代码镜头请求
-constexpr const char *CodeLensResolve = "codeLens/resolve";       // 代码镜头详情解析请求
-constexpr const char *DocumentLink = "textDocument/documentLink"; // 文档链接请求
-constexpr const char *DocumentLinkResolve = "documentLink/resolve"; // 文档链接详情解析请求
-constexpr const char *DocumentColor = "textDocument/documentColor"; // 文档颜色请求 (不常用)
+constexpr const char *CodeLensResolve = "codeLens/resolve";                 // 代码镜头详情解析请求
+constexpr const char *DocumentLink = "textDocument/documentLink";           // 文档链接请求
+constexpr const char *DocumentLinkResolve = "documentLink/resolve";         // 文档链接详情解析请求
+constexpr const char *DocumentColor = "textDocument/documentColor";         // 文档颜色请求 (不常用)
 constexpr const char *ColorPresentation = "textDocument/colorPresentation"; // 颜色表示请求 (不常用)
 constexpr const char *Formatting = "textDocument/formatting";               // 文档格式化请求
-constexpr const char *RangeFormatting = "textDocument/rangeFormatting";   // 范围格式化请求
-constexpr const char *OnTypeFormatting = "textDocument/onTypeFormatting"; // 输入时格式化请求
-constexpr const char *Rename = "textDocument/rename";                     // 重命名请求
-constexpr const char *PrepareRename = "textDocument/prepareRename";       // 准备重命名请求
-constexpr const char *FoldingRange = "textDocument/foldingRange";     // 代码折叠范围请求
-constexpr const char *SelectionRange = "textDocument/selectionRange"; // 选择范围请求
+constexpr const char *RangeFormatting = "textDocument/rangeFormatting";     // 范围格式化请求
+constexpr const char *OnTypeFormatting = "textDocument/onTypeFormatting";   // 输入时格式化请求
+constexpr const char *Rename = "textDocument/rename";                       // 重命名请求
+constexpr const char *PrepareRename = "textDocument/prepareRename";         // 准备重命名请求
+constexpr const char *FoldingRange = "textDocument/foldingRange";           // 代码折叠范围请求
+constexpr const char *SelectionRange = "textDocument/selectionRange";       // 选择范围请求
 constexpr const char *SemanticTokensFull = "textDocument/semanticTokens/full"; // 完整语义令牌请求
 constexpr const char *SemanticTokensFullDelta =
-    "textDocument/semanticTokens/full/delta"; // 增量语义令牌请求
+    "textDocument/semanticTokens/full/delta";                                    // 增量语义令牌请求
 constexpr const char *SemanticTokensRange = "textDocument/semanticTokens/range"; // 范围语义令牌请求
 constexpr const char *LinkedEditingRange =
-    "textDocument/linkedEditingRange"; // 链接编辑范围请求 (如 HTML 标签同步)
+    "textDocument/linkedEditingRange";                        // 链接编辑范围请求 (如 HTML 标签同步)
 constexpr const char *InlayHint = "textDocument/inlayHint";   // 内嵌提示请求
 constexpr const char *InlayHintResolve = "inlayHint/resolve"; // 内嵌提示详情解析请求
 constexpr const char *CallHierarchyIncomingCalls = "callHierarchy/incomingCalls"; // 调用层级 (入)
@@ -96,7 +96,7 @@ constexpr const char *PrepareCallHierarchy = "textDocument/prepareCallHierarchy"
  */
 namespace JsonRpcErrorCode {
 // 由 JSON RPC 规范定义
-constexpr const int ParseError = -32700; // 解析错误: 服务器接收到无效的 JSON
+constexpr const int ParseError = -32700;     // 解析错误: 服务器接收到无效的 JSON
 constexpr const int InvalidRequest = -32600; // 无效请求: 发送的 JSON 不是一个有效的请求对象
 constexpr const int MethodNotFound = -32601; // 方法未找到: 该方法不存在或无效
 constexpr const int InvalidParams = -32602;  // 无效参数: 无效的方法参数
@@ -105,7 +105,7 @@ constexpr const int InternalError = -32603;  // 内部错误: JSON-RPC 框架内
 // -32000 到 -32099 是预留的服务器实现定义的错误代码
 constexpr const int ServerErrorStart = -32099; // 服务器错误范围下限 (示例)
 constexpr const int ServerNotInitialized =
-    -32002; // 服务器未初始化: 在收到初始化请求前接收到其他请求
+    -32002;                                    // 服务器未初始化: 在收到初始化请求前接收到其他请求
 constexpr const int UnknownErrorCode = -32001; // 未知错误代码
 constexpr const int ServerErrorEnd = -32000;   // 服务器错误范围上限 (示例)
 
@@ -205,14 +205,41 @@ struct Location {
   Range range;     // 目标文档内的范围
 };
 
+/**
+ * @brief vscode新跳转结构体
+ */
+struct DefinitionLink {
+  /**
+   * 跳转前光标位置（按下ctrl高亮哪部分）
+   */
+  std::optional<Range> originSelectionRange;
+  std::string targetUri; // 目标文档的 URI (协议中使用字符串)
+  Range targetRange;     // 目标文档内的范围
+  /**
+   * 跳转后光标选中部分
+   */
+  Range targetSelectionRange;
+};
+
 // 为 Location 定义 ADL 序列化函数
-inline void to_json(json &j, const Location &l) { // NOLINT(misc-header-implementation)
-  j = json{{"uri", l.uri}, {"range", l.range}};
+inline void to_json(json &j, const DefinitionLink &l) { // NOLINT(misc-header-implementation)
+  j = json{{"targetUri", l.targetUri},
+           {"targetRange", l.targetRange},
+           {"targetSelectionRange", l.targetSelectionRange}};
+  if (l.originSelectionRange.has_value()) {
+    j["originSelectionRange"] = *l.originSelectionRange;
+  }
 }
 
-inline void from_json(const json &j, Location &l) { // NOLINT(misc-header-implementation)
-  j.at("uri").get_to(l.uri);
-  j.at("range").get_to(l.range);
+inline void from_json(const json &j, DefinitionLink &l) { // NOLINT(misc-header-implementation)
+  j.at("targetUri").get_to(l.targetUri);
+  j.at("targetRange").get_to(l.targetRange);
+  j.at("targetSelectionRange").get_to(l.targetSelectionRange);
+  if (j.count("originSelectionRange")) {
+    Range range;
+    j.at("originSelectionRange").get_to(range);
+    l.originSelectionRange = range;
+  }
 }
 
 /**
@@ -322,8 +349,8 @@ inline void from_json(const json &j, DiagnosticTag &e) { // NOLINT(misc-header-i
  * @brief 相关的诊断信息，指向问题相关的其他位置。
  */
 struct DiagnosticRelatedInformation {
-  Location location;   // 相关位置
-  std::string message; // 相关信息的消息文本
+  DefinitionLink location; // 相关位置
+  std::string message;     // 相关信息的消息文本
 };
 
 // 为 DiagnosticRelatedInformation 提供显式 ADL 转换函数
@@ -345,9 +372,9 @@ struct Diagnostic {
   Range range;                                        // 诊断信息关联的代码范围 (必需)
   std::optional<DiagnosticSeverity> severity;         // 严重级别 (可选)
   std::optional<std::variant<int, std::string>> code; // 错误代码 (可选, 可以是数字或字符串)
-  std::optional<std::string> codeDescription; // 错误代码的描述 URI (可选, LSP期望{href:string})
-  std::optional<std::string> source;          // 诊断来源，如 "编译器", "linter" (可选)
-  std::string message;                        // 诊断消息文本 (必需)
+  std::optional<std::string> codeDescription;     // 错误代码的描述 URI (可选, LSP期望{href:string})
+  std::optional<std::string> source;              // 诊断来源，如 "编译器", "linter" (可选)
+  std::string message;                            // 诊断消息文本 (必需)
   std::optional<std::vector<DiagnosticTag>> tags; // 标签列表 (可选, 如 Unnecessary, Deprecated)
   std::optional<std::vector<DiagnosticRelatedInformation>>
       relatedInformation;   // 相关信息列表 (可选)
@@ -563,7 +590,7 @@ inline void from_json(const json &j,
  * @brief textDocument/didChange 通知的参数。
  */
 struct DidChangeTextDocumentParams {
-  VersionedTextDocumentIdentifier textDocument; // 包含变化后文档的新版本号 (必需)
+  VersionedTextDocumentIdentifier textDocument;               // 包含变化后文档的新版本号 (必需)
   std::vector<TextDocumentContentChangeEvent> contentChanges; // 变化事件列表 (必需)
 };
 
@@ -663,8 +690,8 @@ inline void from_json(const json &j, DidCloseTextDocumentParams &p) {
  * @brief textDocument/publishDiagnostics 通知的参数。
  */
 struct PublishDiagnosticsParams {
-  std::string uri;             // 关联的文档 URI (必需)
-  std::optional<long> version; // 关联的文档版本 (可选, 用于避免旧诊断覆盖新诊断)
+  std::string uri;                     // 关联的文档 URI (必需)
+  std::optional<long> version;         // 关联的文档版本 (可选, 用于避免旧诊断覆盖新诊断)
   std::vector<Diagnostic> diagnostics; // 诊断信息列表 (必需, 空列表表示清除诊断)
 };
 
@@ -729,9 +756,9 @@ struct WorkspaceClientCapabilities {
   std::optional<bool> applyEdit; // 客户端是否支持 workspace/applyEdit 请求
   std::optional<WorkspaceEditClientCapabilities> workspaceEdit; // 有关 workspaceEdit 的详细能力
   std::optional<bool> didChangeConfiguration; // 是否支持接收配置变更通知 (简化表示)
-  std::optional<bool> didChangeWatchedFiles; // 是否支持接收监听文件变更通知 (简化表示)
-  std::optional<bool> symbol;                // 是否支持 workspace/symbol 请求 (简化表示)
-  std::optional<bool> workspaceFolders;      // 是否支持工作区文件夹
+  std::optional<bool> didChangeWatchedFiles;  // 是否支持接收监听文件变更通知 (简化表示)
+  std::optional<bool> symbol;                 // 是否支持 workspace/symbol 请求 (简化表示)
+  std::optional<bool> workspaceFolders;       // 是否支持工作区文件夹
   // 这里可以根据需要添加其他工作区能力字段
 };
 
@@ -872,9 +899,9 @@ inline void from_json(const json &j,
 struct ClientCapabilities {
   std::optional<WorkspaceClientCapabilities> workspace;       // 工作区相关能力
   std::optional<TextDocumentClientCapabilities> textDocument; // 文档相关能力
-  std::optional<json> window;       // 窗口相关能力 (用 json 简化)
-  std::optional<json> general;      // 通用能力 (用 json 简化)
-  std::optional<json> experimental; // 实验性能力 (用 json 简化)
+  std::optional<json> window;                                 // 窗口相关能力 (用 json 简化)
+  std::optional<json> general;                                // 通用能力 (用 json 简化)
+  std::optional<json> experimental;                           // 实验性能力 (用 json 简化)
 };
 
 // 为 ClientCapabilities 提供 ADL 序列化函数 (实现补充)
@@ -922,10 +949,10 @@ struct InitializeParams {
   std::optional<long> processId; // 发起请求的客户端进程 ID (可选, 可以为 null)
   // clientName, clientVersion 已废弃, 使用 clientInfo
   std::optional<std::string> rootPath; // 工作区根路径 (已废弃, 使用 rootUri 或 workspaceFolders)
-  std::optional<std::string> rootUri;        // 工作区根目录 URI (可选, 可以为 null)
-  ClientCapabilities capabilities;           // 客户端声明的能力 (必需)
+  std::optional<std::string> rootUri;  // 工作区根目录 URI (可选, 可以为 null)
+  ClientCapabilities capabilities;     // 客户端声明的能力 (必需)
   std::optional<json> initializationOptions; // 客户端传递给服务器的初始化选项 (可选)
-  std::optional<std::string> trace; // LSP 追踪设置 ("off", "messages", "verbose") (可选)
+  std::optional<std::string> trace;          // LSP 追踪设置 ("off", "messages", "verbose") (可选)
   std::optional<std::vector<json>> workspaceFolders; // 打开的工作区文件夹列表 (可选, 推荐使用)
   std::optional<json> clientInfo; // 客户端信息 {name: string, version?: string} (可选)
 };
@@ -1060,7 +1087,7 @@ inline void from_json(const json &j,
  * @brief 代码补全选项。
  */
 struct CompletionOptions {
-  std::optional<std::vector<std::string>> triggerCharacters; // 触发补全的字符
+  std::optional<std::vector<std::string>> triggerCharacters;   // 触发补全的字符
   std::optional<std::vector<std::string>> allCommitCharacters; // 自动提交补全的字符 (建议使用)
   std::optional<bool> resolveProvider; // 是否支持 completionItem/resolve 请求来获取额外信息
 };
@@ -1131,10 +1158,10 @@ struct ServerCapabilities {
   // 文档同步能力: 可以是简单的 Kind，也可以是详细的 Options 对象
   std::optional<std::variant<TextDocumentSyncKind, TextDocumentSyncOptions>> textDocumentSync;
 
-  std::optional<bool> hoverProvider = false; // 悬停提示提供者 (bool 或 HoverOptions)
-  std::optional<CompletionOptions> completionProvider;       // 代码补全提供者选项
+  std::optional<bool> hoverProvider = false;           // 悬停提示提供者 (bool 或 HoverOptions)
+  std::optional<CompletionOptions> completionProvider; // 代码补全提供者选项
   std::optional<SignatureHelpOptions> signatureHelpProvider; // 签名帮助提供者选项
-  std::optional<bool> definitionProvider = false; // 跳转到定义提供者 (bool 或 DefinitionOptions)
+  std::optional<bool> definitionProvider = true; // 跳转到定义提供者 (bool 或 DefinitionOptions)
   std::optional<bool> typeDefinitionProvider =
       false; // 跳转到类型定义提供者 (bool 或 TypeDefinitionOptions)
   std::optional<bool> implementationProvider =
@@ -1147,7 +1174,7 @@ struct ServerCapabilities {
   std::optional<bool> workspaceSymbolProvider =
       false; // 工作区符号提供者 (bool 或 WorkspaceSymbolOptions)
   std::optional<bool> codeActionProvider = false; // 代码动作提供者 (bool 或 CodeActionOptions)
-  std::optional<json> codeLensProvider; // 代码镜头提供者 (CodeLensOptions) - 使用 json 简化
+  std::optional<json> codeLensProvider;     // 代码镜头提供者 (CodeLensOptions) - 使用 json 简化
   std::optional<json> documentLinkProvider; // 文档链接提供者 (DocumentLinkOptions) - 使用 json 简化
   std::optional<json> colorProvider; // 颜色提供者 (bool 或 DocumentColorOptions) - 使用 json 简化
   std::optional<bool> documentFormattingProvider =

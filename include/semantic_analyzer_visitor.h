@@ -2,7 +2,7 @@
 #define SEMANTIC_ANALYZER_VISITOR_H
 
 // --- ANTLR 和项目头文件 ---
-#include "LangParser.h" // !! 直接包含 Parser 头文件以获取所有 Context 类定义 !!
+#include "LangParser.h"            // !! 直接包含 Parser 头文件以获取所有 Context 类定义 !!
 #include "LangParserBaseVisitor.h" // 引入 ANTLR 生成的 Visitor 基类
 #include "protocol_types.h"        // 引入 LSP 协议类型 (主要需要 Diagnostic)
 #include "semantic_info.h"         // 引入类型、符号、作用域等定义
@@ -21,6 +21,11 @@
 class SptScriptAnalyzer; // 需要访问主分析器以递归处理导入
 struct AnalysisResult;
 
+Range getRange(antlr4::ParserRuleContext *ctx);
+Range getRange(antlr4::tree::TerminalNode *node);
+Range getTokenRange(antlr4::Token *token);
+Range getTokenRange(antlr4::Token *startToken, antlr4::Token *stopToken);
+
 /**
  * @brief CST 遍历器，用于执行 SptScript 的语义分析。
  * 继承自 ANTLR 生成的 BaseVisitor，通过重写 visit 方法实现分析逻辑。
@@ -30,18 +35,15 @@ private:
   SymbolTable &symbolTable;             // 引用符号表，用于定义和查找符号
   std::vector<Diagnostic> &diagnostics; // 引用诊断列表，用于添加语义错误/警告
   const Uri &documentUri;               // 当前正在分析的文档的 URI
-  SptScriptAnalyzer &analyzer; // 引用主分析器，用于解析 import 和获取依赖分析结果
-  std::set<Uri> &visitedInStack; // 引用当前调用栈中正在分析的 URI 集合，用于检测循环导入
-  AnalysisResult &analysisResult; // ** 新增: 引用分析结果以填充映射 **
+  SptScriptAnalyzer &analyzer;          // 引用主分析器，用于解析 import 和获取依赖分析结果
+  std::set<Uri> &visitedInStack;        // 引用当前调用栈中正在分析的 URI 集合，用于检测循环导入
+  AnalysisResult &analysisResult;       // ** 新增: 引用分析结果以填充映射 **
   // --- 语义分析上下文状态 ---
   std::stack<TypeInfoPtr> expectedReturnTypeStack; // 跟踪当前函数预期的返回类型
   bool isInStaticMethod = false;                   // 标记当前是否在静态方法内部
-  ClassType *currentClassType = nullptr; // 指向当前正在分析的类的类型信息 (原始指针)
+  ClassType *currentClassType = nullptr;           // 指向当前正在分析的类的类型信息 (原始指针)
 
   // --- 私有辅助方法 (将在 .cpp 中实现) ---
-  Range getRange(antlr4::ParserRuleContext *ctx);
-  Range getRange(antlr4::tree::TerminalNode *node);
-  Range getTokenRange(antlr4::Token *token);
   Location getLocation(antlr4::ParserRuleContext *ctx);
   void addDiagnostic(const Range &range, const std::string &message,
                      DiagnosticSeverity severity = DiagnosticSeverity::Error);
@@ -49,7 +51,7 @@ private:
   std::shared_ptr<Scope> processImport(const std::string &uriString,
                                        antlr4::tree::ParseTree *importNode); // 处理导入语句
   bool checkTypeAssignable(const TypeInfoPtr &source, const TypeInfoPtr &target,
-                           antlr4::tree::ParseTree *assignmentNode); // 检查类型兼容性
+                           antlr4::tree::ParseTree *assignmentNode);   // 检查类型兼容性
   TypeInfoPtr inferExpressionType(LangParser::ExpressionContext *ctx); // 推断表达式类型 (核心)
   //  辅助函数记录作用域范围 ---
   /**
@@ -60,7 +62,6 @@ private:
   void recordScopeRange(std::shared_ptr<Scope> scope, antlr4::tree::ParseTree *ownerNode);
 
   TypeInfoPtr getTypeFromNode(antlr4::tree::ParseTree *node); // 辅助函数：获取已访问节点的推断类型
-  Range getTokenRange(antlr4::Token *startToken, antlr4::Token *stopToken);
   Location getLocation(antlr4::tree::TerminalNode *node);
 
 public:
