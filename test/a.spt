@@ -6,7 +6,7 @@ int add(int a, int b){
 class A{
     string abc;
 
-    void init(A this, string a){
+    void __init(string a){
         this.abc = a;
     }
 
@@ -15,6 +15,7 @@ int main(){
     int a = 12;
     sting ab = "abc";
     auto cc = "abcd";
-    A aa;
+    auto a  = new A("a");
+
     return 0;
 }

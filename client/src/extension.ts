@@ -51,7 +51,7 @@ export function activate(context: vscode.ExtensionContext) {
         console.error('[SptScript Client] CRITICAL: Failed to determine server path. Aborting activation.');
         return; // 无法启动服务器，退出激活函数
     }
-    serverCommand = 'C:\\Users\\ftp\\Desktop\\spt-lsp\\cmake-build-debug\\sptscript-lsp.exe';
+    serverCommand = 'C:\\Users\\ftp\\Desktop\\spt\\spt-lsp\\build\\sptscript-lsp.exe';
     // serverCommand = 'C:\\Users\\ftp\\Desktop\\sptscript-lsp\\cmake-build-release-mingw-clang64\\sptscript-lsp.exe';
 
     /*
@@ -63,11 +63,26 @@ export function activate(context: vscode.ExtensionContext) {
     }
     */
 
+    // --- 2. 配置日志模式 ---
+    // 读取配置中的日志设置
+    const logConfig = vscode.workspace.getConfiguration('sptscript.lsp');
+    const enableLog = logConfig.get<boolean>('enableLog', true);
+    const logPath = logConfig.get<string>('logPath', '');
+    // 构建服务器启动参数
+    const serverArgs: string[] = [];
+    if (enableLog) {
+        serverArgs.push('--log');
+        if (logPath) {
+            serverArgs.push(logPath);
+        }
+        console.log(`[SptScript Client] Logging enabled. Log path: ${logPath || 'default (lsp_trace.log)'}`);
+    }
 
-    // --- 2. 配置服务器选项 (ServerOptions) ---
+    // --- 3. 配置服务器选项 (ServerOptions) ---
     // 定义如何启动服务器进程以及如何与之通信
     const serverOptions: ServerOptions = {
         command: serverCommand,            // 要运行的可执行文件路径
+        args: serverArgs,                  // 启动参数（日志模式）
         transport: TransportKind.stdio,    // 使用标准输入/输出进行通信
         options: {
             // cwd: path.dirname(serverCommand), // (可选) 设置服务器的工作目录
@@ -89,7 +104,7 @@ export function activate(context: vscode.ExtensionContext) {
 
         // (推荐) 文件事件同步：当工作区中的 .spt 文件发生变动时通知服务器
         synchronize: {
-            fileEvents: vscode.workspace.createFileSystemWatcher('**/*.flx')
+            fileEvents: vscode.workspace.createFileSystemWatcher('**/*.spt')
         },
 
         // (推荐) 指定一个输出通道来显示服务器的日志 (stderr) 和客户端的内部日志

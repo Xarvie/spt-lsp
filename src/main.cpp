@@ -20,6 +20,9 @@
 
 #include <atomic>
 #include <chrono>
+#include <cstdlib>
+#include <fstream>
+#include <iomanip>
 #include <iostream>
 #include <mutex>
 #include <optional>
@@ -32,6 +35,89 @@ using json = nlohmann::json;
 
 namespace lang {
 namespace lsp {
+
+// ============================================================================
+// JSON-RPC Trace Logger
+// ============================================================================
+
+class JsonRpcLogger {
+public:
+    static JsonRpcLogger& instance() {
+        static JsonRpcLogger logger;
+        return logger;
+    }
+    
+    void enable(const std::string& path = "lsp_trace.log") {
+        std::lock_guard<std::mutex> lock(mutex_);
+        if (!logFile_.is_open()) {
+            logFile_.open(path, std::ios::out | std::ios::app);
+            enabled_ = true;
+            logInternal("[JsonRpcLogger] Enabled, logging to: " + path);
+        }
+    }
+    
+    void disable() {
+        std::lock_guard<std::mutex> lock(mutex_);
+        if (logFile_.is_open()) {
+            logInternal("[JsonRpcLogger] Disabled");
+            logFile_.close();
+        }
+        enabled_ = false;
+    }
+    
+    bool isEnabled() const { return enabled_; }
+    
+    void logRecv(const std::string& content) {
+        if (!enabled_) return;
+        std::lock_guard<std::mutex> lock(mutex_);
+        logTimestamp();
+        logFile_ << "[RECV] " << content << std::endl;
+        logFile_.flush();
+    }
+    
+    void logSend(const std::string& content) {
+        if (!enabled_) return;
+        std::lock_guard<std::mutex> lock(mutex_);
+        logTimestamp();
+        logFile_ << "[SEND] " << content << std::endl;
+        logFile_.flush();
+    }
+    
+    void log(const std::string& message) {
+        if (!enabled_) return;
+        std::lock_guard<std::mutex> lock(mutex_);
+        logTimestamp();
+        logFile_ << message << std::endl;
+        logFile_.flush();
+    }
+    
+private:
+    JsonRpcLogger() = default;
+    
+    void logInternal(const std::string& message) {
+        logTimestamp();
+        logFile_ << message << std::endl;
+    }
+    
+    void logTimestamp() {
+        auto now = std::chrono::system_clock::now();
+        auto time = std::chrono::system_clock::to_time_t(now);
+        auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(
+            now.time_since_epoch()) % 1000;
+        
+        char buf[32];
+        std::strftime(buf, sizeof(buf), "%H:%M:%S", std::localtime(&time));
+        logFile_ << "[" << buf << "." << std::setfill('0') << std::setw(3) << ms.count() << "] ";
+    }
+    
+    std::ofstream logFile_;
+    std::mutex mutex_;
+    bool enabled_ = false;
+};
+
+#define JSONRPC_LOG_RECV(content) JsonRpcLogger::instance().logRecv(content)
+#define JSONRPC_LOG_SEND(content) JsonRpcLogger::instance().logSend(content)
+#define JSONRPC_LOG(msg) JsonRpcLogger::instance().log(msg)
 
 // ============================================================================
 // JSON-RPC Types
@@ -293,8 +379,11 @@ private:
 
     // Parse JSON
     try {
-      return json::parse(content);
+      json parsed = json::parse(content);
+      JSONRPC_LOG_RECV(content);
+      return parsed;
     } catch (const json::parse_error &) {
+      JSONRPC_LOG("[ERROR] JSON parse error for: " + content);
       return std::nullopt;
     }
   }
@@ -304,6 +393,7 @@ private:
    */
   void writeMessage(const json &msg) {
     std::string content = msg.dump(-1, ' ', false, json::error_handler_t::replace);
+    JSONRPC_LOG_SEND(content);
 
     std::lock_guard<std::mutex> lock(outputMutex_);
     std::cout << "Content-Length: " << content.length() << "\r\n";
@@ -908,8 +998,11 @@ int main(int argc, char *argv[]) {
 #endif
   std::ios_base::sync_with_stdio(false);
   std::cin.tie(nullptr);
-  //    std::this_thread::sleep_for(std::chrono::seconds(6));
+  
   // Parse command line arguments
+  std::string logPath = "lsp_trace.log";
+  bool enableLog = false;
+  
   for (int i = 1; i < argc; ++i) {
     std::string arg = argv[i];
     if (arg == "--version" || arg == "-v") {
@@ -918,13 +1011,41 @@ int main(int argc, char *argv[]) {
     } else if (arg == "--help" || arg == "-h") {
       std::cout << "Usage: lang-lsp [options]\n";
       std::cout << "Options:\n";
-      std::cout << "  --version, -v  Show version information\n";
-      std::cout << "  --help, -h     Show this help message\n";
+      std::cout << "  --version, -v       Show version information\n";
+      std::cout << "  --help, -h          Show this help message\n";
+      std::cout << "  --log [path]        Enable logging (default: lsp_trace.log)\n";
       return 0;
+    } else if (arg == "--log") {
+      enableLog = true;
+      if (i + 1 < argc && argv[i + 1][0] != '-') {
+        logPath = argv[++i];
+      }
     }
+  }
+  
+  // Check environment variable for logging
+  const char* envLog = std::getenv("SPT_LSP_LOG");
+  if (envLog != nullptr) {
+    enableLog = true;
+    std::string envPath(envLog);
+    if (!envPath.empty() && envPath != "1" && envPath != "true") {
+      logPath = envPath;
+    }
+  }
+  
+  if (enableLog) {
+    lang::lsp::JsonRpcLogger::instance().enable(logPath);
+    lang::lsp::JSONRPC_LOG("=== LSP Server Started ===");
   }
 
   // Run the LSP server
   lang::lsp::LspServer server;
-  return server.run();
+  int result = server.run();
+  
+  if (enableLog) {
+    lang::lsp::JSONRPC_LOG("=== LSP Server Stopped (exit code: " + std::to_string(result) + ") ===");
+    lang::lsp::JsonRpcLogger::instance().disable();
+  }
+  
+  return result;
 }

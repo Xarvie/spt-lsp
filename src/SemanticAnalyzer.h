@@ -651,6 +651,7 @@ public:
         fs = static_cast<FunctionSymbol *>(existing);
         fs->setType(funcType);
         fs->setReturnType(retType);
+        fs->setAstNode(node);
       }
     }
     if (!fs) {

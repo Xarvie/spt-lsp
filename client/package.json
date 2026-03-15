@@ -23,7 +23,7 @@
           "sptscript"
         ],
         "extensions": [
-          ".flx"
+          ".spt"
         ],
         "configuration": "./language-configuration.json"
       }
@@ -38,6 +38,21 @@
           ],
           "default": null,
           "description": "指定 sptScript LSP 服务器可执行文件的绝对路径。如果留空，插件将尝试在默认位置查找。",
+          "scope": "resource"
+        },
+        "sptscript.lsp.enableLog": {
+          "type": "boolean",
+          "default": true,
+          "description": "启用LSP通信日志记录，用于调试。日志将记录所有JSON-RPC消息。",
+          "scope": "resource"
+        },
+        "sptscript.lsp.logPath": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null,
+          "description": "日志文件路径。如果启用日志但未指定路径，默认使用 lsp_trace.log。",
           "scope": "resource"
         }
       }

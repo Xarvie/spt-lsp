@@ -2,7 +2,31 @@
  * @file LspService.cpp
  * @brief Language Server Protocol Service Implementation
  *
- * @copyright Copyright (c) 2024-2025
+ * @copyright Copyright (c) 2024-2025)
+ *
+ * ============================================================================
+ * IMPORTANT: Position Conversion Notes (坑点说明)
+ * ============================================================================
+ *
+ * LSP positions are 0-based (line and character start from 0).
+ * Internal positions are 1-based (line and column start from 1).
+ *
+ * The conversion from 0-based to 1-based happens in main.cpp's from_json:
+ *   p.line = j.at("line").get<uint32_t>() + 1;
+ *   p.column = j.at("character").get<uint32_t>() + 1;
+ *
+ * Therefore, in LspService methods, the Position parameter is ALREADY 1-based.
+ * DO NOT call Position::fromZeroBased() again, or positions will be off by 1!
+ *
+ * Example bug:
+ *   // WRONG - double conversion!
+ *   Position internalPos = Position::fromZeroBased(position.line, position.column);
+ *   uint32_t offset = file->getOffset(internalPos);  // offset will be wrong!
+ *
+ *   // CORRECT - position is already 1-based
+ *   uint32_t offset = file->getOffset(position);
+ *
+ * ============================================================================
  */
 
 #include "LspService.h"
@@ -695,9 +719,8 @@ HoverResult LspService::hover(std::string_view uri, Position position) {
   if (!file)
     return result;
 
-  // Convert from 0-based to 1-based
-  Position internalPos = Position::fromZeroBased(position.line, position.column);
-  uint32_t offset = file->getOffset(internalPos);
+  // position is already 1-based (converted in from_json)
+  uint32_t offset = file->getOffset(position);
 
   // Get AST and find node
   auto *ast = file->getAst();
@@ -772,8 +795,8 @@ CompletionResult LspService::completion(std::string_view uri, Position position,
     return result;
   }
 
-  Position internalPos = position;
-  uint32_t offset = file->getOffset(internalPos);
+  // position is already 1-based (converted in from_json)
+  uint32_t offset = file->getOffset(position);
   LSP_LOG("offset=" << offset);
 
   auto *ast = file->getAst();
@@ -959,8 +982,8 @@ SignatureHelp LspService::signatureHelp(std::string_view uri, Position position)
   if (!file)
     return result;
 
-  Position internalPos = Position::fromZeroBased(position.line, position.column);
-  uint32_t offset = file->getOffset(internalPos);
+  // position is already 1-based (converted in from_json)
+  uint32_t offset = file->getOffset(position);
 
   auto *ast = file->getAst();
   if (!ast)
@@ -977,13 +1000,97 @@ SignatureHelp LspService::signatureHelp(std::string_view uri, Position position)
   if (!findResult.valid())
     return result;
 
-  // Look for enclosing call expression
+  // Look for enclosing call expression or new expression
   auto *callExpr = findResult.context.findAncestor<ast::CallExprNode>();
-  if (!callExpr)
+  auto *newExpr = findResult.context.findAncestor<ast::NewExprNode>();
+  
+  // If no CallExprNode found, try to find identifier before cursor
+  // This handles incomplete calls like "add(" where parser hasn't created CallExprNode yet
+  ast::IdentifierNode *calleeIdent = nullptr;
+  if (!callExpr && !newExpr) {
+    // Check if the found node is an identifier (the function name being typed)
+    calleeIdent = ast::ast_cast<ast::IdentifierNode>(findResult.context.node);
+    if (!calleeIdent) {
+      // Check if parent is an identifier
+      for (auto it = findResult.context.ancestors.rbegin(); 
+           it != findResult.context.ancestors.rend(); ++it) {
+        if (auto *ident = ast::ast_cast<ast::IdentifierNode>(*it)) {
+          calleeIdent = ident;
+          break;
+        }
+      }
+    }
+    
+    // Still not found? Try to find identifier by looking at source code
+    // This handles cases like "add(" where the parser didn't create a CallExprNode
+    if (!calleeIdent) {
+      // Get source code and look for identifier before '('
+      std::string_view source = file->contentView();
+      if (offset > 0 && offset <= source.size()) {
+        // Look backwards for '('
+        uint32_t parenPos = offset;
+        while (parenPos > 0 && (source[parenPos - 1] == ' ' || source[parenPos - 1] == '\t')) {
+          parenPos--;
+        }
+        if (parenPos > 0 && source[parenPos - 1] == '(') {
+          // Found '(', now look for identifier before it
+          uint32_t identEnd = parenPos - 1;
+          while (identEnd > 0 && (source[identEnd - 1] == ' ' || source[identEnd - 1] == '\t')) {
+            identEnd--;
+          }
+          uint32_t identStart = identEnd;
+          while (identStart > 0 && (std::isalnum(source[identStart - 1]) || source[identStart - 1] == '_')) {
+            identStart--;
+          }
+          if (identStart < identEnd) {
+            // Find the identifier node at identStart
+            auto identResult = finder.findNodeAt(identStart);
+            if (identResult.valid()) {
+              calleeIdent = ast::ast_cast<ast::IdentifierNode>(identResult.context.node);
+            }
+          }
+        }
+      }
+    }
+  }
+  
+  if (!callExpr && !newExpr && !calleeIdent)
     return result;
 
-  // Get function type
-  types::TypeRef funcType = model->getNodeType(callExpr->callee);
+  // Get function type and declaration
+  types::TypeRef funcType;
+  ast::FunctionDeclNode *funcDecl = nullptr;
+  ast::MethodDeclNode *methodDecl = nullptr;
+  
+  if (callExpr) {
+    funcType = model->getNodeType(callExpr->callee);
+    // Get the function declaration from symbol
+    auto *funcSymbol = model->findSymbolAt(callExpr->range.begin);
+    if (funcSymbol && funcSymbol->astNode()) {
+      funcDecl = ast::ast_cast<ast::FunctionDeclNode>(funcSymbol->astNode());
+      methodDecl = ast::ast_cast<ast::MethodDeclNode>(funcSymbol->astNode());
+    }
+  } else if (newExpr) {
+    // For new expression, get the constructor (__init) type
+    types::TypeRef classType = model->getNodeType(newExpr->typeName);
+    if (classType && classType->isClass()) {
+      auto *ct = static_cast<const types::ClassType *>(classType.get());
+      auto *initMethod = ct->findMethod("__init");
+      if (initMethod) {
+        funcType = initMethod->type;
+      }
+    }
+  } else if (calleeIdent) {
+    // For incomplete call, look up the identifier's type
+    funcType = model->getNodeType(calleeIdent);
+    // Try to get the function declaration from resolved symbol
+    auto *symbol = model->getResolvedSymbol(calleeIdent);
+    if (symbol && symbol->astNode()) {
+      funcDecl = ast::ast_cast<ast::FunctionDeclNode>(symbol->astNode());
+      methodDecl = ast::ast_cast<ast::MethodDeclNode>(symbol->astNode());
+    }
+  }
+  
   if (!funcType || !funcType->isFunction())
     return result;
 
@@ -994,12 +1101,40 @@ SignatureHelp LspService::signatureHelp(std::string_view uri, Position position)
 
   std::string label = "(";
   const auto &paramTypes = ft->paramTypes();
+  
+  // Get StringTable for parameter name lookup
+  const ast::StringTable &strings = file->factory().stringTable();
+  
+  // Get parameter names from declaration if available
+  auto getParamName = [&](size_t i) -> std::string {
+    if (funcDecl && i < funcDecl->parameters.size()) {
+      auto *param = funcDecl->parameters[i];
+      if (param && param->name.isValid()) {
+        return std::string(strings.get(param->name));
+      }
+    }
+    if (methodDecl && i < methodDecl->parameters.size()) {
+      auto *param = methodDecl->parameters[i];
+      if (param && param->name.isValid()) {
+        return std::string(strings.get(param->name));
+      }
+    }
+    return "";
+  };
+  
   for (size_t i = 0; i < paramTypes.size(); ++i) {
     if (i > 0)
       label += ", ";
 
     ParameterInformation param;
-    param.label = paramTypes[i] ? paramTypes[i]->toString() : "any";
+    std::string paramName = getParamName(i);
+    std::string paramType = paramTypes[i] ? paramTypes[i]->toString() : "any";
+    
+    if (!paramName.empty()) {
+      param.label = paramName + ": " + paramType;
+    } else {
+      param.label = paramType;
+    }
     sig.parameters.push_back(std::move(param));
 
     label += sig.parameters.back().label;
@@ -1044,8 +1179,8 @@ std::vector<LocationLink> LspService::definition(std::string_view uri, Position 
   if (!file)
     return result;
 
-  Position internalPos = Position::fromZeroBased(position.line, position.column);
-  uint32_t offset = file->getOffset(internalPos);
+  // position is already 1-based (converted in from_json)
+  uint32_t offset = file->getOffset(position);
 
   auto *ast = file->getAst();
   if (!ast)
@@ -1099,8 +1234,8 @@ std::vector<LocationLink> LspService::typeDefinition(std::string_view uri, Posit
   if (!file)
     return result;
 
-  Position internalPos = Position::fromZeroBased(position.line, position.column);
-  uint32_t offset = file->getOffset(internalPos);
+  // position is already 1-based (converted in from_json)
+  uint32_t offset = file->getOffset(position);
 
   auto *ast = file->getAst();
   if (!ast)
@@ -1160,8 +1295,8 @@ std::vector<Location> LspService::references(std::string_view uri, Position posi
   if (!file)
     return result;
 
-  Position internalPos = Position::fromZeroBased(position.line, position.column);
-  uint32_t offset = file->getOffset(internalPos);
+  // position is already 1-based (converted in from_json)
+  uint32_t offset = file->getOffset(position);
 
   auto *ast = file->getAst();
   if (!ast)
@@ -1349,8 +1484,8 @@ std::optional<Range> LspService::prepareRename(std::string_view uri, Position po
   if (!file)
     return std::nullopt;
 
-  Position internalPos = Position::fromZeroBased(position.line, position.column);
-  uint32_t offset = file->getOffset(internalPos);
+  // position is already 1-based (converted in from_json)
+  uint32_t offset = file->getOffset(position);
 
   auto *ast = file->getAst();
   if (!ast)

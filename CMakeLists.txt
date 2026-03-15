@@ -42,3 +42,8 @@ target_link_libraries(sptscript-lsp PRIVATE antlr4_static)
 if(NOT MSVC)
 target_link_options(sptscript-lsp PRIVATE "-static-libgcc" "-static-libstdc++" "-static")
 endif()
+
+option(BUILD_TESTS "Build tests" ON)
+if(BUILD_TESTS)
+    add_subdirectory(tests)
+endif()
