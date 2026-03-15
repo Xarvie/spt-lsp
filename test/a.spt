@@ -1,11 +1,20 @@
 //a.spt
-import { Rectangle } from "b.spt";
+int add(int a, int b){
+    return a + b;
+}
 
-int main(){
-    if (true == true) {
-        Rectangle b = new Rectangle();
-        b.height = 10;
-        b.add();
-        print("abc");
+class A{
+    string abc;
+
+    void init(A this, string a){
+        this.abc = a;
     }
+
+}
+int main(){
+    int a = 12;
+    sting ab = "abc";
+    auto cc = "abcd";
+    A aa;
+    return 0;
 }

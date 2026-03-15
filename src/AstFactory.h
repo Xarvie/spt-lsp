@@ -709,6 +709,23 @@ public:
     return node;
   }
 
+  [[nodiscard]] ForStmtNode *makeForStmtNumeric(SourceRange range, VarDeclNode *numericVar,
+                                                Expr *start, Expr *end, Expr *step,
+                                                BlockStmtNode *body) {
+    assert(numericVar && start && end && body && "numericVar, start, end and body must not be null");
+
+    auto *node = arena_.make<ForStmtNode>();
+    node->kind = AstKind::ForStmt;
+    node->range = range;
+    node->style = ForStmtNode::Style::Numeric;
+    node->numericVar = numericVar;
+    node->start = start;
+    node->end = end;
+    node->step = step;
+    node->body = body;
+    return node;
+  }
+
   [[nodiscard]] ForStmtNode *makeForStmtCStyle(SourceRange range, Stmt *init, Expr *condition,
                                                const std::vector<Stmt *> &updates,
                                                BlockStmtNode *body) {

@@ -476,7 +476,24 @@ public:
     Scope *prev = currentScope_;
     currentScope_ = model_.symbolTable().createScope(ScopeKind::Loop, currentScope_, node);
 
-    if (node->style == ast::ForStmtNode::Style::CStyle) {
+    if (node->style == ast::ForStmtNode::Style::Numeric) {
+      // Numeric for: for (i = start, end, step) { body }
+      if (node->numericVar) {
+        types::TypeRef vt = resolveTypeNode(node->numericVar->type);
+        if (vt->isUnknown())
+          vt = model_.typeContext().numberType();
+        auto *vs = model_.symbolTable().createVariable(getString(node->numericVar->name), vt, node->numericVar->range.begin);
+        currentScope_->define(vs);
+        model_.setDefiningSymbol(node->numericVar, vs);
+        setType(node->numericVar, vt);
+      }
+      if (node->start)
+        visit(node->start);
+      if (node->end)
+        visit(node->end);
+      if (node->step)
+        visit(node->step);
+    } else if (node->style == ast::ForStmtNode::Style::CStyle) {
       if (node->init)
         visit(node->init);
       if (node->condition)
@@ -484,6 +501,7 @@ public:
       for (auto *u : node->updates)
         visit(u);
     } else {
+      // ForEach
       if (node->collection) {
         types::TypeRef ct = visit(node->collection);
         types::TypeRef elemType = model_.typeContext().anyType();
@@ -820,7 +838,7 @@ public:
     case ast::PrimitiveKind::Null:
       t = model_.typeContext().nullType();
       break;
-    case ast::PrimitiveKind::Fiber:
+    case ast::PrimitiveKind::Coroutine:
       t = model_.typeContext().fiberType();
       break;
     case ast::PrimitiveKind::Function:

@@ -3,49 +3,113 @@
 
 #pragma once
 
-
 #include "antlr4-runtime.h"
 
-
-
-
-class  LangLexer : public antlr4::Lexer {
+class LangLexer : public antlr4::Lexer {
 public:
   enum {
-    INT = 1, FLOAT = 2, NUMBER = 3, STRING = 4, BOOL = 5, ANY = 6, VOID = 7, 
-    NULL_ = 8, LIST = 9, MAP = 10, FUNCTION = 11, FIBER = 12, MUTIVAR = 13, 
-    IF = 14, ELSE = 15, WHILE = 16, FOR = 17, BREAK = 18, CONTINUE = 19, 
-    RETURN = 20, DEFER = 21, TRUE = 22, FALSE = 23, CONST = 24, AUTO = 25, 
-    GLOBAL = 26, STATIC = 27, IMPORT = 28, AS = 29, TYPE = 30, FROM = 31, 
-    PRIVATE = 32, EXPORT = 33, CLASS = 34, NEW = 35, ADD = 36, SUB = 37, 
-    MUL = 38, DIV = 39, MOD = 40, ASSIGN = 41, ADD_ASSIGN = 42, SUB_ASSIGN = 43, 
-    MUL_ASSIGN = 44, DIV_ASSIGN = 45, MOD_ASSIGN = 46, CONCAT_ASSIGN = 47, 
-    EQ = 48, NEQ = 49, LT = 50, GT = 51, LTE = 52, GTE = 53, AND = 54, OR = 55, 
-    NOT = 56, CONCAT = 57, LEN = 58, BIT_AND = 59, BIT_OR = 60, BIT_XOR = 61, 
-    BIT_NOT = 62, LSHIFT = 63, ARROW = 64, OP = 65, CP = 66, OSB = 67, CSB = 68, 
-    OCB = 69, CCB = 70, COMMA = 71, DOT = 72, COL = 73, SEMICOLON = 74, 
-    DDD = 75, INTEGER = 76, FLOAT_LITERAL = 77, STRING_LITERAL = 78, IDENTIFIER = 79, 
-    WS = 80, LINE_COMMENT = 81, BLOCK_COMMENT = 82
+    INT = 1,
+    FLOAT = 2,
+    NUMBER = 3,
+    STRING = 4,
+    BOOL = 5,
+    ANY = 6,
+    VOID = 7,
+    NULL_ = 8,
+    LIST = 9,
+    MAP = 10,
+    FUNCTION = 11,
+    COROUTINE = 12,
+    VARS = 13,
+    IF = 14,
+    ELSE = 15,
+    WHILE = 16,
+    FOR = 17,
+    BREAK = 18,
+    CONTINUE = 19,
+    RETURN = 20,
+    DEFER = 21,
+    TRUE = 22,
+    FALSE = 23,
+    CONST = 24,
+    AUTO = 25,
+    GLOBAL = 26,
+    STATIC = 27,
+    IMPORT = 28,
+    AS = 29,
+    FROM = 30,
+    PRIVATE = 31,
+    EXPORT = 32,
+    CLASS = 33,
+    NEW = 34,
+    ADD = 35,
+    SUB = 36,
+    MUL = 37,
+    DIV = 38,
+    IDIV = 39,
+    MOD = 40,
+    ASSIGN = 41,
+    ADD_ASSIGN = 42,
+    SUB_ASSIGN = 43,
+    MUL_ASSIGN = 44,
+    DIV_ASSIGN = 45,
+    IDIV_ASSIGN = 46,
+    MOD_ASSIGN = 47,
+    CONCAT_ASSIGN = 48,
+    EQ = 49,
+    NEQ = 50,
+    LT = 51,
+    GT = 52,
+    LTE = 53,
+    GTE = 54,
+    AND = 55,
+    OR = 56,
+    NOT = 57,
+    CONCAT = 58,
+    LEN = 59,
+    BIT_AND = 60,
+    BIT_OR = 61,
+    BIT_XOR = 62,
+    BIT_NOT = 63,
+    LSHIFT = 64,
+    ARROW = 65,
+    OP = 66,
+    CP = 67,
+    OSB = 68,
+    CSB = 69,
+    OCB = 70,
+    CCB = 71,
+    COMMA = 72,
+    DOT = 73,
+    COL = 74,
+    SEMICOLON = 75,
+    DDD = 76,
+    INTEGER = 77,
+    FLOAT_LITERAL = 78,
+    STRING_LITERAL = 79,
+    IDENTIFIER = 80,
+    WS = 81,
+    LINE_COMMENT = 82,
+    BLOCK_COMMENT = 83
   };
 
   explicit LangLexer(antlr4::CharStream *input);
 
   ~LangLexer() override;
 
-
   std::string getGrammarFileName() const override;
 
-  const std::vector<std::string>& getRuleNames() const override;
+  const std::vector<std::string> &getRuleNames() const override;
 
-  const std::vector<std::string>& getChannelNames() const override;
+  const std::vector<std::string> &getChannelNames() const override;
 
-  const std::vector<std::string>& getModeNames() const override;
+  const std::vector<std::string> &getModeNames() const override;
 
-  const antlr4::dfa::Vocabulary& getVocabulary() const override;
+  const antlr4::dfa::Vocabulary &getVocabulary() const override;
 
   antlr4::atn::SerializedATNView getSerializedATN() const override;
 
-  const antlr4::atn::ATN& getATN() const override;
+  const antlr4::atn::ATN &getATN() const override;
 
   // By default the static state used to implement the lexer is lazily initialized during the first
   // call to the constructor. You can call this function if you wish to initialize the static state
@@ -53,10 +117,7 @@ public:
   static void initialize();
 
 private:
-
   // Individual action functions triggered by action() above.
 
   // Individual semantic predicate functions triggered by sempred() above.
-
 };
-

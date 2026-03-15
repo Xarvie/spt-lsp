@@ -210,26 +210,21 @@ std::any visitForStatement(LangParser::ForStatementContext *ctx) override {
   return result;
 }
 
-// C-style for
-std::any visitForCStyleControl(LangParser::ForCStyleControlContext *ctx) override {
+// Numeric for: for (i = start, end, step) { body }
+std::any visitForNumericControl(LangParser::ForNumericControlContext *ctx) override {
   if (!ctx)
-    return static_cast<Stmt *>(factory_.makeErrorStmt(SourceRange::invalid(), "invalid for"));
+    return static_cast<Stmt *>(factory_.makeErrorStmt(SourceRange::invalid(), "invalid numeric for"));
 
-  Stmt *init = nullptr;
-  if (ctx->forInitStatement()) {
-    init = expectStmt(ctx->forInitStatement());
+  VarDeclNode *var = nullptr;
+  if (ctx->forNumericVar()) {
+    var = expectVarDecl(ctx->forNumericVar());
   }
 
-  Expr *cond = nullptr;
-  if (ctx->expression()) {
-    cond = expectExpr(ctx->expression());
-  }
-
-  std::vector<Stmt *> updates;
-  if (ctx->forUpdate()) {
-    for (auto *u : ctx->forUpdate()->forUpdateSingle()) {
-      updates.push_back(expectStmt(u));
-    }
+  Expr *start = expectExpr(ctx->expression(0));
+  Expr *end = expectExpr(ctx->expression(1));
+  Expr *step = nullptr;
+  if (ctx->expression().size() > 2) {
+    step = expectExpr(ctx->expression(2));
   }
 
   BlockStmtNode *body = nullptr;
@@ -240,23 +235,28 @@ std::any visitForCStyleControl(LangParser::ForCStyleControlContext *ctx) overrid
   }
 
   auto range = currentForStmt_ ? getRange(currentForStmt_) : getRange(ctx);
-  return static_cast<Stmt *>(factory_.makeForStmtCStyle(range, init, cond, updates, body));
+  return static_cast<Stmt *>(factory_.makeForStmtNumeric(range, var, start, end, step, body));
 }
 
-// ForEach style
-std::any visitForEachExplicitControl(LangParser::ForEachExplicitControlContext *ctx) override {
+// ForEach: for (k, v : iterator) { body }
+std::any visitForEachControl(LangParser::ForEachControlContext *ctx) override {
   if (!ctx)
     return static_cast<Stmt *>(factory_.makeErrorStmt(SourceRange::invalid(), "invalid foreach"));
 
   std::vector<VarDeclNode *> iterVars;
-  for (auto *item : ctx->declaration_item()) {
-    auto v = visit(item);
+  for (auto *fv : ctx->forEachVar()) {
+    auto v = visit(fv);
     if (auto *vd = tryCast<VarDeclNode>(v)) {
       iterVars.push_back(vd);
     }
   }
 
-  Expr *collection = expectExpr(ctx->expression());
+  std::vector<Expr *> iterators;
+  if (ctx->expressionList()) {
+    for (auto *e : ctx->expressionList()->expression()) {
+      iterators.push_back(expectExpr(e));
+    }
+  }
 
   BlockStmtNode *body = nullptr;
   if (currentForStmt_ && currentForStmt_->blockStatement()) {
@@ -266,44 +266,64 @@ std::any visitForEachExplicitControl(LangParser::ForEachExplicitControlContext *
   }
 
   auto range = currentForStmt_ ? getRange(currentForStmt_) : getRange(ctx);
+  // For generic for-each, collection is the first iterator expression
+  Expr *collection = iterators.empty() ? nullptr : iterators[0];
   return static_cast<Stmt *>(factory_.makeForStmtForEach(range, iterVars, collection, body));
 }
 
-// For init statements
-std::any visitForInitStatement(LangParser::ForInitStatementContext *ctx) override {
+// For numeric variable (typed)
+std::any visitForNumericVarTyped(LangParser::ForNumericVarTypedContext *ctx) override {
   if (!ctx)
-    return static_cast<Stmt *>(factory_.makeEmptyStmt(SourceRange::invalid()));
+    return static_cast<VarDeclNode *>(
+        factory_.makeVarDecl(SourceRange::invalid(), "", factory_.makeErrorType(SourceRange::invalid(), "invalid type"), nullptr));
 
-  if (ctx->multiDeclaration()) {
-    return visit(ctx->multiDeclaration());
+  TypeNode *type = nullptr;
+  if (ctx->type()) {
+    type = expectType(ctx->type());
+  } else if (ctx->AUTO()) {
+    type = factory_.makeInferredType(getRange(ctx->AUTO()));
   }
-  if (ctx->assignStatement()) {
-    return visit(ctx->assignStatement());
-  }
-  if (ctx->expressionList()) {
-    // Multiple expressions as init - wrap in block or use first
-    auto exprs = ctx->expressionList()->expression();
-    if (!exprs.empty()) {
-      Expr *e = expectExpr(exprs[0]);
-      return static_cast<Stmt *>(factory_.makeExprStmt(getRange(ctx), e));
-    }
-  }
-  return static_cast<Stmt *>(factory_.makeEmptyStmt(getRange(ctx)));
+
+  std::string name = ctx->IDENTIFIER() ? ctx->IDENTIFIER()->getText() : "";
+  return factory_.makeVarDecl(getRange(ctx), name, type, nullptr);
 }
 
-std::any visitForUpdateSingle(LangParser::ForUpdateSingleContext *ctx) override {
+// For numeric variable (untyped)
+std::any visitForNumericVarUntyped(LangParser::ForNumericVarUntypedContext *ctx) override {
   if (!ctx)
-    return static_cast<Stmt *>(factory_.makeEmptyStmt(SourceRange::invalid()));
+    return static_cast<VarDeclNode *>(
+        factory_.makeVarDecl(SourceRange::invalid(), "", factory_.makeErrorType(SourceRange::invalid(), "invalid type"), nullptr));
 
-  if (ctx->updateStatement())
-    return visit(ctx->updateStatement());
-  if (ctx->assignStatement())
-    return visit(ctx->assignStatement());
-  if (ctx->expression()) {
-    Expr *e = expectExpr(ctx->expression());
-    return static_cast<Stmt *>(factory_.makeExprStmt(getRange(ctx), e));
+  std::string name = ctx->IDENTIFIER() ? ctx->IDENTIFIER()->getText() : "";
+  // Untyped variable uses auto type
+  return factory_.makeVarDecl(getRange(ctx), name, factory_.makeInferredType(getRange(ctx)), nullptr);
+}
+
+// For each variable (typed)
+std::any visitForEachVarTyped(LangParser::ForEachVarTypedContext *ctx) override {
+  if (!ctx)
+    return static_cast<VarDeclNode *>(
+        factory_.makeVarDecl(SourceRange::invalid(), "", factory_.makeErrorType(SourceRange::invalid(), "invalid type"), nullptr));
+
+  TypeNode *type = nullptr;
+  if (ctx->type()) {
+    type = expectType(ctx->type());
+  } else if (ctx->AUTO()) {
+    type = factory_.makeInferredType(getRange(ctx->AUTO()));
   }
-  return static_cast<Stmt *>(factory_.makeEmptyStmt(getRange(ctx)));
+
+  std::string name = ctx->IDENTIFIER() ? ctx->IDENTIFIER()->getText() : "";
+  return factory_.makeVarDecl(getRange(ctx), name, type, nullptr);
+}
+
+// For each variable (untyped)
+std::any visitForEachVarUntyped(LangParser::ForEachVarUntypedContext *ctx) override {
+  if (!ctx)
+    return static_cast<VarDeclNode *>(
+        factory_.makeVarDecl(SourceRange::invalid(), "", factory_.makeErrorType(SourceRange::invalid(), "invalid type"), nullptr));
+
+  std::string name = ctx->IDENTIFIER() ? ctx->IDENTIFIER()->getText() : "";
+  return factory_.makeVarDecl(getRange(ctx), name, factory_.makeInferredType(getRange(ctx)), nullptr);
 }
 
 std::any visitBreakStmt(LangParser::BreakStmtContext *ctx) override {
@@ -370,8 +390,7 @@ std::any visitImportNamedStmt(LangParser::ImportNamedStmtContext *ctx) override 
     // 使用 std::string 避免悬空引用
     std::string name = ids.size() > 0 ? ids[0]->getText() : "";
     std::string alias = ids.size() > 1 ? ids[1]->getText() : name;
-    bool isType = spec->TYPE() != nullptr;
-    specs.push_back(factory_.makeImportSpecifier(name, alias, isType, getRange(spec)));
+    specs.push_back(factory_.makeImportSpecifier(name, alias, false, getRange(spec)));
   }
 
   std::string path = ctx->STRING_LITERAL() ? parseString(ctx->STRING_LITERAL()->getText()) : "";
@@ -406,8 +425,8 @@ std::any visitTypePrimitive(LangParser::TypePrimitiveContext *ctx) override {
     kind = PrimitiveKind::Void;
   else if (p->NULL_())
     kind = PrimitiveKind::Null;
-  else if (p->FIBER())
-    kind = PrimitiveKind::Fiber;
+  else if (p->COROUTINE())
+    kind = PrimitiveKind::Coroutine;
   else if (p->FUNCTION())
     kind = PrimitiveKind::Function;
 
@@ -536,10 +555,8 @@ visitMutiVariableDeclarationDef(LangParser::MutiVariableDeclarationDefContext *c
   if (!ctx)
     return static_cast<Decl *>(factory_.makeErrorDecl(SourceRange::invalid(), "invalid mutivar"));
 
-  NodeFlags mods = collectModifiers(ctx->GLOBAL().empty() ? nullptr : ctx->GLOBAL()[0],
-                                    ctx->CONST().empty() ? nullptr : ctx->CONST()[0]);
-
-  // 使用 std::string 避免悬空引用
+  // VARS GLOBAL? CONST? IDENTIFIER (COMMA GLOBAL? CONST? IDENTIFIER)*
+  // 每个IDENTIFIER都可以有自己的修饰符
   std::vector<std::string> namesStorage;
   for (auto *id : ctx->IDENTIFIER())
     namesStorage.push_back(id->getText());
@@ -549,33 +566,16 @@ visitMutiVariableDeclarationDef(LangParser::MutiVariableDeclarationDefContext *c
   for (const auto &s : namesStorage)
     names.push_back(s);
 
+  // 使用第一个IDENTIFIER的修饰符作为整体修饰符
+  NodeFlags mods = NodeFlags::None;
+  if (ctx->GLOBAL().size() > 0)
+    mods |= NodeFlags::IsGlobal;
+  if (ctx->CONST().size() > 0)
+    mods |= NodeFlags::IsConst;
+
   Expr *init = ctx->expression() ? expectExpr(ctx->expression()) : nullptr;
 
   return static_cast<Decl *>(factory_.makeMultiVarDecl(getRange(ctx), names, init, mods));
-}
-
-std::any visitMultiDeclaration(LangParser::MultiDeclarationContext *ctx) override {
-  if (!ctx)
-    return static_cast<Stmt *>(factory_.makeEmptyStmt(SourceRange::invalid()));
-
-  // For simplicity, create a block containing multiple var decls
-  // Or just return first one
-  auto items = ctx->declaration_item();
-  auto inits = ctx->expression();
-
-  if (items.empty())
-    return static_cast<Stmt *>(factory_.makeEmptyStmt(getRange(ctx)));
-
-  // Create first variable declaration
-  auto v = visit(items[0]);
-  if (auto *vd = tryCast<VarDeclNode>(v)) {
-    Expr *init = inits.size() > 0 ? expectExpr(inits[0]) : nullptr;
-    auto *decl =
-        factory_.makeVarDecl(getRange(ctx), factory_.strings().get(vd->name), vd->type, init);
-    return static_cast<Stmt *>(factory_.makeDeclStmt(getRange(ctx), decl));
-  }
-
-  return static_cast<Stmt *>(factory_.makeEmptyStmt(getRange(ctx)));
 }
 
 // ------------------------------------------------------------------------
@@ -645,7 +645,7 @@ std::any visitMultiReturnFunctionDeclarationDef(
   auto range = getRange(ctx);
   NodeFlags mods = ctx->GLOBAL() ? NodeFlags::IsGlobal : NodeFlags::None;
 
-  TypeNode *retType = factory_.makeMultiReturnType(getRange(ctx->MUTIVAR()));
+  TypeNode *retType = factory_.makeMultiReturnType(getRange(ctx->VARS()));
 
   // 使用 std::string 确保安全
   std::string name = "";
@@ -758,7 +758,7 @@ visitMultiReturnClassMethodMember(LangParser::MultiReturnClassMethodMemberContex
                                 {}, factory_.makeBlockStmt(SourceRange::invalid(), {})));
 
   NodeFlags mods = ctx->STATIC() ? NodeFlags::IsStatic : NodeFlags::None;
-  TypeNode *retType = factory_.makeMultiReturnType(getRange(ctx->MUTIVAR()));
+  TypeNode *retType = factory_.makeMultiReturnType(getRange(ctx->VARS()));
   // 使用 std::string 避免悬空引用
   std::string name = ctx->IDENTIFIER() ? ctx->IDENTIFIER()->getText() : "";
 

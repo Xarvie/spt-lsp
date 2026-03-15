@@ -253,6 +253,7 @@ enum class BinaryOp : uint8_t {
   Sub, ///< -
   Mul, ///< *
   Div, ///< /
+  IDiv, ///< ~/
   Mod, ///< %
 
   // Comparison
@@ -300,6 +301,7 @@ enum class UpdateOp : uint8_t {
   SubAssign,    ///< -=
   MulAssign,    ///< *=
   DivAssign,    ///< /=
+  IDivAssign,   ///< ~/=
   ModAssign,    ///< %=
   ConcatAssign, ///< ..=
 
@@ -317,7 +319,7 @@ enum class PrimitiveKind : uint8_t {
   Bool,
   Void,
   Null,
-  Fiber,
+  Coroutine,
   Function,
 
   Invalid,
@@ -351,6 +353,11 @@ enum class NodeFlags : uint16_t {
 
 [[nodiscard]] inline constexpr NodeFlags operator&(NodeFlags a, NodeFlags b) noexcept {
   return static_cast<NodeFlags>(static_cast<uint16_t>(a) & static_cast<uint16_t>(b));
+}
+
+inline constexpr NodeFlags &operator|=(NodeFlags &a, NodeFlags b) noexcept {
+  a = a | b;
+  return a;
 }
 
 [[nodiscard]] inline constexpr bool hasFlag(NodeFlags flags, NodeFlags flag) noexcept {
@@ -836,20 +843,27 @@ struct WhileStmtNode : Stmt {
 };
 
 /**
- * @brief For loop statement (C-style and foreach)
+ * @brief For loop statement (Numeric, C-style, and foreach)
  */
 struct ForStmtNode : Stmt {
   /**
    * @brief Determines for loop style
    */
   enum class Style : uint8_t {
-    CStyle,  ///< for (init; cond; update) { body }
-    ForEach, ///< for (Type v : collection) { body }
+    Numeric,  ///< for (i = start, end, step) { body } - Lua style numeric for
+    CStyle,   ///< for (init; cond; update) { body } - DEPRECATED
+    ForEach,  ///< for (Type v : collection) { body }
   };
 
-  Style style = Style::CStyle;
+  Style style = Style::Numeric;
 
-  // C-style: for (init; condition; update) body
+  // Numeric for: for (var = start, end, step) body
+  struct VarDeclNode *numericVar = nullptr; ///< Loop variable (may be typed or untyped)
+  Expr *start = nullptr;                    ///< Start value
+  Expr *end = nullptr;                      ///< End value
+  Expr *step = nullptr;                     ///< Step value (optional, defaults to 1)
+
+  // C-style: for (init; condition; update) body - DEPRECATED
   Stmt *init = nullptr;      ///< Initialization (may be null or ErrorStmt)
   Expr *condition = nullptr; ///< Condition (may be null for infinite loop)
   ArrayView<Stmt *> updates; ///< Update expressions/statements
@@ -1570,6 +1584,8 @@ private:
     return "*";
   case BinaryOp::Div:
     return "/";
+  case BinaryOp::IDiv:
+    return "~/";
   case BinaryOp::Mod:
     return "%";
   case BinaryOp::Eq:
@@ -1642,8 +1658,8 @@ private:
     return "void";
   case PrimitiveKind::Null:
     return "null";
-  case PrimitiveKind::Fiber:
-    return "fiber";
+  case PrimitiveKind::Coroutine:
+    return "coro";
   case PrimitiveKind::Function:
     return "function";
   default:

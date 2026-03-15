@@ -265,6 +265,19 @@ protected:
     return expectType(visit(ctx), ctx, msg);
   }
 
+  /// Expect var decl - NEVER returns nullptr
+  [[nodiscard]] VarDeclNode *expectVarDecl(antlr4::ParserRuleContext *ctx,
+                                           std::string_view msg = "expected variable declaration") {
+    if (!ctx)
+      return factory_.makeVarDecl(SourceRange::invalid(), "",
+                                  factory_.makeErrorType(SourceRange::invalid(), msg), nullptr);
+    auto value = visit(ctx);
+    if (auto *vd = tryCast<VarDeclNode>(value))
+      return vd;
+    return factory_.makeVarDecl(getRange(ctx), "",
+                                factory_.makeErrorType(getRange(ctx), msg), nullptr);
+  }
+
   /// Expect block - NEVER returns nullptr
   [[nodiscard]] BlockStmtNode *expectBlock(antlr4::ParserRuleContext *ctx) {
     if (!ctx) {
@@ -332,6 +345,8 @@ protected:
       return BinaryOp::Mul;
     case LangLexer::DIV:
       return BinaryOp::Div;
+    case LangLexer::IDIV:
+      return BinaryOp::IDiv;
     case LangLexer::MOD:
       return BinaryOp::Mod;
     case LangLexer::EQ:
@@ -390,6 +405,8 @@ protected:
       return UpdateOp::MulAssign;
     case LangLexer::DIV_ASSIGN:
       return UpdateOp::DivAssign;
+    case LangLexer::IDIV_ASSIGN:
+      return UpdateOp::IDivAssign;
     case LangLexer::MOD_ASSIGN:
       return UpdateOp::ModAssign;
     case LangLexer::CONCAT_ASSIGN:
@@ -415,8 +432,8 @@ protected:
       return PrimitiveKind::Void;
     case LangLexer::NULL_:
       return PrimitiveKind::Null;
-    case LangLexer::FIBER:
-      return PrimitiveKind::Fiber;
+    case LangLexer::COROUTINE:
+      return PrimitiveKind::Coroutine;
     case LangLexer::FUNCTION:
       return PrimitiveKind::Function;
     default:
@@ -659,6 +676,34 @@ protected:
     return static_cast<MapEntryNode *>(factory_.makeMapEntry(range, key, val));
   }
 
+  std::any visitMapEntryIntKey(LangParser::MapEntryIntKeyContext *ctx) override {
+    if (!ctx)
+      return static_cast<MapEntryNode *>(factory_.makeMapEntry(
+          SourceRange::invalid(), factory_.makeErrorExpr(SourceRange::invalid(), "invalid key"),
+          factory_.makeErrorExpr(SourceRange::invalid(), "invalid value")));
+    auto range = getRange(ctx);
+    Expr *key = ctx->INTEGER()
+                    ? static_cast<Expr *>(factory_.makeIntLiteral(getRange(ctx->INTEGER()),
+                                                                   std::stoll(ctx->INTEGER()->getText())))
+                    : static_cast<Expr *>(factory_.makeErrorExpr(range, "missing key"));
+    Expr *val = expectExpr(ctx->expression());
+    return static_cast<MapEntryNode *>(factory_.makeMapEntry(range, key, val));
+  }
+
+  std::any visitMapEntryFloatKey(LangParser::MapEntryFloatKeyContext *ctx) override {
+    if (!ctx)
+      return static_cast<MapEntryNode *>(factory_.makeMapEntry(
+          SourceRange::invalid(), factory_.makeErrorExpr(SourceRange::invalid(), "invalid key"),
+          factory_.makeErrorExpr(SourceRange::invalid(), "invalid value")));
+    auto range = getRange(ctx);
+    Expr *key = ctx->FLOAT_LITERAL()
+                    ? static_cast<Expr *>(factory_.makeFloatLiteral(getRange(ctx->FLOAT_LITERAL()),
+                                                                     std::stod(ctx->FLOAT_LITERAL()->getText())))
+                    : static_cast<Expr *>(factory_.makeErrorExpr(range, "missing key"));
+    Expr *val = expectExpr(ctx->expression());
+    return static_cast<MapEntryNode *>(factory_.makeMapEntry(range, key, val));
+  }
+
   std::any visitQualifiedIdentifier(LangParser::QualifiedIdentifierContext *ctx) override {
     if (!ctx)
       return static_cast<QualifiedIdentifierNode *>(
@@ -855,6 +900,8 @@ protected:
         ops.push_back(BinaryOp::Mul);
       else if (opCtx->DIV())
         ops.push_back(BinaryOp::Div);
+      else if (opCtx->IDIV())
+        ops.push_back(BinaryOp::IDiv);
       else if (opCtx->MOD())
         ops.push_back(BinaryOp::Mod);
       else
@@ -946,14 +993,6 @@ protected:
       return factory_.makeCallExpr(range, base, args, getRange(c));
     }
 
-    // Colon lookup: expr:member
-    if (auto *col = dynamic_cast<LangParser::PostfixColonLookupSuffixContext *>(suffix)) {
-      auto range = SourceRange{base->range.begin, getRange(col).end};
-      // 使用 std::string 避免悬空引用
-      std::string member = col->IDENTIFIER() ? col->IDENTIFIER()->getText() : "";
-      return factory_.makeColonLookupExpr(range, base, member);
-    }
-
     return base;
   }
 
@@ -997,9 +1036,9 @@ protected:
 
     TypeNode *retType = nullptr;
     bool isMulti = false;
-    if (ctx->MUTIVAR()) {
+    if (ctx->VARS()) {
       isMulti = true;
-      retType = factory_.makeMultiReturnType(getRange(ctx->MUTIVAR()));
+      retType = factory_.makeMultiReturnType(getRange(ctx->VARS()));
     } else if (ctx->type()) {
       retType = expectType(ctx->type());
     } else {
